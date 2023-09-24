@@ -26,4 +26,20 @@ public class Comentario implements Serializable{
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date fechaPublicacion;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "estado", nullable = false)
+    private Estado estado;
+
+    @ManyToOne
+    @JoinColumn(name = "escritor_id")
+    private Escritor escritor;
+
+    @ManyToOne
+    @JoinColumn(name = "lector_id")
+    private Lector lector;
+
+    @ManyToOne
+    @JoinColumn(name = "publicacion_id")
+    private Publicacion publicacion;
 }

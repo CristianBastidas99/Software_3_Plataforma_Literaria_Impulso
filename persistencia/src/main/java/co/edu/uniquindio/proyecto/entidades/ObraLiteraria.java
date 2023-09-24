@@ -25,6 +25,7 @@ public class ObraLiteraria implements Serializable {
     private String titulo;
 
     @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
     private Date fechaPublicacion;
 
     @Column(name = "sinopsis",  length = 150, nullable = false)

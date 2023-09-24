@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,6 +26,7 @@ public class Publicacion implements Serializable {
     private String contenido;
 
     @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
     private Date fechaPublicacion;
 
     @Column(name = "titulo",  length = 70, nullable = false)
@@ -41,4 +43,6 @@ public class Publicacion implements Serializable {
     @JoinColumn(name = "obra_literaria_id")
     private ObraLiteraria obraLiteraria;
 
+    @OneToMany(mappedBy = "publicacion")
+    private List<Comentario> comentarios;
 }
