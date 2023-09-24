@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -45,4 +46,10 @@ public class Publicacion implements Serializable {
 
     @OneToMany(mappedBy = "publicacion")
     private List<Comentario> comentarios;
+
+    @ManyToMany(mappedBy = "publicacionesVistas")
+    private List<Lector> lectoresVisitas = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "publicacionesRecomendadas")
+    private List<Lector> lectoresRecomendaciones = new ArrayList<>();
 }

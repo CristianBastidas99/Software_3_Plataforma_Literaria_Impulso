@@ -24,4 +24,7 @@ public class Escritor extends Usuario implements Serializable {
 
     @OneToMany(mappedBy = "escritor")
     private List<Comentario> comentarios;
+
+    @ManyToMany(mappedBy = "escritoresFavoritos")
+    private List<Lector> lectores = new ArrayList<>();
 }

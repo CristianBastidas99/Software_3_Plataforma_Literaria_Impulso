@@ -26,4 +26,7 @@ public class Genero implements Serializable {
 
     @ManyToMany(mappedBy = "generos")
     private List<ObraLiteraria> obraLiterarias = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "generosPreferidos")
+    private List<Lector> lectores = new ArrayList<>();
 }
