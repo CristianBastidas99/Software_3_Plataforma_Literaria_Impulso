@@ -13,10 +13,11 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-//@ToString(callSuper = true, onlyExplicitlyIncluded = true)
+@ToString(callSuper = true, onlyExplicitlyIncluded = true)
 public class Escritor extends Usuario implements Serializable {
 
     @Column(name = "biografia", length = 250, nullable = false)
+    @ToString.Include
     private String biografia;
 
     @ManyToMany(mappedBy = "escritores")
