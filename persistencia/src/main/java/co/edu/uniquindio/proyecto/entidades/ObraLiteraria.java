@@ -1,9 +1,7 @@
 package co.edu.uniquindio.proyecto.entidades;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 import java.util.Date;
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@ToString
 public class ObraLiteraria implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -53,12 +52,14 @@ public class ObraLiteraria implements Serializable {
             joinColumns = @JoinColumn(name = "obra_literaria_id"),
             inverseJoinColumns = @JoinColumn(name = "escritor_id")
     )
+    @ToString.Exclude
     private List<Escritor> escritores = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "obra_literaria_genero",
             joinColumns = @JoinColumn(name = "obra_literaria_id"),
             inverseJoinColumns = @JoinColumn(name = "genero_id"))
-    private List<Genero> generos = new java.util.ArrayList<>();
+    @ToString.Exclude
+    private List<Genero> generos = new ArrayList<>();
 
 }

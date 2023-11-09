@@ -1,9 +1,6 @@
 package co.edu.uniquindio.proyecto.entidades;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@ToString
 public class Publicacion implements Serializable {
 
     @Id
@@ -45,11 +43,14 @@ public class Publicacion implements Serializable {
     private ObraLiteraria obraLiteraria;
 
     @OneToMany(mappedBy = "publicacion")
+    @ToString.Exclude
     private List<Comentario> comentarios;
 
     @ManyToMany(mappedBy = "publicacionesVistas")
+    @ToString.Exclude
     private List<Lector> lectoresVisitas = new ArrayList<>();
 
     @ManyToMany(mappedBy = "publicacionesRecomendadas")
+    @ToString.Exclude
     private List<Lector> lectoresRecomendaciones = new ArrayList<>();
 }

@@ -1,9 +1,6 @@
 package co.edu.uniquindio.proyecto.entidades;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,6 +12,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Genero implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,8 +23,10 @@ public class Genero implements Serializable {
     private String nombre;
 
     @ManyToMany(mappedBy = "generos")
+    @ToString.Exclude
     private List<ObraLiteraria> obraLiterarias = new ArrayList<>();
 
     @ManyToMany(mappedBy = "generosPreferidos")
+    @ToString.Exclude
     private List<Lector> lectores = new ArrayList<>();
 }

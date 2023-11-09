@@ -1,16 +1,16 @@
 package co.edu.uniquindio.proyecto.entidades;
 
-import org.hibernate.Hibernate;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
-import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-//@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @MappedSuperclass
 @ToString
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -35,15 +35,18 @@ public class Usuario implements Serializable{
     private Estado estado;
 
     @Override
-    public boolean equals(Object o) {
+    public final boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
         Usuario usuario = (Usuario) o;
-        return id != null && Objects.equals(id, usuario.id);
+        return getId() != null && Objects.equals(getId(), usuario.getId());
     }
 
     @Override
-    public int hashCode() {
-        return getClass().hashCode();
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

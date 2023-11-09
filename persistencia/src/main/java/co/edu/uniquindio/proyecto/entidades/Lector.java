@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-//@ToString(callSuper = true, onlyExplicitlyIncluded = true)
+@ToString(callSuper = true, onlyExplicitlyIncluded = true)
 public class Lector extends Usuario implements Serializable{
 
     @OneToMany(mappedBy = "lector")

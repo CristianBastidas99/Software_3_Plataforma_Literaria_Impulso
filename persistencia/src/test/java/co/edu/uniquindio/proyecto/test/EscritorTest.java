@@ -105,7 +105,7 @@ public class EscritorTest {
     }
 
     @Test
-    @Sql("classpath:escritores.sql" )
+    @Sql("classpath:pli.sql" )
     public void listarUsuariosTest(){
         //Obtenemos la lista de todos los usuarios
         List<Escritor> lista = escritorRepo.findAll();
