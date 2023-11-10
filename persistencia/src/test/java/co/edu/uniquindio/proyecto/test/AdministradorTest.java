@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
@@ -113,5 +114,14 @@ public class AdministradorTest {
         // Puedes agregar aserciones según tus necesidades
     }
 
+    @Test
+    @Sql("classpath:pli.sql")
+    public void listarAdministradoresActivosTest(){
+        //Obtenemos la lista de todos los administradores
+        List<Administrador> lista = administradorRepo.obtenerAdministradoresActivos();
+        //Imprimimos la lista
+        System.out.println(lista);
+        // Puedes agregar aserciones según tus necesidades
+    }
 
 }
