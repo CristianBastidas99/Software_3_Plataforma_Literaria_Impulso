@@ -40,7 +40,11 @@ public class Publicacion implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "obra_literaria_id")
+    @ToString.Exclude
     private ObraLiteraria obraLiteraria;
+
+    @ToString.Include
+    public String idObraLiteraria(){return obraLiteraria.getId()+"";}
 
     @OneToMany(mappedBy = "publicacion")
     @ToString.Exclude

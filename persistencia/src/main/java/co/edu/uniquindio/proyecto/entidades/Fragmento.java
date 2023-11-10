@@ -25,8 +25,11 @@ public class Fragmento implements Serializable {
     private Estado estado;
 
     @OneToOne
+    @ToString.Exclude
     @JoinColumn(name = "obra_literaria_id")
     private ObraLiteraria obraLiteraria;
 
+    @ToString.Include
+    public String idObraLiteraria(){return obraLiteraria.getId()+"";}
 
 }

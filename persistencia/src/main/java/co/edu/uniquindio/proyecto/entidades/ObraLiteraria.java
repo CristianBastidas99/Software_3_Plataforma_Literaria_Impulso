@@ -41,10 +41,18 @@ public class ObraLiteraria implements Serializable {
     private Estado estado;
 
     @OneToOne(mappedBy = "obraLiteraria", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private Fragmento fragmento;
 
+    @ToString.Include
+    public String idFragmento(){return fragmento.getId()+"";}
+
     @OneToOne(mappedBy = "obraLiteraria", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private Publicacion publicacion;
+
+    @ToString.Include
+    public String idPublicacion(){return publicacion.getId()+"";}
 
     @ManyToMany
     @JoinTable(

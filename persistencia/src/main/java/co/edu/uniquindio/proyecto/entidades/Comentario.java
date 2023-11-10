@@ -39,6 +39,6 @@ public class Comentario implements Serializable{
     private Lector lector;
 
     @ManyToOne
-    @JoinColumn(name = "publicacion_id")
+    @JoinColumn(name = "publicacion_id", nullable = false)
     private Publicacion publicacion;
 }
