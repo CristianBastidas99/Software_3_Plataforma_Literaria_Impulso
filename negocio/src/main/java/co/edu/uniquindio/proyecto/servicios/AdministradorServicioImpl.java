@@ -37,7 +37,7 @@ public class AdministradorServicioImpl implements AdministradorServicio{
 
     @Override
     public Administrador obtenerAdministrador(Long idAdministrador) throws Exception {
-        Optional<Administrador> administrador = Optional.of(administradorRepo.getById(idAdministrador));
+        Optional<Administrador> administrador = administradorRepo.findById(idAdministrador);
         if(administrador.isEmpty()){
             throw new Exception("No exite un administrador con ese id");
         }
@@ -74,5 +74,6 @@ public class AdministradorServicioImpl implements AdministradorServicio{
 
         return admin;
     }
+
 
 }
