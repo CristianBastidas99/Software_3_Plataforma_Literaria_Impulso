@@ -21,6 +21,9 @@ public class AdministradorServicioTest {
     @Autowired
     private AdministradorServicio administradorServicio;
 
+    @Autowired
+    private EmaillServicio emaillServicio;
+
     @Test
     @Sql("classpath:pli.sql")
     public void testRegistrarAdministrador() {
@@ -177,6 +180,12 @@ public class AdministradorServicioTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    @Sql("classpath:pli.sql")
+    public void testEnviarCorreo() {
+        boolean estado = emaillServicio.enviarEmail("Prueba!!", "Este es un mensaje", "cristianmasmasmas@gmail.com");
     }
 
 }
