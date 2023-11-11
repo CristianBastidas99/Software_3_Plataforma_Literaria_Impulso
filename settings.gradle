@@ -1,3 +1,4 @@
 rootProject.name = 'Plataforma_Literaria_Impulso_sw3'
 include 'negocio'
+include 'web'
 
