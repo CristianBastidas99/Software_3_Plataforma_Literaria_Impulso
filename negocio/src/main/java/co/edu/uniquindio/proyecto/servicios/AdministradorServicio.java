@@ -1,6 +1,6 @@
 package co.edu.uniquindio.proyecto.servicios;
 
-import co.edu.uniquindio.proyecto.entidades.Administrador;
+import co.edu.uniquindio.proyecto.entidades.*;
 
 import java.util.List;
 

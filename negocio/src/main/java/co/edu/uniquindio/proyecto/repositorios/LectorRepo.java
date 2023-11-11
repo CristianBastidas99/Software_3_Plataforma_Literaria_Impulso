@@ -11,23 +11,20 @@ import java.util.Optional;
 
 @Repository
 public interface LectorRepo extends JpaRepository<Lector, Long> {
-    @Query("SELECT l FROM Lector l WHERE l.email = :correoElectronico AND l.password = :contrasena AND l.estado = 'ACTIVO'")
+    @Query("SELECT l FROM Lector l WHERE l.email = :correoElectronico AND l.password = :contrasena")
     Optional<Lector> iniciarSesionLector(@Param("correoElectronico") String correoElectronico, @Param("contrasena") String contrasena);
     @Query("SELECT l FROM Lector l WHERE l.estado = 'ACTIVO'")
     List<Lector> obtenerLectoresActivos();
     @Query("SELECT l FROM Lector l WHERE l.email = :correoElectronico")
-    Lector buscarLectorPorCorreo(@Param("correoElectronico") String correoElectronico);
-    @Query("SELECT l FROM Lector l ORDER BY l.nombre")
-    List<Lector> listarLectoresOrdenadosPorNombre();
-    //@Query("SELECT DISTINCT l FROM Lector l JOIN l.lectorGeneroPreferido lgp JOIN lgp.genero g JOIN g.obrasLiterarias o WHERE l.estado = 'INACTIVO'")
-    //List<Lector> obtenerLectoresInactivosConObrasFavoritas();
+    Optional<Lector> buscarLectorPorCorreo(@Param("correoElectronico") String correoElectronico);
     @Query("SELECT COUNT(l) FROM Lector l")
     Long contarLectores();
     @Query("SELECT l FROM Lector l WHERE LOWER(l.nombre) LIKE LOWER(:nombre)")
     List<Lector> buscarLectoresPorNombre(@Param("nombre") String nombre);
     @Query("SELECT l FROM Lector l WHERE l.estado = :estado ORDER BY l.id")
     List<Lector> obtenerLectoresPorEstado(@Param("estado") String estado);
-    //@Query("SELECT DISTINCT l FROM Lector l JOIN l.lectorPublicacionRecomendada lpr JOIN lpr.publicacion p WHERE p.estado = 'VISTO'")
-    //List<Lector> listarLectoresConPublicacionesRecomendadasVistas();
-
+    @Query("SELECT l.escritoresFavoritos FROM Lector l WHERE l.id = :lectorId")
+    List<Escritor> obtenerEscritoresFavoritosDeLector(@Param("lectorId") Long lectorId);
+    @Query("SELECT l.publicacionesRecomendadas FROM Lector l WHERE l.id = :PublicacionId")
+    List<Publicacion> obtenerPublicacionesRecomendadas(@Param("PublicacionId") Long PublicacionId);
 }

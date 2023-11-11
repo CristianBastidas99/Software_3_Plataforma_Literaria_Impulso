@@ -12,16 +12,17 @@ import java.util.Optional;
 @Repository
 public interface EscritorRepo extends JpaRepository<Escritor, Long> {
 
-    @Query("SELECT e FROM Escritor e WHERE e.email = :correoElectronico AND e.password = :contrasena AND e.estado = 'ACTIVO'")
+    @Query("SELECT e FROM Escritor e WHERE e.email = :correoElectronico AND e.password = :contrasena")
     Optional<Escritor> iniciarSesionEscritor(@Param("correoElectronico") String correoElectronico, @Param("contrasena") String contrasena);
+    @Query("SELECT e FROM Escritor e WHERE e.email = :correoElectronico")
+    Optional<Escritor> buscarEscritorPorCorreo(@Param("correoElectronico") String correoElectronico);
+
+
+
     @Query("SELECT e FROM Escritor e WHERE e.estado = 'ACTIVO'")
     List<Escritor> obtenerEscritoresActivos();
     @Query("SELECT DISTINCT e FROM Escritor e JOIN e.obrasLiterarias o JOIN o.generos g WHERE g.id = :generoId")
     List<Escritor> buscarEscritoresPorGenero(@Param("generoId") Long generoId);
-    @Query("SELECT e, COUNT(o) AS numObras FROM Escritor e JOIN e.obrasLiterarias o WHERE o.estado = 'PUBLICADO' GROUP BY e ORDER BY numObras DESC")
-    List<Object[]> listarEscritoresPorNumObrasPublicadas();
-    @Query("SELECT e FROM Escritor e WHERE e.estado = 'INACTIVO' AND LOWER(e.biografia) LIKE LOWER(:palabraClave)")
-    List<Escritor> obtenerEscritoresInactivosConBiografia(@Param("palabraClave") String palabraClave);
     @Query("SELECT COUNT(e) FROM Escritor e")
     Long contarEscritores();
     @Query("SELECT e FROM Escritor e WHERE LOWER(e.nombre) LIKE LOWER(:nombre)")
@@ -30,6 +31,4 @@ public interface EscritorRepo extends JpaRepository<Escritor, Long> {
     List<Escritor> obtenerEscritoresPorEstado(@Param("estado") String estado);
     @Query("SELECT DISTINCT e FROM Escritor e JOIN e.obrasLiterarias o WHERE o.estado = 'PENDIENTE'")
     List<Escritor> listarEscritoresConObrasPendientes();
-
-
 }

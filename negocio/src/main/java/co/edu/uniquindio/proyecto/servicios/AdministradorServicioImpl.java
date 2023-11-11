@@ -1,8 +1,7 @@
 package co.edu.uniquindio.proyecto.servicios;
 
-import co.edu.uniquindio.proyecto.entidades.Administrador;
-import co.edu.uniquindio.proyecto.entidades.Estado;
-import co.edu.uniquindio.proyecto.repositorios.AdministradorRepo;
+import co.edu.uniquindio.proyecto.entidades.*;
+import co.edu.uniquindio.proyecto.repositorios.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +27,7 @@ public class AdministradorServicioImpl implements AdministradorServicio{
 
     @Override
     public Administrador actualizarAdministrador(Administrador administrador) throws Exception {
-        Optional<Administrador> administrador1 = Optional.of(administradorRepo.getById(administrador.getId()));
+        Optional<Administrador> administrador1 = administradorRepo.findById(administrador.getId());
         if(administrador1.isEmpty()){
             throw new Exception("No exite un administrador con ese id");
         }
@@ -46,7 +45,7 @@ public class AdministradorServicioImpl implements AdministradorServicio{
 
     @Override
     public void eliminarAdministrador(Long idAdministrador) throws Exception {
-        Optional<Administrador> administrador = Optional.of(administradorRepo.getById(idAdministrador));
+        Optional<Administrador> administrador = administradorRepo.findById(idAdministrador);
         if(administrador.isEmpty()){
             throw new Exception("No exite un administrador con ese id");
         }
