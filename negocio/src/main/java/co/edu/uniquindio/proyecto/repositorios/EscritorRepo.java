@@ -16,7 +16,8 @@ public interface EscritorRepo extends JpaRepository<Escritor, Long> {
     Optional<Escritor> iniciarSesionEscritor(@Param("correoElectronico") String correoElectronico, @Param("contrasena") String contrasena);
     @Query("SELECT e FROM Escritor e WHERE e.email = :correoElectronico")
     Optional<Escritor> buscarEscritorPorCorreo(@Param("correoElectronico") String correoElectronico);
-
+    @Query("SELECT e FROM Escritor e WHERE e.estado = 'ACTIVO' AND (LOWER(e.nombre) LIKE LOWER(:frase) OR LOWER(e.biografia) LIKE LOWER(:frase))")
+    List<Escritor> obtenerEscritoresPorFrase(@Param("frase") String frase);
 
 
     @Query("SELECT e FROM Escritor e WHERE e.estado = 'ACTIVO'")

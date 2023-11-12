@@ -58,4 +58,9 @@ public class PublicacionServicioImpl implements PublicacionServicio{
         return publicacionRepo.findAll();
     }
 
+    @Override
+    public List<Publicacion> buscarPublicacionPorFrase(String frase) {
+        return publicacionRepo.obtenerPublicacionesPorFrase(frase);
+    }
+
 }

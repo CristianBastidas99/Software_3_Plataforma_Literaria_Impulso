@@ -12,9 +12,69 @@
         <h:outputStylesheet library="css" name="bootstrap.min.css" />
         <h:outputStylesheet library="css" name="style.css" />
     </ui:define>
-    <ui:define name="title">Página de Inicio</ui:define>
+    <ui:define name="title">Busqueda y Exploracion</ui:define>
     <ui:define name="content">
-        <h1>Explorar</h1>
+        <!-- Contenido principal -->
+        <div class="card ml-auto p-5">
+            <!-- Búsqueda de Fragmentos Literarios -->
+            <h:form id="searchForm">
+                <div class="container-flex input-group mb-3">
+                    <p:selectOneMenu id="searchType" value="#{explorarBean.searchType}" appendTo="@(self)" style="width: 20%;">
+                        <f:selectItem itemLabel="Buscar Publicaciones" itemValue="0" />
+                        <f:selectItem itemLabel="Buscar Escritores" itemValue="1" />
+                    </p:selectOneMenu>
+                    <p:inputText id="searchInput" value="#{explorarBean.searchInput}" style="width: 73%;" placeholder="Buscar..." />
+                    <div class="input-group-append" style="width: 7%;">
+                        <p:commandButton value="Buscar" action="#{explorarBean.realizarBusqueda}" update="resultados" />
+                    </div>
+                </div>
+            </h:form>
+        </div>
+        <!-- Resultados de la búsqueda de Fragmentos Literarios -->
+        <div class="card ml-auto p-5">
+            <h3>Resultados de la Búsqueda</h3>
+            <div class="card product">
+                <h:form id="resultados">
+                    <p:dataView var="resultado" value="#{explorarBean.resultadosBusqueda}" rows="12" paginator="true"
+                                rowsPerPageTemplate="6,12,16"
+                                paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                gridIcon="pi pi-th-large" listIcon="pi pi-bars">
+
+                        <p:dataViewListItem rendered="#{explorarBean.searchType eq '0'}">
+                            <div class="container-flex product-list-item p-4">
+                                <p:graphicImage name="img/#{resultado.urlImagen}" style="width: 20%;"/>
+                                <div class="product-list-detail p-2" style="width: 73%;">
+                                    <div class="product-name">#{resultado.titulo}</div>
+                                    <div class="product-description">#{resultado.contenido}</div>
+                                </div>
+                                <div class="product-list-action" style="display: flex; align-items: center; justify-content: center;width: 7%;">
+                                    <p:commandButton type="button"
+                                                     value="Ver Detalles"
+                                                     action="explorar.xhtml">
+                                    </p:commandButton>
+                                </div>
+                            </div>
+                        </p:dataViewListItem>
+                        <p:dataViewListItem rendered="#{explorarBean.searchType eq '1'}">
+                            <div class="container-flex product-list-item p-4" >
+                                <p:graphicImage name="img/#{resultado.urlImagen}" style="width: 20%;"/>
+                                <div class="product-list-detail p-2" style="width: 73%;">
+                                    <div class="product-name">#{resultado.nombre}</div>
+                                    <div class="product-description">#{resultado.biografia}</div>
+                                </div>
+                                <div class="product-list-action" style="display: flex; align-items: center; justify-content: center;width: 7%;">
+                                    <p:commandButton type="button"
+                                                     value="Ver Detalles"
+                                                     action="explorar.xhtml">
+                                    </p:commandButton>
+                                </div>
+                            </div>
+                        </p:dataViewListItem>
+                    </p:dataView>
+                </h:form>
+            </div>
+        </div>
+
     </ui:define>
     <ui:define name="script">
         <h:outputScript library="js" name="bootstrap.bundle.min.js" />

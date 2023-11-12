@@ -58,6 +58,11 @@ public class EscritorServicioImpl implements EscritorServicio{
     }
 
     @Override
+    public List<Escritor> buscarEscritoresPorFrase(String frase) {
+        return escritorRepo.obtenerEscritoresPorFrase(frase);
+    }
+
+    @Override
     public Escritor validaLogin(String email, String contrasena) throws Exception {
         Optional<Escritor> escritor = escritorRepo.iniciarSesionEscritor(email, contrasena);
 
