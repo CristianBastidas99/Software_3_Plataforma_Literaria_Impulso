@@ -88,5 +88,8 @@ public class InicioBean implements Serializable {
         return  publicacionList;
     }
 
+    public String registro() {
+        return "registro?faces-redirect=true";
+    }
 
 }
