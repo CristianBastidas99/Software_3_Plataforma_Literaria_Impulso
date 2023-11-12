@@ -6,12 +6,83 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-<h:head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Página de Inicio</title>
-</h:head>
-<h:body>
-    <h1>#{inicioBean.mensaje}</h1>
-</h:body>
+
+<ui:composition template="/WEB-INF/template.xhtml">
+
+    <ui:define name="head">
+        <h:outputStylesheet library="css" name="bootstrap.min.css" />
+        <h:outputStylesheet library="css" name="style.css" />
+    </ui:define>
+    <ui:define name="title">Página de Inicio - Plataforma Literaria</ui:define>
+
+    <ui:define name="content">
+
+        <!-- Contenido principal -->
+        <div class="card ml-auto p-5">
+            <h1>Bienvenido a la Plataforma Literaria</h1>
+            <p>Descubre nuevas obras literarias y conéctate con escritores emergentes.</p>
+            <div>
+                <p:button value="Explorar Obras" outcome="explorar.xhtml?i=1" styleClass="ui-button-raised" />
+            </div>
+        </div>
+
+        <!-- Publicaciones Populares -->
+        <div class=" p-5">
+            <p:carousel value="#{inicioBean.publicacions}" var="publicacion" circular="true" autoplayInterval="3000"
+                        responsiveOptions="#{inicioBean.responsiveOptions}" numVisible="3" numScroll="1">
+                <f:facet name="header">
+                    <h2>Publicaciones Populares</h2>
+                </f:facet>
+
+                <div class="product-item p-2">
+                    <div class="product-item-content">
+                        <div class="mb-3">
+                            <p:graphicImage name="img/#{publicacion.urlImagen}" styleClass="product-image card-img-top"/>
+                        </div>
+                        <div>
+                            <h4 class="mb-1">#{publicacion.titulo}</h4>
+                            <h6 class="mt-0 mb-3">
+                                <h:outputText value="#{publicacion.contenido}" />
+                            </h6>
+                            <p:button value="Ver Detalles" styleClass="ui-button-raised" />
+                        </div>
+                    </div>
+                </div>
+            </p:carousel>
+        </div>
+
+        <!-- Autores Famosos -->
+        <div class=" p-5">
+            <p:carousel value="#{inicioBean.escritors}" var="escritor" circular="true" autoplayInterval="3000"
+                        responsiveOptions="#{inicioBean.responsiveOptions}" numVisible="3" numScroll="1">
+                <f:facet name="header">
+                    <h2>Escritores Populares</h2>
+                </f:facet>
+
+                <div class="product-item p-2">
+                    <div class="product-item-content">
+                        <div class="mb-3">
+                            <p:graphicImage name="img/#{escritor.urlImagen}" styleClass="product-image card-img-top"/>
+                        </div>
+                        <div>
+                            <h4 class="mb-1">#{escritor.nombre}</h4>
+                            <h6 class="mt-0 mb-3">
+                                <h:outputText value="#{escritor.biografia}" />
+                            </h6>
+                            <p:button value="Ver Detalles" styleClass="ui-button-raised" />
+                        </div>
+                    </div>
+                </div>
+            </p:carousel>
+        </div>
+
+    </ui:define>
+
+    <ui:define name="script">
+        <h:outputScript library="js" name="bootstrap.bundle.min.js" />
+        <h:outputScript library="js" name="jquery-3.5.1.slim.min.js" />
+        <h:outputScript library="js" name="popper.min.js" />
+    </ui:define>
+
+</ui:composition>
 </html>

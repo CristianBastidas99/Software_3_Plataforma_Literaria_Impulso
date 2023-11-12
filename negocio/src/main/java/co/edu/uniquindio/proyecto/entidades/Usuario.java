@@ -30,6 +30,9 @@ public class Usuario implements Serializable{
     @Column(name = "password", length = 30, nullable = false)
     private String password;
 
+    @Column(name = "urlImagen", nullable = false)
+    private String urlImagen;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "estado", nullable = false)
     private Estado estado;
