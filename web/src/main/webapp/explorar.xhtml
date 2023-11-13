@@ -48,10 +48,11 @@
                                     <div class="product-description">#{resultado.contenido}</div>
                                 </div>
                                 <div class="product-list-action" style="display: flex; align-items: center; justify-content: center;width: 7%;">
-                                    <p:commandButton type="button"
-                                                     value="Ver Detalles"
-                                                     action="explorar.xhtml">
-                                    </p:commandButton>
+                                    <p:button type="button"
+                                              value="Ver Detalles"
+                                              outcome="publicacion.xhtml">
+                                        <f:param name="idProd" value="#{resultado.id}" />
+                                    </p:button>
                                 </div>
                             </div>
                         </p:dataViewListItem>
@@ -63,10 +64,11 @@
                                     <div class="product-description">#{resultado.biografia}</div>
                                 </div>
                                 <div class="product-list-action" style="display: flex; align-items: center; justify-content: center;width: 7%;">
-                                    <p:commandButton type="button"
-                                                     value="Ver Detalles"
-                                                     action="explorar.xhtml">
-                                    </p:commandButton>
+                                    <p:button type="button"
+                                              value="Ver Detalles"
+                                              outcome="escritor.xhtml">
+                                        <f:param name="idEscr" value="#{resultado.id}" />
+                                    </p:button>
                                 </div>
                             </div>
                         </p:dataViewListItem>

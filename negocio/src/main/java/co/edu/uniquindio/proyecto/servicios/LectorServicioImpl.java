@@ -62,7 +62,7 @@ public class LectorServicioImpl implements LectorServicio{
         Optional<Lector> lector = lectorRepo.iniciarSesionLector(email, contrasena);
 
         if (lector.isEmpty()) {
-            throw new Exception("No existe un lector con ese email y contraseña");
+            return null;
         }
 
         Lector lectorValido = lector.get();

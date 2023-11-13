@@ -75,6 +75,7 @@ public class InicioBean implements Serializable {
         // Crear 9 publicaciones de ejemplo
         for (int i = 1; i <= 9; i++) {
             Publicacion publicacion = new Publicacion();
+            publicacion.setId(Long.valueOf(i));
             publicacion.setContenido("Descripción breve del libro " + i);
             publicacion.setFechaPublicacion(new Date()); // Puedes ajustar la fecha según sea necesario
             publicacion.setTitulo("Título de la publicación " + i);
@@ -90,6 +91,10 @@ public class InicioBean implements Serializable {
 
     public String registro() {
         return "registro?faces-redirect=true";
+    }
+
+    public String login() {
+        return "login?faces-redirect=true";
     }
 
 }

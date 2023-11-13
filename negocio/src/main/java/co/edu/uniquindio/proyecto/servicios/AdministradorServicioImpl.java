@@ -62,7 +62,7 @@ public class AdministradorServicioImpl implements AdministradorServicio{
         Optional<Administrador> administrador = administradorRepo.iniciarSesionAdministrador(email, contrasena);
 
         if (administrador.isEmpty()) {
-            throw new Exception("No existe un administrador con ese email y contraseña");
+            return null;
         }
 
         Administrador admin = administrador.get();

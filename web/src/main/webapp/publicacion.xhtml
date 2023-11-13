@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="/WEB-INF/template.xhtml">
+
+    <ui:define name="head">
+        <h:outputStylesheet library="css" name="bootstrap.min.css" />
+        <h:outputStylesheet library="css" name="style.css" />
+    </ui:define>
+    <ui:define name="title">Registro</ui:define>
+
+    <ui:define name="content">
+
+        <div class="card p-5" style="width: 75%; margin: 0 auto;">
+            <!-- Detalles de la Publicación -->
+            <h2>Publicación: #{publicacionBean.publicacion.titulo}</h2>
+            <p>Escritor: #{publicacionBean.escritor.nombre}</p>
+            <p>Descripción: #{publicacionBean.publicacion.contenido}</p>
+            <p>Sinopsis: #{publicacionBean.publicacion.obraLiteraria.sinopsis}</p>
+            <p>Fragmento de la Obra:</p>
+            <p:media value="/resources/pdf/#{publicacionBean.publicacion.obraLiteraria.fragmento.url}" width="100%" height="600px">
+                Your browser can't display pdf, <h:outputLink
+                    value="#{request.contextPath}/resources/pdf/#{publicacionBean.publicacion.obraLiteraria.fragmento.url}">click</h:outputLink> to download pdf instead.
+            </p:media>
+            <!-- Comentarios -->
+            <div class="comments p-3">
+                <h3>Comentarios</h3>
+                <!-- Comentario 1 -->
+                <h:form id="resultados">
+                    <p:dataView var="comentario" value="#{publicacionBean.publicacion.comentarios}" rows="12" paginator="true"
+                                rowsPerPageTemplate="6,12,16"
+                                paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                gridIcon="pi pi-th-large" listIcon="pi pi-bars">
+
+                        <p:dataViewListItem>
+                            <div class="container-flex product-list-item p-4">
+                                <div class="product-list-detail p-2">
+                                    <div class="product-name"><b>#{comentario.escritor.nombre}</b></div>
+                                    <div class="product-name"><b>#{comentario.lector.nombre}</b></div>
+                                    <div class="product-description">#{comentario.contenido}</div>
+                                </div>
+                            </div>
+                        </p:dataViewListItem>
+                    </p:dataView>
+                </h:form>
+            </div>
+            <div class="comments p-3">
+                <!-- Formulario para agregar un comentario -->
+                <h4>Agregar Comentario</h4>
+                <h:form id="commentForm">
+                    <div class="form-group p-2">
+                        <label for="userComment">Comentario:</label>
+                        <p:inputTextarea id="userComment" value="#{bean.nuevoComentario.texto}" rows="3" required="true" class="form-control" />
+                    </div>
+                    <div class="form-group p-2">
+                        <p:commandButton value="Publicar Comentario" action="#{bean.publicarComentario}" class="btn btn-primary" />
+                    </div>
+                </h:form>
+
+            </div>
+        </div>
+    </ui:define>
+
+    <ui:define name="script">
+        <h:outputScript library="js" name="bootstrap.bundle.min.js" />
+        <h:outputScript library="js" name="jquery-3.5.1.slim.min.js" />
+        <h:outputScript library="js" name="popper.min.js" />
+    </ui:define>
+
+</ui:composition>
+</html>

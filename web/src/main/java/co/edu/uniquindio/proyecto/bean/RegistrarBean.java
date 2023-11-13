@@ -4,6 +4,7 @@ import co.edu.uniquindio.proyecto.entidades.*;
 import co.edu.uniquindio.proyecto.servicios.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.PrimeFaces;
 import org.primefaces.model.ResponsiveOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -46,7 +47,6 @@ public class RegistrarBean implements Serializable{
     }
 
     public void registrar() {
-        System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHOOOOOOOOOOOOOOOOOOOOOOOOLLLLLLLLLLLLAAAAAAAAAAAAAAAAAAA");
         try {
             if(!camposIsEmpy()) {
                 if (!loginServicio.isEmailRegistrado(email)) {
@@ -62,6 +62,11 @@ public class RegistrarBean implements Serializable{
                             escritorServicio.registrarEscritor(escritor);
                             mostrarMensaje("Registro como escritor exitoso", FacesMessage.SEVERITY_INFO);
                             escritor = new Escritor();
+                            nombre = "";
+                            email = "";
+                            password = "";
+                            confirmPassword = "";
+
                         }else if(rol.equals("lector")){
                             lector.setNombre(nombre);
                             lector.setEmail(email);
@@ -72,6 +77,10 @@ public class RegistrarBean implements Serializable{
                             lectorServicio.registrarLector(lector);
                             mostrarMensaje("Registro como lector exitoso", FacesMessage.SEVERITY_INFO);
                             lector = new Lector();
+                            nombre = "";
+                            email = "";
+                            password = "";
+                            confirmPassword = "";
                         }
                     }else{
                         throw new Exception("Los campos de contraseña no coiciden");

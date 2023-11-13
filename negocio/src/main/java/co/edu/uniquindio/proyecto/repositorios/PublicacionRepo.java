@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PublicacionRepo extends JpaRepository<Publicacion, Long> {
@@ -29,6 +30,7 @@ public interface PublicacionRepo extends JpaRepository<Publicacion, Long> {
     List<Publicacion> obtenerPublicacionesConMasComentariosAprobados(@Param("numeroComentarios") Long numeroComentarios);
     @Query("SELECT p FROM Publicacion p WHERE p.estado = 'APROBADO' AND (LOWER(p.titulo) LIKE LOWER(:frase) OR LOWER(p.contenido) LIKE LOWER(:frase))")
     List<Publicacion> obtenerPublicacionesPorFrase(@Param("frase") String frase);
-
+    @Query("SELECT e FROM Escritor e JOIN e.obrasLiterarias ol WHERE ol.id = :obraLiterariaId")
+    Optional<Escritor> obtenerEscritorDePublicacion(@Param("obraLiterariaId") Long obraLiterariaId);
 
 }

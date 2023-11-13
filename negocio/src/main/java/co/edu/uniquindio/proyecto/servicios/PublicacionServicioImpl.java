@@ -63,4 +63,13 @@ public class PublicacionServicioImpl implements PublicacionServicio{
         return publicacionRepo.obtenerPublicacionesPorFrase(frase);
     }
 
+    @Override
+    public Escritor obtenerEscritorDePublicacion(Long idObraLiteraria) throws Exception {
+        Optional<Escritor> escritor = publicacionRepo.obtenerEscritorDePublicacion(idObraLiteraria);
+        if (escritor.isEmpty()) {
+            throw new Exception("No existe una publicación con ese id");
+        }
+        return escritor.get();
+    }
+
 }

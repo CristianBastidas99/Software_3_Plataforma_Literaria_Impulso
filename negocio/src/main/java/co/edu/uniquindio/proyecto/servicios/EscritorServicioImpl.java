@@ -67,7 +67,7 @@ public class EscritorServicioImpl implements EscritorServicio{
         Optional<Escritor> escritor = escritorRepo.iniciarSesionEscritor(email, contrasena);
 
         if (escritor.isEmpty()) {
-            throw new Exception("No existe un escritor con ese email y contraseña");
+            return null;
         }
 
         Escritor escritorValido = escritor.get();

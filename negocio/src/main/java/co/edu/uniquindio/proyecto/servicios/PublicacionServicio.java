@@ -11,5 +11,5 @@ public interface PublicacionServicio {
     void eliminarPublicacion(Long idPublicacion) throws Exception;
     List<Publicacion> listarPublicaciones();
     List<Publicacion> buscarPublicacionPorFrase(String frase);
-
+    Escritor obtenerEscritorDePublicacion(Long idObraLiteraria) throws Exception;
 }

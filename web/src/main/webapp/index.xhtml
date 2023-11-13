@@ -22,7 +22,9 @@
             <h1>Bienvenido a la Plataforma Literaria</h1>
             <p>Descubre nuevas obras literarias y conéctate con escritores emergentes.</p>
             <div>
-                <p:button value="Explorar Obras" outcome="explorar.xhtml?i=1" styleClass="ui-button-raised" />
+                <p:button value="Explorar Obras" outcome="explorar.xhtml" styleClass="ui-button-raised">
+                    <f:param name="i" value="1" />
+                </p:button>
             </div>
         </div>
 
@@ -44,7 +46,9 @@
                             <h6 class="mt-0 mb-3">
                                 <h:outputText value="#{publicacion.contenido}" />
                             </h6>
-                            <p:button value="Ver Detalles" styleClass="ui-button-raised" />
+                            <p:button value="Ver Detalles" outcome="publicacion.xhtml" styleClass="ui-button-raised">
+                                <f:param name="idProd" value="#{publicacion.id}" />
+                            </p:button>
                         </div>
                     </div>
                 </div>
@@ -69,7 +73,9 @@
                             <h6 class="mt-0 mb-3">
                                 <h:outputText value="#{escritor.biografia}" />
                             </h6>
-                            <p:button value="Ver Detalles" styleClass="ui-button-raised" />
+                            <p:button value="Ver Detalles" outcome="escritor.xhtml" styleClass="ui-button-raised" >
+                                <f:param name="idEscr" value="#{escritor.id}" />
+                            </p:button>
                         </div>
                     </div>
                 </div>

@@ -109,3 +109,9 @@ button.ui-button {
     display: flex;
     justify-content: space-between;
 }
+
+.custom-form-group {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px; /* Puedes ajustar la separación entre elementos según tus preferencias */
+}
