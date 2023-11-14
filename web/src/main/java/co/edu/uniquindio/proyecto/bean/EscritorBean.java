@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.el.MethodExpression;
-import javax.faces.annotation.ManagedProperty;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -25,36 +24,44 @@ import java.util.List;
 @ViewScoped
 @Getter
 @Setter
-public class PublicacionBean implements Serializable{
+public class EscritorBean implements Serializable{
 
     @Autowired
-    private PublicacionServicio publicacionServicio;
+    private  EscritorServicio escritorServicio;
+    @Value("#{param['idEscr']}")
+    private String idEscritor;
 
-    @Value("#{param['idProd']}")
-    private String idProducto;
-
-    private Publicacion publicacion;
+    private List<ResponsiveOption> responsiveOptions;
     private Escritor escritor;
+    private List<Publicacion> publicacionList;
 
     @PostConstruct
     public void inicializar(){
-        publicacion = new Publicacion();
+
         escritor = new Escritor();
-        if(idProducto!=null && !idProducto.equals("")){
+        publicacionList = new ArrayList<>();
+
+        if(idEscritor!=null && !idEscritor.equals("")){
             try {
-                publicacion = publicacionServicio.obtenerPublicacion(Long.valueOf(idProducto));
-                escritor = publicacionServicio.obtenerEscritorDePublicacion(publicacion.getObraLiteraria().getId());
+                Long id = Long.valueOf(idEscritor);
+                System.out.println(id);
+                escritor = escritorServicio.obtenerEscritor(id);
+                publicacionList = escritorServicio.obtenerPublicacionesDeEscritor(id);
             } catch (Exception e) {
                 mostrarMensaje(e.getMessage(), FacesMessage.SEVERITY_ERROR);
             }
-        }else{
-            System.out.println("No LLego");
         }
+
+        responsiveOptions = new ArrayList<>();
+        responsiveOptions.add(new ResponsiveOption("1024px", 3, 3));
+        responsiveOptions.add(new ResponsiveOption("768px", 2, 2));
+        responsiveOptions.add(new ResponsiveOption("560px", 1, 1));
     }
 
     private void mostrarMensaje(String mensaje, FacesMessage.Severity severity) {
         FacesMessage facesMsg = new FacesMessage(severity, "Alerta", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, facesMsg);
     }
+
 
 }

@@ -28,7 +28,7 @@ public interface PublicacionRepo extends JpaRepository<Publicacion, Long> {
     List<Object[]> listarPublicacionesOrdenadasPorVistas();
     @Query("SELECT p FROM Publicacion p WHERE (SELECT COUNT(c) FROM p.comentarios c WHERE c.estado = 'APROBADO') > :numeroComentarios")
     List<Publicacion> obtenerPublicacionesConMasComentariosAprobados(@Param("numeroComentarios") Long numeroComentarios);
-    @Query("SELECT p FROM Publicacion p WHERE p.estado = 'APROBADO' AND (LOWER(p.titulo) LIKE LOWER(:frase) OR LOWER(p.contenido) LIKE LOWER(:frase))")
+    @Query("SELECT p FROM Publicacion p WHERE p.estado = 'PUBLICADO' AND (LOWER(p.titulo) LIKE %:frase% OR LOWER(p.contenido) LIKE %:frase%)")
     List<Publicacion> obtenerPublicacionesPorFrase(@Param("frase") String frase);
     @Query("SELECT e FROM Escritor e JOIN e.obrasLiterarias ol WHERE ol.id = :obraLiterariaId")
     Optional<Escritor> obtenerEscritorDePublicacion(@Param("obraLiterariaId") Long obraLiterariaId);

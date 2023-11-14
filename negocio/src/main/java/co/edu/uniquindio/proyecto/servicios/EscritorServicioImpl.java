@@ -63,6 +63,15 @@ public class EscritorServicioImpl implements EscritorServicio{
     }
 
     @Override
+    public List<Publicacion> obtenerPublicacionesDeEscritor(Long idEscritor) throws Exception {
+        Optional<Escritor> escritor = escritorRepo.findById(idEscritor);
+        if(escritor.isEmpty()){
+            throw new Exception("No existe un escritor con ese id");
+        }
+        return escritorRepo.obtenerPublicacionesAprobadasDeEscritor(idEscritor);
+    }
+
+    @Override
     public Escritor validaLogin(String email, String contrasena) throws Exception {
         Optional<Escritor> escritor = escritorRepo.iniciarSesionEscritor(email, contrasena);
 

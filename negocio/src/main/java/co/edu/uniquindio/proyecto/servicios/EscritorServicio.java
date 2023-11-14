@@ -12,6 +12,7 @@ public interface EscritorServicio {
     void eliminarEscritor(Long idEscritor) throws Exception;
     List<Escritor> listarEscritores();
     List<Escritor> buscarEscritoresPorFrase(String frase);
+    List<Publicacion> obtenerPublicacionesDeEscritor(Long idEscritor) throws Exception;
     Escritor validaLogin(String email, String contrasena) throws  Exception;
 
 }

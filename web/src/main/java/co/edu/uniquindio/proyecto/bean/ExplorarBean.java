@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.el.MethodExpression;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -41,18 +43,31 @@ public class ExplorarBean implements Serializable{
         resultadosBusqueda.clear();
 
         if(searchType.equals("1")){
-            List<Escritor> escritores = escritorServicio.buscarEscritoresPorFrase(searchInput);
-            if(escritores.isEmpty()){
-                escritores = escritoresEjemplo();
+            if(!searchInput.isEmpty()) {
+                List<Escritor> escritores = escritorServicio.buscarEscritoresPorFrase(searchInput);
+                if(escritores.isEmpty()){
+                    mostrarMensaje("No se encontraron escritores con esta busqueda", FacesMessage.SEVERITY_ERROR);
+                }
+                resultadosBusqueda.addAll(escritores);
+            }else{
+                mostrarMensaje("El campo buscar esta vacio", FacesMessage.SEVERITY_ERROR);
             }
-            resultadosBusqueda.addAll(escritores);
         }else if(searchType.equals("0")){
-            List<Publicacion> publicaciones = publicacionServicio.buscarPublicacionPorFrase(searchInput);
-            if(publicaciones.isEmpty()){
-                publicaciones = publicacionesEjemplo();
+            if(!searchInput.isEmpty()) {
+                List<Publicacion> publicaciones = publicacionServicio.buscarPublicacionPorFrase(searchInput);
+                if(publicaciones.isEmpty()){
+                    mostrarMensaje("No se encontraron publicaciones con esta busqueda", FacesMessage.SEVERITY_ERROR);
+                }
+                resultadosBusqueda.addAll((publicaciones));
+            }else{
+                mostrarMensaje("El campo buscar esta vacio", FacesMessage.SEVERITY_ERROR);
             }
-            resultadosBusqueda.addAll((publicaciones));
         }
+    }
+
+    private void mostrarMensaje(String mensaje, FacesMessage.Severity severity) {
+        FacesMessage facesMsg = new FacesMessage(severity, "Alerta", mensaje);
+        FacesContext.getCurrentInstance().addMessage(null, facesMsg);
     }
 
     private List<Escritor> escritoresEjemplo() {
