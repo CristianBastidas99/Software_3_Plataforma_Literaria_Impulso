@@ -19,14 +19,14 @@
             <a class="navbar-brand" href="../index.xhtml">Plataforma Literaria</a>
             <div class="ml-auto p-1">
                 <h:form>
-                    <p:commandButton value="Registrarse" update="@form" action="#{inicioBean.registro}"  styleClass="ui-button-raised ui-button" />
-                    <p:commandButton value="Iniciar Sesion" update="@form" action="#{inicioBean.login}" styleClass="ui-button-raised ui-button"  />
+                    <p:commandButton value="Registrarse" update="@form" action="#{inicioBean.registro}" rendered="#{!loginBean.autenticado}" styleClass="ui-button-raised ui-button" />
+                    <p:commandButton value="Iniciar Sesion" update="@form" action="#{inicioBean.login}" rendered="#{!loginBean.autenticado}" styleClass="ui-button-raised ui-button"  />
                     <!--<p:button value="Cerar Sesion" styleClass="ui-button-raised ui-button-danger ui-button" />-->
-                    <p:splitButton value="#{inicioBean.nameAccount}" outcome="index.xhtml" appendTo="@(self)" icon="pi pi-user" styleClass="ui-button-secondary">
+                    <p:splitButton value="#{loginBean.usuario.nombre}" rendered="#{loginBean.autenticado}" outcome="index.xhtml" appendTo="@(self)" icon="pi pi-user" styleClass="ui-button-secondary">
                         <p:menuitem value="Cuenta" outcome="index.xhtml"  icon="pi pi-user-edit"/>
                         <p:menuitem value="Panel de Ccntrol" outcome="index.xhtml"  icon="pi pi-sliders-h"/>
                         <p:divider />
-                        <p:menuitem value="Cerrar Sesion" outcome="index.xhtml" icon="pi pi-sign-out" />
+                        <p:menuitem value="Cerrar Sesion" action="#{loginBean.logout}" ajax="false" icon="pi pi-sign-out" />
                     </p:splitButton>
                 </h:form>
             </div>

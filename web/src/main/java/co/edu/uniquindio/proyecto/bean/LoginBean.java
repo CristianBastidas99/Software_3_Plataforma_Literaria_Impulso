@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.ResponsiveOption;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -18,9 +19,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 @Component
-@ViewScoped
+@Scope("session")
 @Getter
 @Setter
 public class LoginBean implements Serializable{
@@ -39,29 +43,47 @@ public class LoginBean implements Serializable{
     private Escritor escritor;
     private Lector lector;
     private Administrador administrador;
+    private Boolean autenticado;
+    private int tipo;
+    private Usuario usuario;
 
     @PostConstruct
-    public void login(){
+    public void inicializar(){
         escritor = new Escritor();
         lector = new Lector();
         administrador = new Administrador();
+        usuario = new Usuario();
+        autenticado = false;
+        tipo = 0;
     }
 
-    public void loginn() {
+    public String loginn() {
         try {
             if(!camposIsEmpy()) {
                 if (loginServicio.isEmailRegistrado(email)) {
                     administrador = administradorServicio.validaLogin(email, password);
                     if(administrador!= null){
                         mostrarMensaje("Login Exitoso Administrador", FacesMessage.SEVERITY_INFO);
+                        usuario = administrador;
+                        autenticado = true;
+                        tipo = 1;
+                        return "index.xhtml";
                     }
                     escritor = escritorServicio.validaLogin(email, password);
                     if(escritor!= null){
                         mostrarMensaje("Login Exitoso Escritor", FacesMessage.SEVERITY_INFO);
+                        usuario = escritor;
+                        autenticado = true;
+                        tipo = 2;
+                        return "index.xhtml";
                     }
                     lector = lectorServicio.validaLogin(email, password);
                     if(lector!= null){
                         mostrarMensaje("Login Exitoso Lector", FacesMessage.SEVERITY_INFO);
+                        usuario = lector;
+                        autenticado = true;
+                        tipo = 3;
+                        return "index.xhtml";
                     }
                     if (administrador == null && escritor == null && lector == null) {
                         mostrarMensaje("La contraseña es incorrecta", FacesMessage.SEVERITY_ERROR);
@@ -79,6 +101,7 @@ public class LoginBean implements Serializable{
         } catch (Exception e) {
             mostrarMensaje(e.getMessage(), FacesMessage.SEVERITY_ERROR);
         }
+        return "login.xhtml";
     }
 
     private boolean camposIsEmpy(){
@@ -90,6 +113,22 @@ public class LoginBean implements Serializable{
             return true;
         }
         return false;
+    }
+
+    public String logout(){
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+
+        // Redirigir a la página de inicio
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
+        try {
+            externalContext.redirect(request.getContextPath() + "/index.xhtml");
+        } catch (Exception e) {
+            // Manejar excepciones si es necesario
+            mostrarMensaje(e.getMessage(), FacesMessage.SEVERITY_ERROR);
+        }
+
+        return null;
     }
 
     private void mostrarMensaje(String mensaje, FacesMessage.Severity severity) {
