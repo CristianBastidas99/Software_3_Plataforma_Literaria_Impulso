@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="/WEB-INF/template.xhtml">
+
+    <ui:define name="head">
+        <h:outputStylesheet library="css" name="bootstrap.min.css" />
+        <h:outputStylesheet library="css" name="style.css" />
+    </ui:define>
+    <ui:define name="title">Editar Perfil</ui:define>
+
+    <ui:define name="content">
+        <div class="card p-5">
+            <p:panel id="edit" header="Editar Perfil de #{editarPerfilBean.titulo}" style="width: 75%; margin: 0 auto;">
+                <h:form id="editProfileForm" enctype="multipart/form-data">
+                    <!-- Formulario para editar el perfil -->
+                    <div class="form-group p-2">
+                        <p:outputLabel for="nombre" value="Nombre" />
+                        <p:inputText id="nombre" value="#{editarPerfilBean.usuarioSesion.nombre}" class="form-control" placeholder="Tu nombre" />
+                    </div>
+                    <div class="form-group p-2">
+                        <p:outputLabel for="biografia" rendered="#{loginBean.tipo eq '2'}" value="Biografía" />
+                        <p:inputTextarea id="biografia" value="#{editarPerfilBean.usuarioSesion.biografia}" rendered="#{loginBean.tipo eq '2'}" rows="5" class="form-control"
+                                         placeholder="Escribe una breve biografía" />
+                    </div>
+                    <div class="form-group p-2">
+                        <p:outputLabel for="imagen_perfil" value="Imagen de Perfil" />
+                        <p:fileUpload id="imagen_perfil" listener="#{editarPerfilBean.subirImagenes}" mode="advanced" dragDropSupport="false"
+                                       sizeLimit="100000" fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+                                      validateContentType="true" accept=".gif,.jpg,.jpeg,.png"
+                                      onupload="return confirm('Are you sure?')"/>
+                    </div>
+                    <div class="form-group p-2">
+                        <p:commandButton value="Guardar Cambios" action="#{editarPerfilBean.guardarCambios}" class="btn btn-primary"
+                                         update="@form" />
+                    </div>
+                    <p:messages showDetail="true" />
+                </h:form>
+            </p:panel>
+        </div>
+
+        <div class="card p-5">
+            <p:panel header="Cambiar Contraseña" style="width: 75%; margin: 0 auto;">
+                <h:form id="editPassForm">
+                    <!-- Cambiar contraseña -->
+                    <div class="form-group p-2">
+                        <p:outputLabel for="contrasenaActual" value="Contraseña Actual" />
+                        <p:password id="contrasenaActual" value="#{editarPerfilBean.contrasenaActual}" class="form-control"
+                                    placeholder="Tu contraseña actual" />
+                    </div>
+                    <div class="form-group p-2">
+                        <p:outputLabel for="nuevaContrasena" value="Nueva Contraseña" />
+                        <p:password id="nuevaContrasena" value="#{editarPerfilBean.nuevaContrasena}" class="form-control"
+                                    placeholder="Tu nueva contraseña" />
+                    </div>
+                    <div class="form-group p-2">
+                        <p:outputLabel for="confirmarContrasena" value="Confirmar Nueva Contraseña" />
+                        <p:password id="confirmarContrasena" value="#{editarPerfilBean.confirmarContrasena}" class="form-control"
+                                    placeholder="Confirmar nueva contraseña" />
+                    </div>
+                    <div class="form-group p-2">
+                        <p:commandButton value="Cambiar Contraseña" action="#{editarPerfilBean.cambiarContrasena}" class="btn btn-primary"
+                                     update="@form" />
+                    </div>
+                    <p:messages showDetail="true" />
+                </h:form>
+            </p:panel>
+        </div>
+    </ui:define>
+
+    <ui:define name="script">
+        <h:outputScript library="js" name="bootstrap.bundle.min.js" />
+        <h:outputScript library="js" name="jquery-3.5.1.slim.min.js" />
+        <h:outputScript library="js" name="popper.min.js" />
+    </ui:define>
+
+</ui:composition>
+</html>

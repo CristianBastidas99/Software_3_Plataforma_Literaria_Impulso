@@ -6,10 +6,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.model.ResponsiveOption;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,6 +35,8 @@ public class InicioBean implements Serializable {
     private PublicacionServicio publicacionServicio;
     @Autowired
     private  EscritorServicio escritorServicio;
+    @Value(value = "#{loginBean.usuario}")
+    private Usuario usuarioSesion;
 
     @PostConstruct
     public void inicializar(){
@@ -95,6 +102,26 @@ public class InicioBean implements Serializable {
 
     public String login() {
         return "login?faces-redirect=true";
+    }
+
+    public String cuenta(){
+
+        // Redirigir a la página de inicio
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
+        try {
+            externalContext.redirect(request.getContextPath() + "/editar_perfil.xhtml?idUsu=" + usuarioSesion.getId());
+        } catch (Exception e) {
+            // Manejar excepciones si es necesario
+            mostrarMensaje(e.getMessage(), FacesMessage.SEVERITY_ERROR);
+        }
+
+        return null;
+    }
+
+    private void mostrarMensaje(String mensaje, FacesMessage.Severity severity) {
+        FacesMessage facesMsg = new FacesMessage(severity, "Alerta", mensaje);
+        FacesContext.getCurrentInstance().addMessage(null, facesMsg);
     }
 
 }

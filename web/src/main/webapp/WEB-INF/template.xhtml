@@ -23,8 +23,8 @@
                     <p:commandButton value="Iniciar Sesion" update="@form" action="#{inicioBean.login}" rendered="#{!loginBean.autenticado}" styleClass="ui-button-raised ui-button"  />
                     <!--<p:button value="Cerar Sesion" styleClass="ui-button-raised ui-button-danger ui-button" />-->
                     <p:splitButton value="#{loginBean.usuario.nombre}" rendered="#{loginBean.autenticado}" outcome="index.xhtml" appendTo="@(self)" icon="pi pi-user" styleClass="ui-button-secondary">
-                        <p:menuitem value="Cuenta" outcome="index.xhtml"  icon="pi pi-user-edit"/>
-                        <p:menuitem value="Panel de Ccntrol" outcome="index.xhtml"  icon="pi pi-sliders-h"/>
+                        <p:menuitem value="Editar Cuenta" action="#{inicioBean.cuenta}" ajax="false" rendered="#{loginBean.tipo eq '2' or loginBean.tipo eq '3'}" icon="pi pi-user-edit"/>
+                        <p:menuitem value="Panel de Ccntrol" outcome="index.xhtml" rendered="#{loginBean.tipo eq '1'}" icon="pi pi-sliders-h"/>
                         <p:divider />
                         <p:menuitem value="Cerrar Sesion" action="#{loginBean.logout}" ajax="false" icon="pi pi-sign-out" />
                     </p:splitButton>

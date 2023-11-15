@@ -40,18 +40,12 @@ public class LoginBean implements Serializable{
 
     private String email;
     private String password;
-    private Escritor escritor;
-    private Lector lector;
-    private Administrador administrador;
     private Boolean autenticado;
     private int tipo;
     private Usuario usuario;
 
     @PostConstruct
     public void inicializar(){
-        escritor = new Escritor();
-        lector = new Lector();
-        administrador = new Administrador();
         usuario = new Usuario();
         autenticado = false;
         tipo = 0;
@@ -61,7 +55,7 @@ public class LoginBean implements Serializable{
         try {
             if(!camposIsEmpy()) {
                 if (loginServicio.isEmailRegistrado(email)) {
-                    administrador = administradorServicio.validaLogin(email, password);
+                    Administrador administrador = administradorServicio.validaLogin(email, password);
                     if(administrador!= null){
                         mostrarMensaje("Login Exitoso Administrador", FacesMessage.SEVERITY_INFO);
                         usuario = administrador;
@@ -69,7 +63,7 @@ public class LoginBean implements Serializable{
                         tipo = 1;
                         return "index.xhtml";
                     }
-                    escritor = escritorServicio.validaLogin(email, password);
+                    Escritor escritor = escritorServicio.validaLogin(email, password);
                     if(escritor!= null){
                         mostrarMensaje("Login Exitoso Escritor", FacesMessage.SEVERITY_INFO);
                         usuario = escritor;
@@ -77,7 +71,7 @@ public class LoginBean implements Serializable{
                         tipo = 2;
                         return "index.xhtml";
                     }
-                    lector = lectorServicio.validaLogin(email, password);
+                    Lector lector = lectorServicio.validaLogin(email, password);
                     if(lector!= null){
                         mostrarMensaje("Login Exitoso Lector", FacesMessage.SEVERITY_INFO);
                         usuario = lector;
@@ -87,12 +81,6 @@ public class LoginBean implements Serializable{
                     }
                     if (administrador == null && escritor == null && lector == null) {
                         mostrarMensaje("La contraseña es incorrecta", FacesMessage.SEVERITY_ERROR);
-                    }else{
-                        email = "";
-                        password = "";
-                        escritor = new Escritor();
-                        lector = new Lector();
-                        administrador = new Administrador();
                     }
                 }else{
                     throw new Exception("El email no se encuentra registrado");

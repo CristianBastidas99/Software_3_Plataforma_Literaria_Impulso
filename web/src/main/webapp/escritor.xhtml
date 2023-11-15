@@ -13,10 +13,10 @@
         <h:outputStylesheet library="css" name="bootstrap.min.css" />
         <h:outputStylesheet library="css" name="style.css" />
     </ui:define>
+
     <ui:define name="title">Escritor</ui:define>
 
     <ui:define name="content">
-
         <div class="row">
             <div class="col-md-4">
                 <!-- Información del Escritor -->
@@ -25,7 +25,6 @@
                     <h:panelGrid columns="1" styleClass="card-body">
                         <h:outputText value="#{escritorBean.escritor.nombre}" styleClass="card-title"/>
                         <h:outputText value="#{escritorBean.escritor.biografia}" styleClass="card-text"/>
-                        <p:button outcome="index.html" value="Editar Perfil" styleClass="btn btn-primary"/>
                     </h:panelGrid>
                 </p:panel>
             </div>
@@ -54,8 +53,7 @@
                     </div>
                 </p:carousel>
             </div>
-    </div>
-
+        </div>
     </ui:define>
 
     <ui:define name="script">
