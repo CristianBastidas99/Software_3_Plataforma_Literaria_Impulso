@@ -34,7 +34,7 @@
             <div class="col-md-4">
                 <!-- Información del Escritor -->
                 <p:panel header="Información del Escritor">
-                    <h:graphicImage name="img/#{escritorBean.escritor.urlImagen}" alt="Avatar del Escritor" styleClass="card-img-top"/>
+                    <h:graphicImage value="#{recursos.imagenUsuario(escritorBean.escritor.urlImagen)}" alt="Avatar del Escritor" styleClass="card-img-top"/>
                     <h:panelGrid columns="1" styleClass="card-body">
                         <h:outputText value="#{escritorBean.escritor.nombre}" styleClass="card-title"/>
                         <h:outputText value="#{escritorBean.escritor.biografia}" styleClass="card-text"/>
@@ -51,7 +51,7 @@
                     <div class="product-item p-2">
                         <div class="product-item-content">
                             <div class="mb-3">
-                                <p:graphicImage name="img/#{publicacion.urlImagen}" styleClass="product-image card-img-top"/>
+                                <p:graphicImage value="#{recursos.imagenPublicacion(publicacion.urlImagen)}" styleClass="product-image card-img-top"/>
                             </div>
                             <div>
                                 <h4 class="mb-1">#{publicacion.titulo}</h4>

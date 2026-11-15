@@ -31,7 +31,8 @@ Plataforma_Literaria_Impulso_sw3
 │   └── src/test/                # Pruebas de repositorios, consultas y servicios (+ pli.sql)
 ├── web/                         # Aplicación web JSF (módulo ejecutable)
 │   ├── src/main/java/.../bean/  # Managed beans (Inicio, Explorar, Login, Registrar,
-│   │                            # Escritor, Publicacion, EditarPerfil)
+│   │                            # Escritor, Publicacion, EditarPerfil, Recursos)
+│   ├── src/main/java/.../archivos/ # Subida y validación de imágenes y PDFs (ArchivoServicio)
 │   ├── src/main/resources/demo/ # Datos del perfil demo (datos-demo.json)
 │   └── src/main/webapp/         # Páginas .xhtml, plantilla y recursos (css, js, img, pdf)
 ├── scripts/                     # Generador de portadas, avatares y PDFs de la demo
@@ -86,6 +87,15 @@ La configuración está en `web/src/main/resources/application.properties` (y un
 | `DB_PASSWORD` | `12345` | Contraseña de MySQL |
 | `MAIL_HOST` | `localhost` | Host SMTP |
 | `MAIL_PORT` | `1025` | Puerto SMTP |
+| `UPLOAD_DIR` | `uploads` | Carpeta donde se guardan las imágenes y PDFs que suben los usuarios |
+
+### Archivos subidos
+
+Las imágenes y PDFs que suben los usuarios se guardan **fuera del código**, en la carpeta `UPLOAD_DIR` (subcarpetas `img/` y `pdf/`), y se sirven en `/uploads/**`. Si la ruta es relativa, se toma desde el directorio en el que se arranca la aplicación: con `./gradlew :web:bootRun` queda en `web/uploads`. La carpeta se crea al arrancar y está en `.gitignore`.
+
+- Imágenes: JPG, PNG o WEBP, máximo 5 MB (`upload.imagen.max-mb`).
+- Fragmentos: PDF, máximo 20 MB (`upload.pdf.max-mb`).
+- El tipo se comprueba por la extensión **y** por el contenido del archivo, y cada archivo se guarda con un nombre aleatorio (UUID).
 
 Además puedes crear un archivo **opcional** `application-secret.properties` (en `web/src/main/resources/`) para sobrescribir cualquier propiedad en tu máquina, por ejemplo, para usar Gmail real en lugar de Mailpit:
 
@@ -128,7 +138,8 @@ New-NetFirewallRule -DisplayName "Impulso 8080" -Direction Inbound -Protocol TCP
 
 ```bash
 ./gradlew build -x test     # Compilar sin ejecutar pruebas
-./gradlew :negocio:test     # Ejecutar pruebas (requieren MySQL corriendo)
+./gradlew :negocio:test     # Pruebas de negocio (requieren MySQL corriendo)
+./gradlew :web:test         # Pruebas de web (no requieren MySQL)
 ```
 
 Las pruebas usan una base de datos aparte, `plisw3_test`, que se crea automáticamente. No modifican la base de desarrollo.
@@ -197,7 +208,7 @@ python scripts/generar_recursos_demo.py
 ## Problemas conocidos
 
 - Las contraseñas se guardan y comparan en texto plano.
-- Las subidas se guardan en `src/main/webapp/resources/...` (ruta relativa); solo funciona en desarrollo.
+- Los cambios en las páginas `.xhtml` pueden no verse hasta reiniciar la aplicación (JSF guarda las vistas en caché).
 - El formulario para comentar en `publicacion.xhtml` todavía no está conectado a ningún bean.
 
 ## Historial de cambios de configuración

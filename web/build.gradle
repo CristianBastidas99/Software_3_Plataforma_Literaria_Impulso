@@ -8,3 +8,6 @@ dependencies {
     implementation 'org.primefaces:primefaces:13.0.0'
     implementation 'commons-io:commons-io:2.5'
 }
+test {
+    useJUnitPlatform()
+}

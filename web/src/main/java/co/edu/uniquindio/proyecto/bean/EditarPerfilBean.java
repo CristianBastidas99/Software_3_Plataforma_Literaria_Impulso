@@ -1,5 +1,7 @@
 package co.edu.uniquindio.proyecto.bean;
 
+import co.edu.uniquindio.proyecto.archivos.ArchivoInvalidoException;
+import co.edu.uniquindio.proyecto.archivos.ArchivoServicio;
 import co.edu.uniquindio.proyecto.entidades.Escritor;
 import co.edu.uniquindio.proyecto.entidades.Lector;
 import co.edu.uniquindio.proyecto.entidades.Usuario;
@@ -17,12 +19,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 
 @Component
 @ViewScoped
@@ -38,8 +35,8 @@ public class EditarPerfilBean implements Serializable {
     private Usuario usuarioSesion;
     @Value(value = "#{loginBean.tipo}")
     private int tipo;
-    @Value("${upload.url}")
-    private String urlImagenes;
+    @Autowired
+    private ArchivoServicio archivoServicio;
     private String titulo;
     private String contrasenaActual;
     private String nuevaContrasena;
@@ -101,28 +98,14 @@ public class EditarPerfilBean implements Serializable {
 
     public void subirImagenes(FileUploadEvent event) {
         UploadedFile imagen = event.getFile();
-        imagenPerfil = subirImagen(imagen);
-        if (imagenPerfil != null) {
+        try {
+            imagenPerfil = archivoServicio.guardarImagen(imagen);
             usuarioSesion.setUrlImagen(imagenPerfil);
-            Mensajes.info("La imagen se cargó correctamente");
-        } else {
-            Mensajes.error("No se pudo cargar la imagen");
-        }
-    }
-
-    private String subirImagen(UploadedFile imagen) {
-        String nombreArchivo = generarNombreUnico(imagen.getFileName());
-        Path rutaDestino = Paths.get(urlImagenes, nombreArchivo);
-        try (InputStream input = imagen.getInputStream()) {
-            Files.copy(input, rutaDestino, StandardCopyOption.REPLACE_EXISTING);
-            return nombreArchivo;
-        } catch (IOException e) {
+            Mensajes.info("La imagen se cargó correctamente. Pulsa \"Guardar Cambios\" para conservarla.");
+        } catch (ArchivoInvalidoException e) {
             Mensajes.error(e.getMessage());
-            return null;
+        } catch (IOException e) {
+            Mensajes.error("No se pudo guardar la imagen. Inténtalo de nuevo.");
         }
-    }
-
-    private String generarNombreUnico(String nombreOriginal) {
-        return System.currentTimeMillis() + "_" + nombreOriginal;
     }
 }

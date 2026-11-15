@@ -52,7 +52,7 @@ public class RegistrarBean implements Serializable {
                 escritor.setNombre(nombre);
                 escritor.setEmail(email);
                 escritor.setPassword(password);
-                escritor.setUrlImagen("autor.jpg");
+                escritor.setUrlImagen("");
                 escritor.setEstado(Estado.ACTIVO);
                 escritor.setBiografia("");
                 escritorServicio.registrarEscritor(escritor);
@@ -63,7 +63,7 @@ public class RegistrarBean implements Serializable {
                 lector.setNombre(nombre);
                 lector.setEmail(email);
                 lector.setPassword(password);
-                lector.setUrlImagen("autor.jpg");
+                lector.setUrlImagen("");
                 lector.setEstado(Estado.ACTIVO);
                 lectorServicio.registrarLector(lector);
                 Mensajes.info("Registro como lector exitoso");

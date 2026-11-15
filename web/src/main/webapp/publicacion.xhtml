@@ -37,10 +37,10 @@
             <p>Descripción: #{publicacionBean.publicacion.contenido}</p>
             <p>Sinopsis: #{publicacionBean.publicacion.obraLiteraria.sinopsis}</p>
             <p>Fragmento de la Obra:</p>
-            <p:media value="/resources/pdf/#{publicacionBean.publicacion.obraLiteraria.fragmento.url}" width="100%" height="600px"
+            <p:media value="#{recursos.pdf(publicacionBean.publicacion.obraLiteraria.fragmento.url)}" width="100%" height="600px"
                      rendered="#{not empty publicacionBean.publicacion.obraLiteraria.fragmento.url}">
                 Tu navegador no puede mostrar el PDF. <h:outputLink
-                    value="#{request.contextPath}/resources/pdf/#{publicacionBean.publicacion.obraLiteraria.fragmento.url}">Haz clic aquí</h:outputLink> para descargarlo.
+                    value="#{request.contextPath}#{recursos.pdf(publicacionBean.publicacion.obraLiteraria.fragmento.url)}">Haz clic aquí</h:outputLink> para descargarlo.
             </p:media>
             <h:outputText value="Esta obra aún no tiene un fragmento disponible." styleClass="text-muted"
                           rendered="#{empty publicacionBean.publicacion.obraLiteraria.fragmento.url}"/>

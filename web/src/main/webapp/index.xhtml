@@ -43,7 +43,7 @@
                 <div class="product-item p-2">
                     <div class="product-item-content">
                         <div class="mb-3">
-                            <p:graphicImage name="img/#{publicacion.urlImagen}" styleClass="product-image card-img-top"/>
+                            <p:graphicImage value="#{recursos.imagenPublicacion(publicacion.urlImagen)}" styleClass="product-image card-img-top"/>
                         </div>
                         <div>
                             <h4 class="mb-1">#{publicacion.titulo}</h4>
@@ -74,7 +74,7 @@
                 <div class="product-item p-2">
                     <div class="product-item-content">
                         <div class="mb-3">
-                            <p:graphicImage name="img/#{escritor.urlImagen}" styleClass="product-image card-img-top"/>
+                            <p:graphicImage value="#{recursos.imagenUsuario(escritor.urlImagen)}" styleClass="product-image card-img-top"/>
                         </div>
                         <div>
                             <h4 class="mb-1">#{escritor.nombre}</h4>
