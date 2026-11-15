@@ -37,4 +37,35 @@ public interface PublicacionRepo extends JpaRepository<Publicacion, Long> {
     @Query("SELECT p FROM Publicacion p WHERE p.estado = 'PUBLICADO' ORDER BY p.fechaPublicacion DESC, p.id DESC")
     List<Publicacion> listarPublicacionesPublicadas();
 
+    // ---- Interacción del lector (Fase 6) ----
+
+    @Query("SELECT COUNT(l) FROM Lector l JOIN l.publicacionesRecomendadas p WHERE p.id = :publicacionId")
+    long contarRecomendaciones(@Param("publicacionId") Long publicacionId);
+
+    @Query("SELECT COUNT(l) FROM Lector l JOIN l.publicacionesVistas p WHERE p.id = :publicacionId")
+    long contarVistas(@Param("publicacionId") Long publicacionId);
+
+    @Query("SELECT COUNT(l) > 0 FROM Lector l JOIN l.publicacionesRecomendadas p WHERE l.id = :lectorId AND p.id = :publicacionId")
+    boolean haRecomendado(@Param("lectorId") Long lectorId, @Param("publicacionId") Long publicacionId);
+
+    @Query("SELECT p.id, COUNT(l) FROM Publicacion p JOIN p.lectoresVisitas l GROUP BY p.id")
+    List<Object[]> contarVistasPorPublicacion();
+
+    @Query("SELECT p.id, COUNT(l) FROM Publicacion p JOIN p.lectoresRecomendaciones l GROUP BY p.id")
+    List<Object[]> contarRecomendacionesPorPublicacion();
+
+    /** Búsqueda en título y descripción; {@code patron} ya trae los comodines y usa ! como carácter de escape. */
+    @Query("SELECT p FROM Publicacion p WHERE p.estado = 'PUBLICADO' " +
+            "AND (LOWER(p.titulo) LIKE :patron ESCAPE '!' OR LOWER(p.contenido) LIKE :patron ESCAPE '!')")
+    List<Publicacion> buscarPublicadas(@Param("patron") String patron);
+
+    @Query("SELECT DISTINCT p FROM Publicacion p JOIN p.obraLiteraria o JOIN o.generos g WHERE p.estado = 'PUBLICADO' " +
+            "AND g.id = :generoId AND (LOWER(p.titulo) LIKE :patron ESCAPE '!' OR LOWER(p.contenido) LIKE :patron ESCAPE '!')")
+    List<Publicacion> buscarPublicadasPorGenero(@Param("patron") String patron, @Param("generoId") Long generoId);
+
+    /** Publicaciones de alguno de los géneros o escritores indicados (las listas no pueden estar vacías). */
+    @Query("SELECT DISTINCT p FROM Publicacion p JOIN p.obraLiteraria o LEFT JOIN o.generos g LEFT JOIN o.escritores e " +
+            "WHERE p.estado = 'PUBLICADO' AND (g.id IN :generos OR e.id IN :escritores)")
+    List<Publicacion> buscarPublicadasPorGenerosOEscritores(@Param("generos") List<Long> generos,
+                                                            @Param("escritores") List<Long> escritores);
 }

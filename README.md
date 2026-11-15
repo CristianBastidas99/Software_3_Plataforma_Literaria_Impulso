@@ -30,7 +30,7 @@ Plataforma_Literaria_Impulso_sw3
 │       ├── dto/                 # DatosObra: datos del formulario de obra con Bean Validation
 │       ├── validacion/          # Validador de ISBN (@Isbn)
 │       └── servicios/           # Interfaces + implementaciones (CRUD, login, búsqueda, email,
-│                                # GestionObra para las obras del escritor)
+│                                # GestionObra, Interaccion y FiltroPalabras)
 │   └── src/test/                # Pruebas de repositorios, consultas y servicios (+ pli.sql)
 ├── web/                         # Aplicación web JSF (módulo ejecutable)
 │   ├── src/main/java/.../bean/  # Managed beans (Inicio, Explorar, Login, Registrar,
@@ -187,7 +187,7 @@ python scripts/generar_recursos_demo.py
 | Página | Descripción |
 |---|---|
 | `index.xhtml` | Inicio con publicaciones destacadas |
-| `explorar.xhtml` | Búsqueda de publicaciones y escritores por frase |
+| `explorar.xhtml` | Búsqueda de publicaciones (frase, género y orden por fecha o popularidad) y de escritores |
 | `registro.xhtml` | Registro de escritores y lectores |
 | `login.xhtml` | Inicio de sesión (administrador, escritor o lector) |
 | `publicacion.xhtml?idProd=<id>` | Detalle de una publicación y su autor |
@@ -206,19 +206,18 @@ python scripts/generar_recursos_demo.py
 - Servicio de envío de correo.
 - Interfaz web: inicio, explorar, registro, login con sesión, detalle de publicación y perfil de escritor.
 - Edición de perfil (nombre, correo, biografía, imagen y contraseña) y página "Mi perfil" del lector.
+- Interacción: comentarios con filtro de palabras ofensivas, recomendaciones, contador de vistas, seguir escritores, géneros preferidos y sección "Recomendado para ti".
 - Publicación de obras por los escritores: creación con portada, PDF, géneros y coautores; edición, retiro y nueva publicación, con validación de datos (incluido el ISBN) y control de autoría.
 - Subida de imágenes y PDF a una carpeta externa, con validación de tipo y tamaño.
 
 **Pendiente / en desarrollo**
-- Pantallas de administración, comentarios y géneros.
-- Uso del filtro de palabras ofensivas (`malaspalabras.json`) en los comentarios.
+- Pantallas de administración (moderación de comentarios, géneros y usuarios).
 - Uso del servicio de correo en algún flujo (registro, recuperación de contraseña, etc.).
 
 ## Problemas conocidos
 
 - Las contraseñas se guardan y comparan en texto plano.
 - Los cambios en las páginas `.xhtml` pueden no verse hasta reiniciar la aplicación (JSF guarda las vistas en caché).
-- El formulario para comentar en `publicacion.xhtml` todavía no está conectado a ningún bean.
 
 ## Historial de cambios de configuración
 

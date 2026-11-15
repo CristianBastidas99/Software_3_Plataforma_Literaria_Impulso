@@ -28,6 +28,20 @@
             </div>
         </div>
 
+        <!-- Recomendado para ti (solo lectores) -->
+        <ui:fragment rendered="#{inicioBean.lector}">
+            <div class="p-5 pb-0" id="recomendadoParaTi">
+                <h2>Recomendado para ti</h2>
+                <p class="text-muted">Según tus géneros preferidos y los escritores que sigues.</p>
+                <ui:include src="/WEB-INF/fragmentos/lista_publicaciones.xhtml">
+                    <ui:param name="publicaciones" value="#{inicioBean.recomendadas}"/>
+                    <ui:param name="vacio" value="Elige tus géneros preferidos o sigue a algún escritor para recibir recomendaciones."/>
+                </ui:include>
+                <p:button value="Elegir mis géneros" outcome="mi_perfil.xhtml" icon="pi pi-sliders-h"
+                          rendered="#{empty inicioBean.recomendadas}" styleClass="ui-button-outlined mb-3"/>
+            </div>
+        </ui:fragment>
+
         <!-- Publicaciones Populares -->
         <div class=" p-5">
             <ui:fragment rendered="#{empty inicioBean.publicacions}">

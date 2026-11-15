@@ -29,4 +29,6 @@ public interface ComentarioRepo extends JpaRepository<Comentario, Long> {
     @Query("SELECT c FROM Comentario c WHERE LOWER(c.contenido) LIKE LOWER(:palabraClave)")
     List<Comentario> buscarComentariosPorMalasPalabras(@Param("palabraClave") String palabraClave);
 
+    @Query("SELECT c FROM Comentario c WHERE c.publicacion.id = :publicacionId AND c.estado = 'APROBADO' ORDER BY c.fechaPublicacion DESC, c.id DESC")
+    List<Comentario> listarComentariosVisibles(@Param("publicacionId") Long publicacionId);
 }

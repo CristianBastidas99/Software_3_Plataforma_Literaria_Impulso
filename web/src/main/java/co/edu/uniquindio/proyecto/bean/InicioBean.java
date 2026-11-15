@@ -3,6 +3,7 @@ package co.edu.uniquindio.proyecto.bean;
 import co.edu.uniquindio.proyecto.entidades.Escritor;
 import co.edu.uniquindio.proyecto.entidades.Publicacion;
 import co.edu.uniquindio.proyecto.servicios.EscritorServicio;
+import co.edu.uniquindio.proyecto.servicios.InteraccionServicio;
 import co.edu.uniquindio.proyecto.servicios.PublicacionServicio;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,16 +30,34 @@ public class InicioBean implements Serializable {
     private PublicacionServicio publicacionServicio;
     @Autowired
     private EscritorServicio escritorServicio;
+    @Autowired
+    private InteraccionServicio interaccionServicio;
+    @Autowired
+    private LoginBean loginBean;
+
+    private static final int LECTOR = 3;
+    private static final int MAX_RECOMENDADAS = 8;
+
+    /** Publicaciones de los géneros preferidos y escritores favoritos del lector con sesión. */
+    private List<Publicacion> recomendadas = new ArrayList<>();
 
     @PostConstruct
     public void inicializar() {
         publicacions = publicacionServicio.listarPublicacionesPublicadas();
         escritors = escritorServicio.listarEscritores();
+        if (isLector()) {
+            recomendadas = interaccionServicio.recomendadasPara(loginBean.getUsuario().getId(), MAX_RECOMENDADAS);
+        }
 
         responsiveOptions = new ArrayList<>();
         responsiveOptions.add(new ResponsiveOption("1024px", 3, 3));
         responsiveOptions.add(new ResponsiveOption("768px", 2, 2));
         responsiveOptions.add(new ResponsiveOption("560px", 1, 1));
+    }
+
+    public boolean isLector() {
+        return Boolean.TRUE.equals(loginBean.getAutenticado()) && loginBean.getTipo() == LECTOR
+                && loginBean.getUsuario() != null && loginBean.getUsuario().getId() != null;
     }
 
     public String registro() {

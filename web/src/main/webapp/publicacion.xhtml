@@ -75,6 +75,18 @@
                             <f:convertDateTime pattern="dd/MM/yyyy"/>
                         </h:outputText>
                     </p>
+                    <h:form id="formInteraccion" styleClass="d-flex align-items-center">
+                        <span class="mr-3" title="Lectores que la han visto"><i class="pi pi-eye"></i>
+                            <h:outputText id="vistas" value=" #{publicacionBean.vistas} #{publicacionBean.vistas == 1 ? 'vista' : 'vistas'}"/></span>
+                        <span class="mr-3" title="Lectores que la recomiendan"><i class="pi pi-thumbs-up"></i>
+                            <h:outputText id="recomendaciones" value=" #{publicacionBean.recomendaciones} #{publicacionBean.recomendaciones == 1 ? 'recomendación' : 'recomendaciones'}"/></span>
+                        <p:commandButton id="recomendar" rendered="#{publicacionBean.lector and publicacionBean.publicada}"
+                                         value="#{publicacionBean.recomendada ? 'Recomendada' : 'Recomendar'}"
+                                         icon="#{publicacionBean.recomendada ? 'pi pi-thumbs-up-fill' : 'pi pi-thumbs-up'}"
+                                         action="#{publicacionBean.alternarRecomendacion}" process="@this" update="@form mensajesInteraccion"
+                                         styleClass="#{publicacionBean.recomendada ? 'ui-button-success' : 'ui-button-outlined'}"/>
+                        <p:growl id="mensajesInteraccion" life="2500"/>
+                    </h:form>
                 </div>
             </div>
             <p>Fragmento de la Obra:</p>
@@ -87,42 +99,63 @@
                           rendered="#{empty publicacionBean.publicacion.obraLiteraria.fragmento.url}"/>
             <!-- Comentarios -->
             <div class="comments p-3">
-                <h3>Comentarios</h3>
-                <!-- Comentario 1 -->
-                <h:form id="resultados">
-                    <p:dataView var="comentario" value="#{publicacionBean.publicacion.comentarios}" rows="12" paginator="true"
-                                rowsPerPageTemplate="6,12,16"
-                                paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                gridIcon="pi pi-th-large" listIcon="pi pi-bars">
+                <h3>Comentarios (#{publicacionBean.comentarios.size()})</h3>
+                <h:form id="formComentarios">
+                    <p:messages id="mensajesComentarios" showDetail="true" closable="true"/>
 
-                        <p:dataViewListItem>
-                            <div class="container-flex product-list-item p-4">
-                                <div class="product-list-detail p-2">
-                                    <div class="product-name"><b>#{comentario.escritor.nombre}</b></div>
-                                    <div class="product-name"><b>#{comentario.lector.nombre}</b></div>
-                                    <div class="product-description">#{comentario.contenido}</div>
+                    <ui:fragment rendered="#{publicacionBean.puedeComentar}">
+                        <div class="form-group">
+                            <p:outputLabel for="nuevoComentario" value="Escribe un comentario"/>
+                            <p:inputTextarea id="nuevoComentario" value="#{publicacionBean.nuevoComentario}" rows="3"
+                                             styleClass="form-control" maxlength="#{publicacionBean.comentarioMax}"
+                                             counter="contadorComentario" counterTemplate="Quedan {0} caracteres"
+                                             autoResize="false" placeholder="¿Qué te pareció?"/>
+                            <h:outputText id="contadorComentario" styleClass="text-muted small"/>
+                        </div>
+                        <p:commandButton id="publicarComentario" value="Publicar comentario" icon="pi pi-send"
+                                         action="#{publicacionBean.comentar}" process="@this nuevoComentario"
+                                         update="@form" styleClass="mb-3"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{not publicacionBean.puedeComentar and publicacionBean.publicada}">
+                        <p class="text-muted" id="avisoComentar">
+                            <h:link outcome="login.xhtml" value="Inicia sesión" rendered="#{not loginBean.autenticado}"/>
+                            #{loginBean.autenticado ? 'Inicia sesión como lector o escritor' : ''} para comentar.
+                        </p>
+                    </ui:fragment>
+
+                    <ui:repeat value="#{publicacionBean.comentarios}" var="comentario">
+                        <div class="d-flex border-top py-3 comentario">
+                            <h:graphicImage value="#{recursos.imagenUsuario(publicacionBean.imagenAutor(comentario))}" alt=""
+                                            style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;" styleClass="mr-3"/>
+                            <div class="flex-grow-1">
+                                <div class="d-flex align-items-center">
+                                    <strong class="autor-comentario">#{publicacionBean.nombreAutor(comentario)}</strong>
+                                    <h:outputText value="Escritor" styleClass="badge badge-info ml-2"
+                                                  rendered="#{publicacionBean.esDeEscritor(comentario)}"/>
+                                    <small class="text-muted ml-2">
+                                        <h:outputText value="#{comentario.fechaPublicacion}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                                        </h:outputText>
+                                    </small>
+                                    <p:commandButton icon="pi pi-trash" title="Eliminar mi comentario" rendered="#{publicacionBean.esMio(comentario)}"
+                                                     action="#{publicacionBean.eliminarComentario(comentario.id)}" process="@this" update="@form"
+                                                     styleClass="ui-button-danger ui-button-flat ui-button-sm ml-auto eliminar-comentario">
+                                        <p:confirm header="Eliminar comentario" message="¿Eliminar tu comentario? No se puede deshacer."
+                                                   icon="pi pi-exclamation-triangle"/>
+                                    </p:commandButton>
                                 </div>
+                                <div class="texto-comentario" style="white-space: pre-wrap;">#{comentario.contenido}</div>
                             </div>
-                        </p:dataViewListItem>
-                    </p:dataView>
-                </h:form>
-            </div>
-            <div class="comments p-3">
-                <!-- Formulario para agregar un comentario -->
-                <h4>Agregar Comentario</h4>
-                <h:form id="commentForm">
-                    <div class="form-group p-2">
-                        <p:outputLabel for="userComment" rendered="#{!loginBean.autenticado or loginBean.tipo eq '1'}" value="Inicia sesión para comentar"/>
-                    </div>
-                    <div class="form-group p-2">
-                        <p:outputLabel for="userComment" rendered="#{loginBean.autenticado and (loginBean.tipo eq '2' or loginBean.tipo eq '3')}" value="Comentario:"/>
-                        <p:inputTextarea id="userComment" rendered="#{loginBean.autenticado and (loginBean.tipo eq '2' or loginBean.tipo eq '3')}" value="#{bean.nuevoComentario.texto}" rows="3" required="true" class="form-control" />
-                    </div>
-                    <div class="form-group p-2">
-                        <p:commandButton value="Publicar Comentario" rendered="#{loginBean.autenticado and (loginBean.tipo eq '2' or loginBean.tipo eq '3')}" action="#{bean.publicarComentario}" class="btn btn-primary" />
-                    </div>
-                </h:form>
+                        </div>
+                    </ui:repeat>
+                    <h:outputText value="Todavía no hay comentarios. ¡Sé el primero!" styleClass="text-muted d-block"
+                                  rendered="#{empty publicacionBean.comentarios}"/>
 
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" width="360">
+                        <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+                    </p:confirmDialog>
+                </h:form>
             </div>
         </div>
         </ui:fragment>

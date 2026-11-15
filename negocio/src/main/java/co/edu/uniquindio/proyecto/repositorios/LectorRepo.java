@@ -27,4 +27,21 @@ public interface LectorRepo extends JpaRepository<Lector, Long> {
     List<Escritor> obtenerEscritoresFavoritosDeLector(@Param("lectorId") Long lectorId);
     @Query("SELECT l.publicacionesRecomendadas FROM Lector l WHERE l.id = :PublicacionId")
     List<Publicacion> obtenerPublicacionesRecomendadas(@Param("PublicacionId") Long PublicacionId);
+
+    // ---- Interacción del lector (Fase 6) ----
+
+    @Query("SELECT COUNT(l) FROM Lector l JOIN l.escritoresFavoritos e WHERE e.id = :escritorId")
+    long contarSeguidores(@Param("escritorId") Long escritorId);
+
+    @Query("SELECT COUNT(l) > 0 FROM Lector l JOIN l.escritoresFavoritos e WHERE l.id = :lectorId AND e.id = :escritorId")
+    boolean esFavorito(@Param("lectorId") Long lectorId, @Param("escritorId") Long escritorId);
+
+    @Query("SELECT g.id FROM Lector l JOIN l.generosPreferidos g WHERE l.id = :lectorId")
+    List<Long> idsGenerosPreferidos(@Param("lectorId") Long lectorId);
+
+    @Query("SELECT e.id FROM Lector l JOIN l.escritoresFavoritos e WHERE l.id = :lectorId")
+    List<Long> idsEscritoresFavoritos(@Param("lectorId") Long lectorId);
+
+    @Query("SELECT p.id FROM Lector l JOIN l.publicacionesVistas p WHERE l.id = :lectorId")
+    List<Long> idsPublicacionesVistas(@Param("lectorId") Long lectorId);
 }

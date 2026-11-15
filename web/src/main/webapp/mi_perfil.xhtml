@@ -43,13 +43,26 @@
 
                 <!-- Géneros preferidos -->
                 <h4>Géneros preferidos</h4>
-                <div class="mb-4">
-                    <ui:repeat value="#{miPerfilBean.generosPreferidos}" var="genero">
-                        <p:chip label="#{genero.nombre}" styleClass="mr-2 mb-2"/>
-                    </ui:repeat>
-                    <h:outputText value="Aún no has elegido géneros preferidos." styleClass="text-muted"
-                                  rendered="#{empty miPerfilBean.generosPreferidos}"/>
-                </div>
+                <h:form id="formGeneros" styleClass="mb-4">
+                    <h:panelGroup id="chipsGeneros" layout="block" styleClass="mb-2">
+                        <ui:repeat value="#{miPerfilBean.generosPreferidos}" var="genero">
+                            <p:chip label="#{genero.nombre}" styleClass="mr-2 mb-2"/>
+                        </ui:repeat>
+                        <h:outputText value="Aún no has elegido géneros preferidos. Elígelos para recibir recomendaciones."
+                                      styleClass="text-muted" rendered="#{empty miPerfilBean.generosPreferidos}"/>
+                    </h:panelGroup>
+                    <div class="d-flex align-items-center">
+                        <p:selectCheckboxMenu id="generos" value="#{miPerfilBean.idsGenerosSeleccionados}" multiple="true"
+                                              filter="true" filterMatchMode="contains" emptyLabel="Elige tus géneros"
+                                              updateLabel="true" style="min-width: 260px;" styleClass="mr-2">
+                            <f:converter converterId="javax.faces.Long"/>
+                            <f:selectItems value="#{miPerfilBean.generosDisponibles}" var="g" itemValue="#{g.id}" itemLabel="#{g.nombre}"/>
+                        </p:selectCheckboxMenu>
+                        <p:commandButton id="guardarGeneros" value="Guardar géneros" icon="pi pi-check"
+                                         action="#{miPerfilBean.guardarGeneros}" process="@form" update="chipsGeneros mensajesGeneros"/>
+                    </div>
+                    <p:messages id="mensajesGeneros" showDetail="true" closable="true" styleClass="mt-2"/>
+                </h:form>
 
                 <!-- Escritores favoritos -->
                 <h4>Escritores favoritos</h4>

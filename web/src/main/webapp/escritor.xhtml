@@ -39,6 +39,18 @@
                         <h:outputText value="#{escritorBean.escritor.nombre}" styleClass="card-title"/>
                         <h:outputText value="#{escritorBean.escritor.biografia}" styleClass="card-text"/>
                     </h:panelGrid>
+                    <h:form id="formFavorito" styleClass="px-3 pb-3">
+                        <div class="mb-2 text-muted">
+                            <i class="pi pi-users"></i>
+                            <h:outputText id="seguidores" value=" #{escritorBean.seguidores} #{escritorBean.seguidores == 1 ? 'seguidor' : 'seguidores'}"/>
+                        </div>
+                        <p:commandButton id="seguir" rendered="#{escritorBean.lector}"
+                                         value="#{escritorBean.favorito ? 'Siguiendo' : 'Seguir'}"
+                                         icon="#{escritorBean.favorito ? 'pi pi-heart-fill' : 'pi pi-heart'}"
+                                         action="#{escritorBean.alternarFavorito}" process="@this" update="@form"
+                                         styleClass="#{escritorBean.favorito ? 'ui-button-danger' : 'ui-button-outlined'}"/>
+                        <p:growl id="mensajesFavorito" life="2500"/>
+                    </h:form>
                 </p:panel>
             </div>
             <div class="col-md-8 p-5">

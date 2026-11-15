@@ -18,23 +18,35 @@
         <div class="card ml-auto p-5">
             <!-- Búsqueda de Fragmentos Literarios -->
             <h:form id="searchForm">
-                <div class="container-flex input-group mb-3">
-                    <p:selectOneMenu id="searchType" value="#{explorarBean.searchType}" appendTo="@(self)" style="width: 20%;">
-                        <f:selectItem itemLabel="Buscar Publicaciones" itemValue="0" />
-                        <f:selectItem itemLabel="Buscar Escritores" itemValue="1" />
+                <div class="d-flex flex-wrap align-items-center">
+                    <p:selectOneMenu id="searchType" value="#{explorarBean.searchType}" appendTo="@(self)" styleClass="mr-2 mb-2">
+                        <f:selectItem itemLabel="Buscar publicaciones" itemValue="0" />
+                        <f:selectItem itemLabel="Buscar escritores" itemValue="1" />
+                        <p:ajax listener="#{explorarBean.cambiarTipo}" process="@this" update="@form resultados"/>
                     </p:selectOneMenu>
-                    <p:inputText id="searchInput" value="#{explorarBean.searchInput}" style="width: 73%;" placeholder="Buscar..." />
-                    <div class="input-group-append" style="width: 7%;">
-                        <p:commandButton value="Buscar" action="#{explorarBean.realizarBusqueda}" update="resultados" />
-                    </div>
+                    <p:inputText id="searchInput" value="#{explorarBean.searchInput}" styleClass="mr-2 mb-2 flex-grow-1"
+                                 placeholder="#{explorarBean.buscandoPublicaciones ? 'Título o descripción (opcional)' : 'Nombre o biografía'}"/>
+                    <ui:fragment rendered="#{explorarBean.buscandoPublicaciones}">
+                        <p:selectOneMenu id="genero" value="#{explorarBean.idGenero}" appendTo="@(self)" styleClass="mr-2 mb-2">
+                            <f:selectItem itemLabel="Todos los géneros" itemValue="#{null}" noSelectionOption="true"/>
+                            <f:selectItems value="#{explorarBean.generos}" var="g" itemValue="#{g.id}" itemLabel="#{g.nombre}"/>
+                        </p:selectOneMenu>
+                        <p:selectOneMenu id="orden" value="#{explorarBean.orden}" appendTo="@(self)" styleClass="mr-2 mb-2">
+                            <f:selectItem itemLabel="Más recientes" itemValue="RECIENTES"/>
+                            <f:selectItem itemLabel="Más populares" itemValue="POPULARES"/>
+                        </p:selectOneMenu>
+                    </ui:fragment>
+                    <p:commandButton id="buscar" value="Buscar" icon="pi pi-search" action="#{explorarBean.realizarBusqueda}"
+                                     update="resultados" styleClass="mb-2"/>
                 </div>
             </h:form>
         </div>
         <!-- Resultados de la búsqueda de Fragmentos Literarios -->
         <div class="card ml-auto p-5">
-            <h3>Resultados de la Búsqueda</h3>
+            <h3>Resultados</h3>
             <div class="card product">
                 <h:form id="resultados">
+                    <p class="text-muted mb-2" id="totalResultados">#{explorarBean.resultadosBusqueda.size()} #{explorarBean.resultadosBusqueda.size() == 1 ? 'resultado' : 'resultados'}</p>
                     <p:dataView var="resultado" value="#{explorarBean.resultadosBusqueda}" rows="12" paginator="true"
                                 rowsPerPageTemplate="6,12,16"
                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
