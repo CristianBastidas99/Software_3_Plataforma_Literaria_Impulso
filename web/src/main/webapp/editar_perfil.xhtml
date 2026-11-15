@@ -13,40 +13,72 @@
         <h:outputStylesheet library="css" name="bootstrap.min.css" />
         <h:outputStylesheet library="css" name="style.css" />
     </ui:define>
-    <ui:define name="title">Editar Perfil</ui:define>
+    <ui:define name="title">Editar perfil</ui:define>
 
     <ui:define name="content">
+
+        <ui:fragment rendered="#{not editarPerfilBean.puedeEditar}">
+            <div class="card p-5 text-center" style="width: 75%; margin: 0 auto;">
+                <h2>Inicia sesión para editar tu perfil</h2>
+                <p>Esta página es para escritores y lectores con sesión iniciada.</p>
+                <div>
+                    <p:button value="Iniciar sesión" outcome="login.xhtml" styleClass="ui-button-raised"/>
+                </div>
+            </div>
+        </ui:fragment>
+
+        <ui:fragment rendered="#{editarPerfilBean.puedeEditar}">
         <div class="card p-5">
-            <p:panel id="edit" header="Editar Perfil de #{editarPerfilBean.titulo}" style="width: 75%; margin: 0 auto;">
+            <p:panel id="edit" header="Editar perfil de #{editarPerfilBean.titulo}" style="width: 75%; margin: 0 auto;">
                 <h:form id="editProfileForm" enctype="multipart/form-data">
-                    <!-- Formulario para editar el perfil -->
                     <div class="form-group p-2">
                         <p:outputLabel for="nombre" value="Nombre" />
-                        <p:inputText id="nombre" value="#{editarPerfilBean.usuarioSesion.nombre}" class="form-control" placeholder="Tu nombre" />
+                        <p:inputText id="nombre" value="#{editarPerfilBean.nombre}" styleClass="form-control"
+                                     maxlength="30" placeholder="Tu nombre" />
                     </div>
                     <div class="form-group p-2">
-                        <p:outputLabel for="biografia" rendered="#{loginBean.tipo eq '2'}" value="Biografía" />
-                        <p:inputTextarea id="biografia" value="#{editarPerfilBean.usuarioSesion.biografia}" rendered="#{loginBean.tipo eq '2'}" rows="5" class="form-control"
-                                         placeholder="Escribe una breve biografía" />
+                        <p:outputLabel for="email" value="Correo electrónico" />
+                        <p:inputText id="email" type="email" value="#{editarPerfilBean.email}" styleClass="form-control"
+                                     maxlength="50" placeholder="tu@correo.com" />
                     </div>
-                    <div class="form-group p-2">
-                        <p:outputLabel for="imagen_perfil" value="Imagen de Perfil" />
-                        <div class="mb-2">
-                            <p:graphicImage id="imagenActual" value="#{recursos.imagenUsuario(editarPerfilBean.usuarioSesion.urlImagen)}"
-                                            alt="Imagen de perfil actual" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%;"/>
+                    <ui:fragment rendered="#{editarPerfilBean.escritor}">
+                        <div class="form-group p-2">
+                            <p:outputLabel for="biografia" value="Biografía" />
+                            <p:inputTextarea id="biografia" value="#{editarPerfilBean.biografia}" rows="5" styleClass="form-control"
+                                             maxlength="250" counter="contadorBiografia"
+                                             counterTemplate="Quedan {0} caracteres" autoResize="false"
+                                             placeholder="Escribe una breve biografía" />
+                            <h:outputText id="contadorBiografia" styleClass="text-muted small"/>
                         </div>
-                        <p:fileUpload id="imagen_perfil" listener="#{editarPerfilBean.subirImagenes}" mode="advanced" dragDropSupport="false"
+                    </ui:fragment>
+                    <div class="form-group p-2">
+                        <p:outputLabel for="imagen_perfil" value="Imagen de perfil" />
+                        <h:panelGroup id="vistaPrevia" layout="block" styleClass="mb-2 d-flex align-items-center">
+                            <p:graphicImage id="imagenActual" value="#{recursos.imagenUsuario(editarPerfilBean.imagenVistaPrevia)}"
+                                            alt="Imagen de perfil" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%;"/>
+                            <div class="ml-3">
+                                <h:outputText value="Vista previa: sin guardar" styleClass="badge badge-warning"
+                                              rendered="#{editarPerfilBean.hayImagenPendiente}"/>
+                                <div class="mt-2">
+                                    <p:commandButton value="Usar imagen por defecto" icon="pi pi-times" process="@this"
+                                                     action="#{editarPerfilBean.quitarImagen}"
+                                                     update="vistaPrevia mensajesPerfil"
+                                                     styleClass="ui-button-secondary ui-button-flat"/>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+                        <p:fileUpload id="imagen_perfil" listener="#{editarPerfilBean.subirImagen}" mode="advanced" dragDropSupport="false"
+                                      auto="true" label="Elegir imagen"
                                       sizeLimit="#{recursos.maxImagenBytes}" allowTypes="/(\.|\/)(jpe?g|png|webp|JPE?G|PNG|WEBP)$/"
                                       accept=".jpg,.jpeg,.png,.webp"
                                       invalidFileMessage="Formato no permitido. La imagen debe ser JPG, PNG o WEBP."
                                       invalidSizeMessage="La imagen supera el tamaño máximo permitido."
-                                      uploadLabel="Subir" cancelLabel="Cancelar"
-                                      update="imagenActual mensajesPerfil"/>
+                                      update="vistaPrevia mensajesPerfil"/>
                         <small class="text-muted">JPG, PNG o WEBP. Máximo #{recursos.maxImagenMb} MB.</small>
                     </div>
                     <div class="form-group p-2">
-                        <p:commandButton value="Guardar Cambios" action="#{editarPerfilBean.guardarCambios}" class="btn btn-primary"
-                                         update="@form" />
+                        <p:commandButton id="guardar" value="Guardar cambios" action="#{editarPerfilBean.guardarCambios}" styleClass="btn btn-primary"
+                                         process="@form" update="@form :menuUsuario" />
                     </div>
                     <p:messages id="mensajesPerfil" showDetail="true" />
                 </h:form>
@@ -54,32 +86,32 @@
         </div>
 
         <div class="card p-5">
-            <p:panel header="Cambiar Contraseña" style="width: 75%; margin: 0 auto;">
+            <p:panel header="Cambiar contraseña" style="width: 75%; margin: 0 auto;">
                 <h:form id="editPassForm">
-                    <!-- Cambiar contraseña -->
                     <div class="form-group p-2">
-                        <p:outputLabel for="contrasenaActual" value="Contraseña Actual" />
-                        <p:password id="contrasenaActual" value="#{editarPerfilBean.contrasenaActual}" class="form-control"
-                                    placeholder="Tu contraseña actual" />
+                        <p:outputLabel for="contrasenaActual" value="Contraseña actual" />
+                        <p:password id="contrasenaActual" value="#{editarPerfilBean.contrasenaActual}" styleClass="form-control"
+                                    toggleMask="true" placeholder="Tu contraseña actual" />
                     </div>
                     <div class="form-group p-2">
-                        <p:outputLabel for="nuevaContrasena" value="Nueva Contraseña" />
-                        <p:password id="nuevaContrasena" value="#{editarPerfilBean.nuevaContrasena}" class="form-control"
-                                    placeholder="Tu nueva contraseña" />
+                        <p:outputLabel for="nuevaContrasena" value="Nueva contraseña" />
+                        <p:password id="nuevaContrasena" value="#{editarPerfilBean.nuevaContrasena}" styleClass="form-control"
+                                    toggleMask="true" maxlength="30" placeholder="Al menos 8 caracteres" />
                     </div>
                     <div class="form-group p-2">
-                        <p:outputLabel for="confirmarContrasena" value="Confirmar Nueva Contraseña" />
-                        <p:password id="confirmarContrasena" value="#{editarPerfilBean.confirmarContrasena}" class="form-control"
-                                    placeholder="Confirmar nueva contraseña" />
+                        <p:outputLabel for="confirmarContrasena" value="Confirmar nueva contraseña" />
+                        <p:password id="confirmarContrasena" value="#{editarPerfilBean.confirmarContrasena}" styleClass="form-control"
+                                    toggleMask="true" maxlength="30" placeholder="Repite la nueva contraseña" />
                     </div>
                     <div class="form-group p-2">
-                        <p:commandButton value="Cambiar Contraseña" action="#{editarPerfilBean.cambiarContrasena}" class="btn btn-primary"
-                                     update="@form" />
+                        <p:commandButton id="cambiar" value="Cambiar contraseña" action="#{editarPerfilBean.cambiarContrasena}" styleClass="btn btn-primary"
+                                         update="@form" />
                     </div>
-                    <p:messages showDetail="true" />
+                    <p:messages id="mensajesContrasena" showDetail="true" />
                 </h:form>
             </p:panel>
         </div>
+        </ui:fragment>
     </ui:define>
 
     <ui:define name="script">

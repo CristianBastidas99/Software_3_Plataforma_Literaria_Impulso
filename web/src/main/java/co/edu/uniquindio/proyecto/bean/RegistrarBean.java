@@ -7,6 +7,7 @@ import co.edu.uniquindio.proyecto.servicios.EscritorServicio;
 import co.edu.uniquindio.proyecto.servicios.LectorServicio;
 import co.edu.uniquindio.proyecto.servicios.LoginServicio;
 import co.edu.uniquindio.proyecto.util.Mensajes;
+import co.edu.uniquindio.proyecto.util.ValidacionUsuario;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +37,12 @@ public class RegistrarBean implements Serializable {
 
     public void registrar() {
         try {
-            if (camposVacios()) {
+            if (!camposValidos()) {
                 return;
             }
-            if (loginServicio.isEmailRegistrado(email)) {
+            String correo = ValidacionUsuario.normalizarEmail(email);
+            String nombreLimpio = nombre.trim();
+            if (loginServicio.isEmailRegistrado(correo)) {
                 Mensajes.error("El correo electrónico ya se encuentra en uso");
                 return;
             }
@@ -49,8 +52,8 @@ public class RegistrarBean implements Serializable {
             }
             if ("escritor".equals(rol)) {
                 Escritor escritor = new Escritor();
-                escritor.setNombre(nombre);
-                escritor.setEmail(email);
+                escritor.setNombre(nombreLimpio);
+                escritor.setEmail(correo);
                 escritor.setPassword(password);
                 escritor.setUrlImagen("");
                 escritor.setEstado(Estado.ACTIVO);
@@ -60,8 +63,8 @@ public class RegistrarBean implements Serializable {
                 limpiarCampos();
             } else if ("lector".equals(rol)) {
                 Lector lector = new Lector();
-                lector.setNombre(nombre);
-                lector.setEmail(email);
+                lector.setNombre(nombreLimpio);
+                lector.setEmail(correo);
                 lector.setPassword(password);
                 lector.setUrlImagen("");
                 lector.setEstado(Estado.ACTIVO);
@@ -81,23 +84,21 @@ public class RegistrarBean implements Serializable {
         confirmPassword = "";
     }
 
-    private boolean camposVacios() {
-        if (nombre == null || nombre.isEmpty()) {
-            Mensajes.error("El nombre no puede estar vacío");
-            return true;
+    private boolean camposValidos() {
+        String error = ValidacionUsuario.validarNombre(nombre);
+        if (error == null) {
+            error = ValidacionUsuario.validarEmail(email);
         }
-        if (email == null || email.isEmpty()) {
-            Mensajes.error("El correo electrónico no puede estar vacío");
-            return true;
+        if (error == null) {
+            error = ValidacionUsuario.validarPassword(password);
         }
-        if (password == null || password.isEmpty()) {
-            Mensajes.error("La contraseña no puede estar vacía");
-            return true;
+        if (error == null && (confirmPassword == null || confirmPassword.isEmpty())) {
+            error = "La confirmación de la contraseña no puede estar vacía";
         }
-        if (confirmPassword == null || confirmPassword.isEmpty()) {
-            Mensajes.error("La confirmación de la contraseña no puede estar vacía");
-            return true;
+        if (error != null) {
+            Mensajes.error(error);
+            return false;
         }
-        return false;
+        return true;
     }
 }

@@ -1,0 +1,22 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <!--
+        Cuadrícula de publicaciones con portada, título y enlace al detalle.
+        Parámetros: publicaciones (lista de Publicacion) y vacio (texto si la lista está vacía).
+    -->
+    <div class="row mb-4">
+        <ui:repeat value="#{publicaciones}" var="pub">
+            <div class="col-6 col-md-3 mb-3">
+                <h:link outcome="publicacion.xhtml" style="text-decoration: none; color: inherit;">
+                    <f:param name="idProd" value="#{pub.id}"/>
+                    <h:graphicImage value="#{recursos.imagenPublicacion(pub.urlImagen)}" alt="#{pub.titulo}"
+                                    style="width: 100%; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 4px;"/>
+                    <div class="mt-2 font-weight-bold">#{pub.titulo}</div>
+                </h:link>
+            </div>
+        </ui:repeat>
+    </div>
+    <h:outputText value="#{vacio}" styleClass="text-muted d-block mb-4" rendered="#{empty publicaciones}"/>
+</ui:composition>

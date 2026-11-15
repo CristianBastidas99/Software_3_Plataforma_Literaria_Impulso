@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="/WEB-INF/template.xhtml">
+
+    <ui:define name="head">
+        <h:outputStylesheet library="css" name="bootstrap.min.css" />
+        <h:outputStylesheet library="css" name="style.css" />
+    </ui:define>
+    <ui:define name="title">Mi perfil</ui:define>
+
+    <ui:define name="content">
+
+        <ui:fragment rendered="#{not miPerfilBean.esLector or miPerfilBean.lector == null}">
+            <div class="card p-5 text-center" style="width: 75%; margin: 0 auto;">
+                <h2>Inicia sesión como lector</h2>
+                <p>En esta página los lectores ven sus favoritos, sus recomendaciones y su historial.</p>
+                <div>
+                    <p:button value="Iniciar sesión" outcome="login.xhtml" styleClass="ui-button-raised"/>
+                </div>
+            </div>
+        </ui:fragment>
+
+        <ui:fragment rendered="#{miPerfilBean.esLector and miPerfilBean.lector != null}">
+            <div class="container py-4">
+                <!-- Cabecera -->
+                <div class="d-flex align-items-center mb-4">
+                    <h:graphicImage value="#{recursos.imagenUsuario(miPerfilBean.lector.urlImagen)}" alt="Tu imagen de perfil"
+                                    style="width: 96px; height: 96px; object-fit: cover; border-radius: 50%;"/>
+                    <div class="ml-3">
+                        <h2 class="mb-1">#{miPerfilBean.lector.nombre}</h2>
+                        <div class="text-muted">#{miPerfilBean.lector.email}</div>
+                        <p:button value="Editar cuenta" outcome="editar_perfil.xhtml" icon="pi pi-user-edit"
+                                  styleClass="ui-button-secondary ui-button-flat mt-2"/>
+                    </div>
+                </div>
+
+                <!-- Géneros preferidos -->
+                <h4>Géneros preferidos</h4>
+                <div class="mb-4">
+                    <ui:repeat value="#{miPerfilBean.generosPreferidos}" var="genero">
+                        <p:chip label="#{genero.nombre}" styleClass="mr-2 mb-2"/>
+                    </ui:repeat>
+                    <h:outputText value="Aún no has elegido géneros preferidos." styleClass="text-muted"
+                                  rendered="#{empty miPerfilBean.generosPreferidos}"/>
+                </div>
+
+                <!-- Escritores favoritos -->
+                <h4>Escritores favoritos</h4>
+                <div class="row mb-4">
+                    <ui:repeat value="#{miPerfilBean.escritoresFavoritos}" var="escritor">
+                        <div class="col-6 col-md-3 mb-3 text-center">
+                            <h:link outcome="escritor.xhtml" style="text-decoration: none; color: inherit;">
+                                <f:param name="idEscr" value="#{escritor.id}"/>
+                                <h:graphicImage value="#{recursos.imagenUsuario(escritor.urlImagen)}" alt="#{escritor.nombre}"
+                                                style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%;"/>
+                                <div class="mt-2">#{escritor.nombre}</div>
+                            </h:link>
+                        </div>
+                    </ui:repeat>
+                </div>
+                <h:outputText value="Aún no sigues a ningún escritor." styleClass="text-muted d-block mb-4"
+                              rendered="#{empty miPerfilBean.escritoresFavoritos}"/>
+
+                <!-- Recomendadas -->
+                <h4>Mis recomendaciones</h4>
+                <ui:include src="/WEB-INF/fragmentos/lista_publicaciones.xhtml">
+                    <ui:param name="publicaciones" value="#{miPerfilBean.publicacionesRecomendadas}"/>
+                    <ui:param name="vacio" value="Aún no has recomendado ninguna publicación."/>
+                </ui:include>
+
+                <!-- Historial -->
+                <h4>Historial de lectura</h4>
+                <ui:include src="/WEB-INF/fragmentos/lista_publicaciones.xhtml">
+                    <ui:param name="publicaciones" value="#{miPerfilBean.publicacionesVistas}"/>
+                    <ui:param name="vacio" value="Todavía no has visto ninguna publicación."/>
+                </ui:include>
+            </div>
+        </ui:fragment>
+    </ui:define>
+
+    <ui:define name="script">
+        <h:outputScript library="js" name="bootstrap.bundle.min.js" />
+    </ui:define>
+
+</ui:composition>
+</html>
