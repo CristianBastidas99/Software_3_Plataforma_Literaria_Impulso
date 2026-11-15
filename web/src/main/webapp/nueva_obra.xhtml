@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="/WEB-INF/template.xhtml">
+
+    <ui:define name="head">
+        <h:outputStylesheet library="css" name="bootstrap.min.css" />
+        <h:outputStylesheet library="css" name="style.css" />
+    </ui:define>
+    <ui:define name="title">#{obraFormBean.edicion ? 'Editar obra' : 'Nueva obra'}</ui:define>
+
+    <ui:define name="content">
+
+        <ui:fragment rendered="#{not obraFormBean.puedeEditar}">
+            <div class="card p-5 text-center" style="width: 75%; margin: 0 auto;">
+                <h2>No puedes abrir este formulario</h2>
+                <p>#{obraFormBean.motivoBloqueo}</p>
+                <div>
+                    <p:button value="Iniciar sesión" outcome="login.xhtml" styleClass="ui-button-raised"
+                              rendered="#{not obraFormBean.escritorAutenticado}"/>
+                    <p:button value="Ir a mis obras" outcome="mis_obras.xhtml" styleClass="ui-button-raised"
+                              rendered="#{obraFormBean.escritorAutenticado}"/>
+                </div>
+            </div>
+        </ui:fragment>
+
+        <ui:fragment rendered="#{obraFormBean.puedeEditar}">
+        <div class="card p-5">
+            <p:panel header="#{obraFormBean.edicion ? 'Editar obra' : 'Publicar una obra nueva'}" style="width: 85%; margin: 0 auto;">
+                <h:form id="formObra" enctype="multipart/form-data">
+                    <p:messages id="mensajesObra" globalOnly="true" showDetail="true" closable="true"/>
+                    <p class="text-muted small">Los campos marcados con * son obligatorios.</p>
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group p-2">
+                                <p:outputLabel for="titulo" value="Título *" />
+                                <p:inputText id="titulo" value="#{obraFormBean.datos.titulo}" styleClass="form-control" maxlength="70"
+                                             placeholder="Título de la obra"/>
+                                <p:message for="titulo" display="text"/>
+                            </div>
+                            <div class="form-group p-2">
+                                <p:outputLabel for="sinopsis" value="Sinopsis *" />
+                                <p:inputTextarea id="sinopsis" value="#{obraFormBean.datos.sinopsis}" rows="3" styleClass="form-control"
+                                                 maxlength="150" counter="contadorSinopsis" counterTemplate="Quedan {0} caracteres"
+                                                 autoResize="false" placeholder="De qué trata la obra, en pocas líneas"/>
+                                <h:outputText id="contadorSinopsis" styleClass="text-muted small"/>
+                                <p:message for="sinopsis" display="text"/>
+                            </div>
+                            <div class="form-group p-2">
+                                <p:outputLabel for="descripcion" value="Descripción de la publicación *" />
+                                <p:inputTextarea id="descripcion" value="#{obraFormBean.datos.descripcion}" rows="3" styleClass="form-control"
+                                                 maxlength="255" counter="contadorDescripcion" counterTemplate="Quedan {0} caracteres"
+                                                 autoResize="false" placeholder="Lo que verán los lectores al abrir la publicación"/>
+                                <h:outputText id="contadorDescripcion" styleClass="text-muted small"/>
+                                <p:message for="descripcion" display="text"/>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group p-2">
+                                    <p:outputLabel for="isbn" value="ISBN *" />
+                                    <p:inputText id="isbn" value="#{obraFormBean.datos.isbn}" styleClass="form-control" maxlength="20"
+                                                 placeholder="978-958-..."/>
+                                    <p:message for="isbn" display="text"/>
+                                </div>
+                                <div class="col-md-6 form-group p-2">
+                                    <p:outputLabel for="editorial" value="Editorial" />
+                                    <p:inputText id="editorial" value="#{obraFormBean.datos.editorial}" styleClass="form-control" maxlength="100"
+                                                 placeholder="Opcional"/>
+                                    <p:message for="editorial" display="text"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group p-2">
+                                    <p:outputLabel for="fecha" value="Fecha de publicación *" />
+                                    <p:datePicker id="fecha" value="#{obraFormBean.datos.fechaPublicacion}" pattern="dd/MM/yyyy"
+                                                  maxdate="#{obraFormBean.hoy}" showIcon="true" styleClass="d-block"
+                                                  converterMessage="La fecha debe tener el formato dd/mm/aaaa"/>
+                                    <p:message for="fecha" display="text"/>
+                                </div>
+                                <div class="col-md-6 form-group p-2">
+                                    <p:outputLabel for="generos" value="Géneros *" />
+                                    <p:selectCheckboxMenu id="generos" value="#{obraFormBean.datos.generos}" label="Elige uno o varios"
+                                                          multiple="true" filter="true" filterMatchMode="contains"
+                                                          emptyLabel="Elige uno o varios" updateLabel="true" styleClass="d-flex">
+                                        <f:converter converterId="javax.faces.Long"/>
+                                        <f:selectItems value="#{obraFormBean.generosDisponibles}" var="g" itemValue="#{g.id}" itemLabel="#{g.nombre}"/>
+                                    </p:selectCheckboxMenu>
+                                    <p:message for="generos" display="text"/>
+                                </div>
+                            </div>
+                            <div class="form-group p-2">
+                                <p:outputLabel for="coautores" value="Coautores" />
+                                <p:selectCheckboxMenu id="coautores" value="#{obraFormBean.datos.coautores}" multiple="true"
+                                                      filter="true" filterMatchMode="contains" emptyLabel="Ninguno (opcional)"
+                                                      updateLabel="true" styleClass="d-flex">
+                                    <f:converter converterId="javax.faces.Long"/>
+                                    <f:selectItems value="#{obraFormBean.coautoresDisponibles}" var="e" itemValue="#{e.id}" itemLabel="#{e.nombre}"/>
+                                </p:selectCheckboxMenu>
+                                <small class="text-muted">Tú siempre figuras como autor.</small>
+                                <p:message for="coautores" display="text"/>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <!-- Portada -->
+                            <div class="form-group p-2">
+                                <p:outputLabel for="portada" value="Portada" />
+                                <h:panelGroup id="vistaPortada" layout="block" styleClass="mb-2 text-center">
+                                    <p:graphicImage value="#{recursos.imagenPublicacion(obraFormBean.portadaVistaPrevia)}" alt="Portada"
+                                                    style="width: 100%; max-width: 220px; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 4px;"/>
+                                    <div class="mt-1">
+                                        <h:outputText value="Vista previa: sin guardar" styleClass="badge badge-warning"
+                                                      rendered="#{obraFormBean.portadaSinGuardar}"/>
+                                    </div>
+                                    <p:commandButton value="Usar portada por defecto" icon="pi pi-times" process="@this"
+                                                     action="#{obraFormBean.quitarPortada}" update="vistaPortada mensajesObra"
+                                                     styleClass="ui-button-secondary ui-button-flat"/>
+                                </h:panelGroup>
+                                <p:fileUpload id="portada" listener="#{obraFormBean.subirPortada}" mode="advanced" auto="true"
+                                              label="Elegir portada" dragDropSupport="false"
+                                              sizeLimit="#{recursos.maxImagenBytes}" allowTypes="/(\.|\/)(jpe?g|png|webp|JPE?G|PNG|WEBP)$/"
+                                              accept=".jpg,.jpeg,.png,.webp"
+                                              invalidFileMessage="Formato no permitido. La portada debe ser JPG, PNG o WEBP."
+                                              invalidSizeMessage="La portada supera el tamaño máximo permitido."
+                                              update="vistaPortada mensajesObra"/>
+                                <small class="text-muted">Opcional. JPG, PNG o WEBP, máximo #{recursos.maxImagenMb} MB.</small>
+                            </div>
+
+                            <!-- Fragmento -->
+                            <div class="form-group p-2">
+                                <p:outputLabel for="fragmento" value="Fragmento en PDF *" />
+                                <h:panelGroup id="estadoFragmento" layout="block" styleClass="mb-2">
+                                    <h:outputLink value="#{request.contextPath}#{recursos.pdf(obraFormBean.fragmentoActual)}" target="_blank"
+                                                  rendered="#{not empty obraFormBean.fragmentoActual}">
+                                        <i class="pi pi-file-pdf"></i> Ver el PDF actual
+                                    </h:outputLink>
+                                    <h:outputText value=" Sin guardar" styleClass="badge badge-warning ml-1"
+                                                  rendered="#{obraFormBean.fragmentoSinGuardar}"/>
+                                    <h:outputText value="Todavía no has subido el PDF." styleClass="text-muted"
+                                                  rendered="#{empty obraFormBean.fragmentoActual}"/>
+                                </h:panelGroup>
+                                <p:fileUpload id="fragmento" listener="#{obraFormBean.subirFragmento}" mode="advanced" auto="true"
+                                              label="Elegir PDF" dragDropSupport="false"
+                                              sizeLimit="#{recursos.maxPdfBytes}" allowTypes="/(\.|\/)(pdf|PDF)$/"
+                                              accept=".pdf,application/pdf"
+                                              invalidFileMessage="Formato no permitido. El fragmento debe ser un PDF."
+                                              invalidSizeMessage="El PDF supera el tamaño máximo permitido."
+                                              update="estadoFragmento mensajesObra mensajeFragmento"/>
+                                <small class="text-muted">Máximo #{recursos.maxPdfMb} MB.</small>
+                                <p:message id="mensajeFragmento" for="fragmento" display="text"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group p-2 d-flex">
+                        <p:commandButton id="guardar" value="#{obraFormBean.edicion ? 'Guardar cambios' : 'Publicar obra'}"
+                                         icon="pi pi-check" action="#{obraFormBean.guardar}" process="@form" update="@form"
+                                         styleClass="btn btn-primary mr-2"/>
+                        <p:button value="Cancelar" outcome="mis_obras.xhtml" styleClass="ui-button-secondary ui-button-flat"/>
+                    </div>
+                </h:form>
+            </p:panel>
+        </div>
+        </ui:fragment>
+    </ui:define>
+
+    <ui:define name="script">
+        <h:outputScript library="js" name="bootstrap.bundle.min.js" />
+    </ui:define>
+
+</ui:composition>
+</html>

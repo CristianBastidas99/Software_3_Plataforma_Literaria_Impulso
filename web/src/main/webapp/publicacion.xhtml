@@ -32,10 +32,51 @@
         <ui:fragment rendered="#{publicacionBean.encontrada}">
         <div class="card p-5" style="width: 75%; margin: 0 auto;">
             <!-- Detalles de la Publicación -->
-            <h2>Publicación: #{publicacionBean.publicacion.titulo}</h2>
-            <p>Escritor: #{publicacionBean.escritor.nombre}</p>
-            <p>Descripción: #{publicacionBean.publicacion.contenido}</p>
-            <p>Sinopsis: #{publicacionBean.publicacion.obraLiteraria.sinopsis}</p>
+            <ui:fragment rendered="#{not publicacionBean.publicada}">
+                <div class="alert alert-warning">
+                    Esta obra no está publicada: solo tú y sus coautores pueden verla. Puedes volver a publicarla desde
+                    <h:link outcome="mis_obras.xhtml" value="Mis obras"/>.
+                </div>
+            </ui:fragment>
+            <div class="row mb-3">
+                <div class="col-md-3 mb-3">
+                    <h:graphicImage value="#{recursos.imagenPublicacion(publicacionBean.publicacion.urlImagen)}"
+                                    alt="Portada de #{publicacionBean.publicacion.titulo}"
+                                    style="width: 100%; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 4px;"/>
+                </div>
+                <div class="col-md-9">
+                    <div class="d-flex align-items-start">
+                        <h2 class="mr-auto">#{publicacionBean.publicacion.titulo}</h2>
+                        <p:button value="Editar obra" outcome="nueva_obra.xhtml" icon="pi pi-pencil"
+                                  rendered="#{publicacionBean.autor}" styleClass="ui-button-secondary ui-button-flat">
+                            <f:param name="idObra" value="#{publicacionBean.publicacion.obraLiteraria.id}"/>
+                        </p:button>
+                    </div>
+                    <p>
+                        #{publicacionBean.autores.size() > 1 ? 'Autores' : 'Escritor'}:
+                        <ui:repeat value="#{publicacionBean.autores}" var="a" varStatus="st">
+                            <h:link outcome="escritor.xhtml" value="#{a.nombre}">
+                                <f:param name="idEscr" value="#{a.id}"/>
+                            </h:link>#{st.last ? '' : ', '}
+                        </ui:repeat>
+                    </p>
+                    <p class="mb-2">
+                        <ui:repeat value="#{publicacionBean.generos}" var="g">
+                            <span class="badge badge-secondary mr-1">#{g.nombre}</span>
+                        </ui:repeat>
+                    </p>
+                    <p>Descripción: #{publicacionBean.publicacion.contenido}</p>
+                    <p>Sinopsis: #{publicacionBean.publicacion.obraLiteraria.sinopsis}</p>
+                    <p class="text-muted small">
+                        ISBN #{publicacionBean.publicacion.obraLiteraria.isbn}
+                        #{empty publicacionBean.publicacion.obraLiteraria.editorial ? '' : ' · '.concat(publicacionBean.publicacion.obraLiteraria.editorial)}
+                        ·
+                        <h:outputText value="#{publicacionBean.publicacion.obraLiteraria.fechaPublicacion}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p>
+                </div>
+            </div>
             <p>Fragmento de la Obra:</p>
             <p:media value="#{recursos.pdf(publicacionBean.publicacion.obraLiteraria.fragmento.url)}" width="100%" height="600px"
                      rendered="#{not empty publicacionBean.publicacion.obraLiteraria.fragmento.url}">

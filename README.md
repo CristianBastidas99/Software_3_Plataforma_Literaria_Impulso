@@ -27,11 +27,15 @@ Plataforma_Literaria_Impulso_sw3
 │       ├── entidades/           # Usuario, Administrador, Escritor, Lector, ObraLiteraria,
 │       │                        # Publicacion, Fragmento, Comentario, Genero, Estado
 │       ├── repositorios/        # Repositorios JPA con consultas JPQL
-│       └── servicios/           # Interfaces + implementaciones (CRUD, login, búsqueda, email)
+│       ├── dto/                 # DatosObra: datos del formulario de obra con Bean Validation
+│       ├── validacion/          # Validador de ISBN (@Isbn)
+│       └── servicios/           # Interfaces + implementaciones (CRUD, login, búsqueda, email,
+│                                # GestionObra para las obras del escritor)
 │   └── src/test/                # Pruebas de repositorios, consultas y servicios (+ pli.sql)
 ├── web/                         # Aplicación web JSF (módulo ejecutable)
 │   ├── src/main/java/.../bean/  # Managed beans (Inicio, Explorar, Login, Registrar,
-│   │                            # Escritor, Publicacion, EditarPerfil, MiPerfil, Recursos)
+│   │                            # Escritor, Publicacion, EditarPerfil, MiPerfil, MisObras,
+│   │                            # ObraForm, Recursos)
 │   ├── src/main/java/.../archivos/ # Subida y validación de imágenes y PDFs (ArchivoServicio)
 │   ├── src/main/resources/demo/ # Datos del perfil demo (datos-demo.json)
 │   └── src/main/webapp/         # Páginas .xhtml, plantilla y recursos (css, js, img, pdf)
@@ -189,6 +193,8 @@ python scripts/generar_recursos_demo.py
 | `publicacion.xhtml?idProd=<id>` | Detalle de una publicación y su autor |
 | `escritor.xhtml?idEscr=<id>` | Perfil de un escritor y sus publicaciones |
 | `editar_perfil.xhtml` | Edición de nombre, correo, biografía, imagen y contraseña (escritor o lector con sesión) |
+| `mis_obras.xhtml` | Obras del escritor con sesión: editar, retirar y volver a publicar |
+| `nueva_obra.xhtml` | Publicar una obra (`?idObra=<id>` para editarla) con portada, fragmento PDF, géneros y coautores |
 | `mi_perfil.xhtml` | Géneros preferidos, escritores favoritos, recomendaciones e historial del lector con sesión |
 
 ## Estado del proyecto
@@ -200,10 +206,11 @@ python scripts/generar_recursos_demo.py
 - Servicio de envío de correo.
 - Interfaz web: inicio, explorar, registro, login con sesión, detalle de publicación y perfil de escritor.
 - Edición de perfil (nombre, correo, biografía, imagen y contraseña) y página "Mi perfil" del lector.
+- Publicación de obras por los escritores: creación con portada, PDF, géneros y coautores; edición, retiro y nueva publicación, con validación de datos (incluido el ISBN) y control de autoría.
 - Subida de imágenes y PDF a una carpeta externa, con validación de tipo y tamaño.
 
 **Pendiente / en desarrollo**
-- Pantallas de administración, comentarios, géneros y creación de obras/publicaciones.
+- Pantallas de administración, comentarios y géneros.
 - Uso del filtro de palabras ofensivas (`malaspalabras.json`) en los comentarios.
 - Uso del servicio de correo en algún flujo (registro, recuperación de contraseña, etc.).
 

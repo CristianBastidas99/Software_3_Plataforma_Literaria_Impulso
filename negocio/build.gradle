@@ -5,6 +5,8 @@ plugins {
 dependencies {
     // 'api': el módulo web usa las entidades y repositorios, así que necesita JPA en su classpath de compilación
     api 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // Bean Validation: las anotaciones de DatosObra las usan tanto el servicio como los formularios JSF
+    api 'org.springframework.boot:spring-boot-starter-validation'
     runtimeOnly 'mysql:mysql-connector-java'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 }

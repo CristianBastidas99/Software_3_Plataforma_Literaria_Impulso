@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="/WEB-INF/template.xhtml">
+
+    <ui:define name="head">
+        <h:outputStylesheet library="css" name="bootstrap.min.css" />
+        <h:outputStylesheet library="css" name="style.css" />
+    </ui:define>
+    <ui:define name="title">Mis obras</ui:define>
+
+    <ui:define name="content">
+
+        <ui:fragment rendered="#{not misObrasBean.escritorAutenticado}">
+            <div class="card p-5 text-center" style="width: 75%; margin: 0 auto;">
+                <h2>Inicia sesión como escritor</h2>
+                <p>Aquí los escritores gestionan las obras que han publicado.</p>
+                <div>
+                    <p:button value="Iniciar sesión" outcome="login.xhtml" styleClass="ui-button-raised"/>
+                </div>
+            </div>
+        </ui:fragment>
+
+        <ui:fragment rendered="#{misObrasBean.escritorAutenticado}">
+        <div class="container py-4">
+            <div class="d-flex align-items-center mb-3">
+                <h2 class="mb-0">Mis obras</h2>
+                <p:button value="Nueva obra" outcome="nueva_obra.xhtml" icon="pi pi-plus" styleClass="ml-auto"/>
+            </div>
+
+            <h:form id="formObras">
+                <p:messages id="mensajesObras" showDetail="true" closable="true"/>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="380">
+                    <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+                </p:confirmDialog>
+
+                <p:dataTable id="tablaObras" value="#{misObrasBean.obras}" var="obra" rowKey="#{obra.id}"
+                             emptyMessage="Todavía no has publicado ninguna obra." styleClass="mt-2">
+                    <p:column headerText="Portada" style="width: 90px;">
+                        <h:graphicImage value="#{recursos.imagenPublicacion(obra.publicacion.urlImagen)}" alt="Portada de #{obra.titulo}"
+                                        style="width: 60px; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 3px;"/>
+                    </p:column>
+                    <p:column headerText="Título">
+                        <h:link outcome="publicacion.xhtml" value="#{obra.titulo}" rendered="#{obra.publicacion != null}">
+                            <f:param name="idProd" value="#{obra.publicacion.id}"/>
+                        </h:link>
+                        <h:outputText value="#{obra.titulo}" rendered="#{obra.publicacion == null}"/>
+                        <div class="text-muted small">ISBN #{obra.isbn}</div>
+                    </p:column>
+                    <p:column headerText="Fecha" style="width: 120px;">
+                        <h:outputText value="#{obra.fechaPublicacion}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Estado" style="width: 170px;">
+                        <p:tag value="#{misObrasBean.textoEstado(obra)}" severity="#{misObrasBean.severidadEstado(obra)}"/>
+                    </p:column>
+                    <p:column headerText="Acciones" style="width: 300px;">
+                        <p:button value="Editar" outcome="nueva_obra.xhtml" icon="pi pi-pencil" styleClass="ui-button-flat mr-1">
+                            <f:param name="idObra" value="#{obra.id}"/>
+                        </p:button>
+                        <p:commandButton value="Retirar" icon="pi pi-eye-slash" rendered="#{misObrasBean.isPublicada(obra)}"
+                                         action="#{misObrasBean.retirar(obra.id)}" update="@form"
+                                         styleClass="ui-button-danger ui-button-flat">
+                            <p:confirm header="Retirar obra" icon="pi pi-exclamation-triangle"
+                                       message="¿Retirar «#{obra.titulo}»? Dejará de verse en inicio, en las búsquedas y en tu perfil. Podrás volver a publicarla."/>
+                        </p:commandButton>
+                        <p:commandButton value="Volver a publicar" icon="pi pi-eye" rendered="#{misObrasBean.isRetirada(obra)}"
+                                         action="#{misObrasBean.volverAPublicar(obra.id)}" update="@form"
+                                         styleClass="ui-button-success ui-button-flat"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </div>
+        </ui:fragment>
+    </ui:define>
+
+    <ui:define name="script">
+        <h:outputScript library="js" name="bootstrap.bundle.min.js" />
+    </ui:define>
+
+</ui:composition>
+</html>

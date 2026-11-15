@@ -1,6 +1,7 @@
 package co.edu.uniquindio.proyecto.bean;
 
 import co.edu.uniquindio.proyecto.entidades.Escritor;
+import co.edu.uniquindio.proyecto.entidades.Estado;
 import co.edu.uniquindio.proyecto.entidades.Genero;
 import co.edu.uniquindio.proyecto.entidades.Lector;
 import co.edu.uniquindio.proyecto.entidades.Publicacion;
@@ -48,8 +49,8 @@ public class MiPerfilBean implements Serializable {
             // Se copian las colecciones perezosas mientras la sesión de JPA de la petición sigue abierta
             generosPreferidos = copiar(lector.getGenerosPreferidos());
             escritoresFavoritos = copiar(lector.getEscritoresFavoritos());
-            publicacionesRecomendadas = copiar(lector.getPublicacionesRecomendadas());
-            publicacionesVistas = copiar(lector.getPublicacionesVistas());
+            publicacionesRecomendadas = publicadas(lector.getPublicacionesRecomendadas());
+            publicacionesVistas = publicadas(lector.getPublicacionesVistas());
         } catch (Exception e) {
             lector = null;
         }
@@ -59,6 +60,13 @@ public class MiPerfilBean implements Serializable {
     public boolean isEsLector() {
         return Boolean.TRUE.equals(loginBean.getAutenticado()) && loginBean.getTipo() == LECTOR
                 && loginBean.getUsuario() != null && loginBean.getUsuario().getId() != null;
+    }
+
+    /** Las obras retiradas por su autor no se muestran. */
+    private static List<Publicacion> publicadas(Collection<Publicacion> coleccion) {
+        List<Publicacion> lista = copiar(coleccion);
+        lista.removeIf(p -> p.getEstado() != Estado.PUBLICADO);
+        return lista;
     }
 
     private static <T> List<T> copiar(Collection<T> coleccion) {

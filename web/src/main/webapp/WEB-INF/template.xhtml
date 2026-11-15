@@ -30,6 +30,8 @@
                         <p:menuitem value="Mi perfil público" outcome="escritor.xhtml" rendered="#{loginBean.tipo eq '2'}" icon="pi pi-id-card">
                             <f:param name="idEscr" value="#{loginBean.usuario.id}"/>
                         </p:menuitem>
+                        <p:menuitem value="Mis obras" outcome="mis_obras.xhtml" rendered="#{loginBean.tipo eq '2'}" icon="pi pi-book"/>
+                        <p:menuitem value="Nueva obra" outcome="nueva_obra.xhtml" rendered="#{loginBean.tipo eq '2'}" icon="pi pi-plus"/>
                         <p:menuitem value="Editar cuenta" outcome="editar_perfil.xhtml" rendered="#{loginBean.tipo eq '2' or loginBean.tipo eq '3'}" icon="pi pi-user-edit"/>
                         <p:menuitem value="Panel de control" outcome="index.xhtml" rendered="#{loginBean.tipo eq '1'}" icon="pi pi-sliders-h"/>
                         <p:divider />

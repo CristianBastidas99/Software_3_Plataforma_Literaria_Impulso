@@ -59,17 +59,27 @@ public class PublicacionServicioImpl implements PublicacionServicio{
     }
 
     @Override
+    public List<Escritor> obtenerEscritoresDeObra(Long idObraLiteraria) {
+        return publicacionRepo.obtenerEscritoresDeObra(idObraLiteraria);
+    }
+
+    @Override
+    public List<Publicacion> listarPublicacionesPublicadas() {
+        return publicacionRepo.listarPublicacionesPublicadas();
+    }
+
+    @Override
     public List<Publicacion> buscarPublicacionPorFrase(String frase) {
         return publicacionRepo.obtenerPublicacionesPorFrase(frase);
     }
 
     @Override
     public Escritor obtenerEscritorDePublicacion(Long idObraLiteraria) throws Exception {
-        Optional<Escritor> escritor = publicacionRepo.obtenerEscritorDePublicacion(idObraLiteraria);
-        if (escritor.isEmpty()) {
+        List<Escritor> escritores = publicacionRepo.obtenerEscritoresDeObra(idObraLiteraria);
+        if (escritores.isEmpty()) {
             throw new Exception("No existe una publicación con ese id");
         }
-        return escritor.get();
+        return escritores.get(0);
     }
 
 }

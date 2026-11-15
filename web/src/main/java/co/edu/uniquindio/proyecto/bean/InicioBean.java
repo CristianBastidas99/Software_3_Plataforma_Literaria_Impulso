@@ -32,7 +32,7 @@ public class InicioBean implements Serializable {
 
     @PostConstruct
     public void inicializar() {
-        publicacions = publicacionServicio.listarPublicaciones();
+        publicacions = publicacionServicio.listarPublicacionesPublicadas();
         escritors = escritorServicio.listarEscritores();
 
         responsiveOptions = new ArrayList<>();

@@ -23,6 +23,16 @@ public final class Mensajes {
         mostrar(mensaje, FacesMessage.SEVERITY_ERROR);
     }
 
+    /** Muestra un error asociado a un componente, para que aparezca en su {@code p:message}. */
+    public static void errorEn(String clientId, String mensaje) {
+        FacesContext contexto = FacesContext.getCurrentInstance();
+        if (contexto == null) {
+            return;
+        }
+        contexto.addMessage(clientId, new FacesMessage(FacesMessage.SEVERITY_ERROR, mensaje, mensaje));
+        contexto.validationFailed();
+    }
+
     public static void mostrar(String mensaje, FacesMessage.Severity severidad) {
         FacesContext contexto = FacesContext.getCurrentInstance();
         if (contexto == null) {

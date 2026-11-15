@@ -27,4 +27,14 @@ public interface ObraLiterariaRepo extends JpaRepository<ObraLiteraria, Long> {
     @Query("SELECT o FROM ObraLiteraria o WHERE (SELECT COUNT(f) FROM o.fragmento f WHERE f.estado = 'APROBADO') > :numeroFragmentos")
     List<ObraLiteraria> obtenerObrasConMasFragmentosAprobados(@Param("numeroFragmentos") Long numeroFragmentos);
 
+
+    @Query("SELECT DISTINCT o FROM ObraLiteraria o JOIN o.escritores e WHERE e.id = :escritorId ORDER BY o.id DESC")
+    List<ObraLiteraria> listarObrasDeEscritor(@Param("escritorId") Long escritorId);
+
+    @Query("SELECT COUNT(o) > 0 FROM ObraLiteraria o JOIN o.escritores e WHERE o.id = :obraId AND e.id = :escritorId")
+    boolean esAutorDeObra(@Param("obraId") Long obraId, @Param("escritorId") Long escritorId);
+
+    boolean existsByIsbn(String isbn);
+
+    boolean existsByIsbnAndIdNot(String isbn, Long id);
 }
