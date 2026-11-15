@@ -168,9 +168,8 @@ docker exec -i <contenedor-mysql> mysql -uroot -p12345 plisw3 < negocio/src/test
 
 - Las contraseñas se guardan y comparan en texto plano.
 - Las subidas se guardan en `src/main/webapp/resources/...` (ruta relativa); solo funciona en desarrollo.
-- En `EditarPerfilBean.subirImagen` falta el separador `/` entre la carpeta y el nombre del archivo.
-- En `EditarPerfilBean.cambiarContrasena`, para el lector se guarda antes de cambiar la contraseña, así que el cambio no se persiste.
-- Los `toString()` de `ObraLiteraria`, `Publicacion` y `Fragmento` lanzan `NullPointerException` si la relación asociada es nula.
+- Las pruebas de `negocio` usan la base de datos de desarrollo y el script `pli.sql` no coincide con el esquema actual, por lo que fallan.
+- El formulario para comentar en `publicacion.xhtml` todavía no está conectado a ningún bean.
 
 ## Historial de cambios de configuración
 

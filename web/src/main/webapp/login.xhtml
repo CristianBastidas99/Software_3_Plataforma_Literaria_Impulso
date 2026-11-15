@@ -20,7 +20,7 @@
 
         <div class="card p-5">
 
-            <p:panel header="Iniciar Sesion" style="width: 75%; margin: 0 auto;">
+            <p:panel header="Iniciar sesión" style="width: 75%; margin: 0 auto;">
                 <h:form>
                     <div class="form-group">
                         <p:outputLabel for="email" value="Correo Electrónico"/>
@@ -31,7 +31,7 @@
                         <p:password id="password" value="#{loginBean.password}" style="width: 67vw;" styleClass="form-control" toggleMask="true" redisplay="true" required="true"/>
                     </div>
                     <div class="form-group p-2">
-                        <p:commandButton value="Iniciar Sesion" action="#{loginBean.loginn}" update="@form"  styleClass="btn btn-primary"/>
+                        <p:commandButton value="Iniciar sesión" action="#{loginBean.loginn}" update="@form"  styleClass="btn btn-primary"/>
                     </div>
                     <p:messages showDetail="true" />
                 </h:form>
@@ -46,8 +46,6 @@
 
     <ui:define name="script">
         <h:outputScript library="js" name="bootstrap.bundle.min.js" />
-        <h:outputScript library="js" name="jquery-3.5.1.slim.min.js" />
-        <h:outputScript library="js" name="popper.min.js" />
     </ui:define>
 
 </ui:composition>

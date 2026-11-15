@@ -42,7 +42,7 @@
                         <p:password id="password" value="#{registrarBean.password}" styleClass="form-control" placeholder="Ingresa una contraseña" required="true"/>
                     </div>
                     <div class="form-group">
-                        <p:outputLabel for="password" value="Confirmar contraseña"/>
+                        <p:outputLabel for="confirmPassword" value="Confirmar contraseña"/>
                         <p:password id="confirmPassword" value="#{registrarBean.confirmPassword}" styleClass="form-control" placeholder="Confirme la contraseña" required="true"/>
                     </div>
                     <div class="form-group p-2">
@@ -57,8 +57,6 @@
 
     <ui:define name="script">
         <h:outputScript library="js" name="bootstrap.bundle.min.js" />
-        <h:outputScript library="js" name="jquery-3.5.1.slim.min.js" />
-        <h:outputScript library="js" name="popper.min.js" />
     </ui:define>
 
 </ui:composition>

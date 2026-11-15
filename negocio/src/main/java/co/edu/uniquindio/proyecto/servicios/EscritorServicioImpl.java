@@ -27,7 +27,7 @@ public class EscritorServicioImpl implements EscritorServicio{
 
     @Override
     public Escritor actualizarEscritor(Escritor escritor) throws Exception {
-        Optional<Escritor> escritorExistente = Optional.of(escritorRepo.getById(escritor.getId()));
+        Optional<Escritor> escritorExistente = escritorRepo.findById(escritor.getId());
         if(escritorExistente.isEmpty()){
             throw new Exception("No existe un escritor con ese id");
         }

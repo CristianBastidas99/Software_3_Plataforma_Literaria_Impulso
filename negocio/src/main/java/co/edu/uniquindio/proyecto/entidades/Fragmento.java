@@ -30,6 +30,6 @@ public class Fragmento implements Serializable {
     private ObraLiteraria obraLiteraria;
 
     @ToString.Include
-    public String idObraLiteraria(){return obraLiteraria.getId()+"";}
+    public String idObraLiteraria(){return obraLiteraria != null ? String.valueOf(obraLiteraria.getId()) : null;}
 
 }

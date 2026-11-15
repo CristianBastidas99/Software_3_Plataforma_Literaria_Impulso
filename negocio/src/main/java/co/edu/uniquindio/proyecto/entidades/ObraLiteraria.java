@@ -45,14 +45,14 @@ public class ObraLiteraria implements Serializable {
     private Fragmento fragmento;
 
     @ToString.Include
-    public String idFragmento(){return fragmento.getId()+"";}
+    public String idFragmento(){return fragmento != null ? String.valueOf(fragmento.getId()) : null;}
 
     @OneToOne(mappedBy = "obraLiteraria", cascade = CascadeType.ALL)
     @ToString.Exclude
     private Publicacion publicacion;
 
     @ToString.Include
-    public String idPublicacion(){return publicacion.getId()+"";}
+    public String idPublicacion(){return publicacion != null ? String.valueOf(publicacion.getId()) : null;}
 
     @ManyToMany
     @JoinTable(

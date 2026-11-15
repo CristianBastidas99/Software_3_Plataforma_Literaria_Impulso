@@ -1,54 +1,51 @@
 package co.edu.uniquindio.proyecto.bean;
 
-import co.edu.uniquindio.proyecto.entidades.*;
-import co.edu.uniquindio.proyecto.servicios.*;
+import co.edu.uniquindio.proyecto.entidades.Escritor;
+import co.edu.uniquindio.proyecto.entidades.Publicacion;
+import co.edu.uniquindio.proyecto.servicios.EscritorServicio;
 import lombok.Getter;
 import lombok.Setter;
-import org.primefaces.PrimeFaces;
 import org.primefaces.model.ResponsiveOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.el.MethodExpression;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Component
 @ViewScoped
 @Getter
 @Setter
-public class EscritorBean implements Serializable{
+public class EscritorBean implements Serializable {
 
     @Autowired
-    private  EscritorServicio escritorServicio;
+    private EscritorServicio escritorServicio;
     @Value("#{param['idEscr']}")
     private String idEscritor;
 
     private List<ResponsiveOption> responsiveOptions;
     private Escritor escritor;
     private List<Publicacion> publicacionList;
+    /** Indica si el escritor solicitado existe; si es falso la vista muestra un mensaje en lugar del perfil. */
+    private boolean encontrado;
 
     @PostConstruct
-    public void inicializar(){
-
-        escritor = new Escritor();
+    public void inicializar() {
         publicacionList = new ArrayList<>();
+        encontrado = false;
 
-        if(idEscritor!=null && !idEscritor.equals("")){
+        Long id = ParametrosUrl.aLong(idEscritor);
+        if (id != null) {
             try {
-                Long id = Long.valueOf(idEscritor);
-                System.out.println(id);
                 escritor = escritorServicio.obtenerEscritor(id);
                 publicacionList = escritorServicio.obtenerPublicacionesDeEscritor(id);
+                encontrado = true;
             } catch (Exception e) {
-                mostrarMensaje(e.getMessage(), FacesMessage.SEVERITY_ERROR);
+                escritor = null;
             }
         }
 
@@ -57,11 +54,4 @@ public class EscritorBean implements Serializable{
         responsiveOptions.add(new ResponsiveOption("768px", 2, 2));
         responsiveOptions.add(new ResponsiveOption("560px", 1, 1));
     }
-
-    private void mostrarMensaje(String mensaje, FacesMessage.Severity severity) {
-        FacesMessage facesMsg = new FacesMessage(severity, "Alerta", mensaje);
-        FacesContext.getCurrentInstance().addMessage(null, facesMsg);
-    }
-
-
 }

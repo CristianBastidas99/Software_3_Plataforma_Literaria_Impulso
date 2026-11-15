@@ -1,39 +1,39 @@
 package co.edu.uniquindio.proyecto.bean;
 
-import co.edu.uniquindio.proyecto.entidades.*;
-import co.edu.uniquindio.proyecto.servicios.*;
+import co.edu.uniquindio.proyecto.entidades.Escritor;
+import co.edu.uniquindio.proyecto.entidades.Lector;
+import co.edu.uniquindio.proyecto.entidades.Usuario;
+import co.edu.uniquindio.proyecto.servicios.EscritorServicio;
+import co.edu.uniquindio.proyecto.servicios.LectorServicio;
+import co.edu.uniquindio.proyecto.util.Mensajes;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.ResponsiveOption;
 import org.primefaces.model.file.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.el.MethodExpression;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.servlet.http.HttpServletRequest;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 @Component
 @ViewScoped
 @Getter
 @Setter
-public class EditarPerfilBean implements Serializable{
+public class EditarPerfilBean implements Serializable {
 
     @Autowired
-    private  EscritorServicio escritorServicio;
+    private EscritorServicio escritorServicio;
     @Autowired
-    private  LectorServicio lectorServicio;
+    private LectorServicio lectorServicio;
     @Value(value = "#{loginBean.usuario}")
     private Usuario usuarioSesion;
     @Value(value = "#{loginBean.tipo}")
@@ -47,10 +47,10 @@ public class EditarPerfilBean implements Serializable{
     private String imagenPerfil;
 
     @PostConstruct
-    public void inicializar(){
-        if(tipo == 2){
+    public void inicializar() {
+        if (tipo == 2) {
             titulo = "Escritor";
-        }else if(tipo == 3){
+        } else if (tipo == 3) {
             titulo = "Lector";
         }
         contrasenaActual = "";
@@ -61,116 +61,68 @@ public class EditarPerfilBean implements Serializable{
 
     public void guardarCambios() {
         try {
-            if(tipo == 2){
-                Escritor escritor = (Escritor) usuarioSesion;
-                escritorServicio.actualizarEscritor(escritor);
-                mostrarMensaje("Se actualizacon con exito", FacesMessage.SEVERITY_INFO);
-            }else if(tipo == 3){
-                Lector lector = (Lector) usuarioSesion;
-                lectorServicio.actualizarLector(lector);
-                mostrarMensaje("Se actualizacon con exito", FacesMessage.SEVERITY_INFO);
+            if (tipo == 2) {
+                escritorServicio.actualizarEscritor((Escritor) usuarioSesion);
+                Mensajes.info("Los cambios se guardaron con éxito");
+            } else if (tipo == 3) {
+                lectorServicio.actualizarLector((Lector) usuarioSesion);
+                Mensajes.info("Los cambios se guardaron con éxito");
             }
         } catch (Exception e) {
-            mostrarMensaje(e.getMessage(), FacesMessage.SEVERITY_ERROR);
+            Mensajes.error(e.getMessage());
         }
     }
 
-    public void cambiarContrasena(){
+    public void cambiarContrasena() {
         try {
-            if(contrasenaActual.equals(usuarioSesion.getPassword())){
-                if(nuevaContrasena.equals(confirmarContrasena)){
-                    if(tipo == 2){
-                        Escritor escritor = (Escritor) usuarioSesion;
-                        escritor.setPassword(nuevaContrasena);
-                        escritorServicio.actualizarEscritor(escritor);
-                        mostrarMensaje("Se actualizacon con exito", FacesMessage.SEVERITY_INFO);
-                    }else if(tipo == 3){
-                        Lector lector = (Lector) usuarioSesion;
-                        lectorServicio.actualizarLector(lector);
-                        lector.setPassword(nuevaContrasena);
-                        mostrarMensaje("Se actualizacon con exito", FacesMessage.SEVERITY_INFO);
-                    }
-                }else{
-                    mostrarMensaje("La nueva contraseña no coincide con la confirmacion", FacesMessage.SEVERITY_ERROR);
-                }
-            }else{
-                mostrarMensaje("La contaseña actual es incorrecta", FacesMessage.SEVERITY_ERROR);
+            if (!contrasenaActual.equals(usuarioSesion.getPassword())) {
+                Mensajes.error("La contraseña actual es incorrecta");
+                return;
+            }
+            if (!nuevaContrasena.equals(confirmarContrasena)) {
+                Mensajes.error("La nueva contraseña no coincide con la confirmación");
+                return;
+            }
+            if (tipo == 2) {
+                Escritor escritor = (Escritor) usuarioSesion;
+                escritor.setPassword(nuevaContrasena);
+                escritorServicio.actualizarEscritor(escritor);
+                Mensajes.info("La contraseña se cambió con éxito");
+            } else if (tipo == 3) {
+                Lector lector = (Lector) usuarioSesion;
+                lector.setPassword(nuevaContrasena);
+                lectorServicio.actualizarLector(lector);
+                Mensajes.info("La contraseña se cambió con éxito");
             }
         } catch (Exception e) {
-            mostrarMensaje(e.getMessage(), FacesMessage.SEVERITY_ERROR);
+            Mensajes.error(e.getMessage());
         }
     }
 
-    public void subirImagenes(FileUploadEvent event){
+    public void subirImagenes(FileUploadEvent event) {
         UploadedFile imagen = event.getFile();
         imagenPerfil = subirImagen(imagen);
-        if(imagenPerfil!=null){
+        if (imagenPerfil != null) {
             usuarioSesion.setUrlImagen(imagenPerfil);
-            mostrarMensaje("La imagen se cargo", FacesMessage.SEVERITY_INFO);
-        }else{
-            mostrarMensaje("No se pudo cargar la imagen", FacesMessage.SEVERITY_ERROR);
+            Mensajes.info("La imagen se cargó correctamente");
+        } else {
+            Mensajes.error("No se pudo cargar la imagen");
         }
-    }
-
-    public String subirImagen2(UploadedFile imagen){
-        try {
-            File archivo = new File(urlImagenes + "/" + imagen.getFileName());
-            OutputStream outputStream = new FileOutputStream(archivo);
-            IOUtils.copy(imagen.getInputStream(), outputStream);
-            return imagen.getFileName();
-        }catch (Exception e){
-            mostrarMensaje(e.getMessage(), FacesMessage.SEVERITY_ERROR);
-        }
-        return null;
     }
 
     private String subirImagen(UploadedFile imagen) {
-        String nombreArchivo = null;
-        InputStream input = null;
-        OutputStream output = null;
-
-        try {
-            // Obtener el nombre del archivo original
-            String nombreOriginal = imagen.getFileName();
-
-            // Generar un nombre único para evitar conflictos
-            nombreArchivo = generarNombreUnico(nombreOriginal);
-
-            // Ruta donde se guardará el archivo en el servidor
-            String rutaDestino = urlImagenes + nombreArchivo;
-
-            // Crear un InputStream a partir del UploadedFile
-            input = imagen.getInputStream();
-
-            // Crear un OutputStream para escribir el archivo en el servidor
-            output = new FileOutputStream(new File(rutaDestino));
-
-            // Utilizar IOUtils para copiar el contenido del InputStream al OutputStream
-            IOUtils.copy(input, output);
-
+        String nombreArchivo = generarNombreUnico(imagen.getFileName());
+        Path rutaDestino = Paths.get(urlImagenes, nombreArchivo);
+        try (InputStream input = imagen.getInputStream()) {
+            Files.copy(input, rutaDestino, StandardCopyOption.REPLACE_EXISTING);
+            return nombreArchivo;
         } catch (IOException e) {
-            // Manejar excepciones si es necesario
-            mostrarMensaje(e.getMessage(), FacesMessage.SEVERITY_ERROR);
-            nombreArchivo = null;
-        } finally {
-            // Cerrar InputStream y OutputStream
-            IOUtils.closeQuietly(input);
-            IOUtils.closeQuietly(output);
+            Mensajes.error(e.getMessage());
+            return null;
         }
-
-        return nombreArchivo;
     }
 
     private String generarNombreUnico(String nombreOriginal) {
-        // Lógica para generar un nombre único (puedes implementar la tuya)
-        // Por ejemplo, podrías agregar un timestamp al nombre original
-        long timestamp = System.currentTimeMillis();
-        return timestamp + "_" + nombreOriginal;
-    }
-
-
-    private void mostrarMensaje(String mensaje, FacesMessage.Severity severity) {
-        FacesMessage facesMsg = new FacesMessage(severity, "Alerta", mensaje);
-        FacesContext.getCurrentInstance().addMessage(null, facesMsg);
+        return System.currentTimeMillis() + "_" + nombreOriginal;
     }
 }

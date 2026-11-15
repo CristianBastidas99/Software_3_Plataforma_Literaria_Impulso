@@ -1,31 +1,23 @@
 package co.edu.uniquindio.proyecto.bean;
 
-import co.edu.uniquindio.proyecto.entidades.*;
-import co.edu.uniquindio.proyecto.servicios.*;
+import co.edu.uniquindio.proyecto.entidades.Escritor;
+import co.edu.uniquindio.proyecto.entidades.Publicacion;
+import co.edu.uniquindio.proyecto.servicios.PublicacionServicio;
 import lombok.Getter;
 import lombok.Setter;
-import org.primefaces.PrimeFaces;
-import org.primefaces.model.ResponsiveOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.el.MethodExpression;
-import javax.faces.annotation.ManagedProperty;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Component
 @ViewScoped
 @Getter
 @Setter
-public class PublicacionBean implements Serializable{
+public class PublicacionBean implements Serializable {
 
     @Autowired
     private PublicacionServicio publicacionServicio;
@@ -35,26 +27,31 @@ public class PublicacionBean implements Serializable{
 
     private Publicacion publicacion;
     private Escritor escritor;
+    /** Indica si la publicación solicitada existe; si es falso la vista muestra un mensaje en lugar del detalle. */
+    private boolean encontrada;
 
     @PostConstruct
-    public void inicializar(){
-        publicacion = new Publicacion();
-        escritor = new Escritor();
-        if(idProducto!=null && !idProducto.equals("")){
+    public void inicializar() {
+        encontrada = false;
+
+        Long id = ParametrosUrl.aLong(idProducto);
+        if (id == null) {
+            return;
+        }
+        try {
+            publicacion = publicacionServicio.obtenerPublicacion(id);
+            encontrada = true;
+        } catch (Exception e) {
+            publicacion = null;
+            return;
+        }
+
+        if (publicacion.getObraLiteraria() != null) {
             try {
-                publicacion = publicacionServicio.obtenerPublicacion(Long.valueOf(idProducto));
                 escritor = publicacionServicio.obtenerEscritorDePublicacion(publicacion.getObraLiteraria().getId());
             } catch (Exception e) {
-                mostrarMensaje(e.getMessage(), FacesMessage.SEVERITY_ERROR);
+                escritor = null;
             }
-        }else{
-            System.out.println("No LLego");
         }
     }
-
-    private void mostrarMensaje(String mensaje, FacesMessage.Severity severity) {
-        FacesMessage facesMsg = new FacesMessage(severity, "Alerta", mensaje);
-        FacesContext.getCurrentInstance().addMessage(null, facesMsg);
-    }
-
 }
