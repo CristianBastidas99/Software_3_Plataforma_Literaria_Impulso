@@ -41,3 +41,6 @@ out/
 ### VS Code ###
 .vscode/
 /.idea/vcs.xml
+
+### Secretos locales ###
+application-secret.properties

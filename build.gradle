@@ -31,3 +31,8 @@ subprojects{
 test {
     useJUnitPlatform()
 }
+
+// El proyecto raiz solo agrupa los modulos; no genera un jar ejecutable
+bootJar {
+    enabled = false
+}
