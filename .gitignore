@@ -44,3 +44,6 @@ out/
 
 ### Secretos locales ###
 application-secret.properties
+
+### Notas personales (no versionar) ###
+/notas/
