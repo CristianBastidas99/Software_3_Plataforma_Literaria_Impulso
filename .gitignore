@@ -1,35 +1,73 @@
-# Project exclude paths
-/.gradle/
-/persistencia/build/
-/persistencia/build/classes/java/main/
-
-HELP.md
-.gradle
+### Gradle ###
+.gradle/
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+.gradletasknamecache
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
+### Java ###
+*.class
+*.log
+*.ctxt
+.mtj.tmp/
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+replay_pid*
+
+### Spring Boot ###
+HELP.md
 
 ### IntelliJ IDEA ###
-.idea
+.idea/
 *.iws
 *.iml
 *.ipr
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+.idea_modules/
+atlassian-ide-plugin.xml
+cmake-build-*/
+.shelf/
+http-client.private.env.json
+
+### Eclipse / STS ###
+.metadata/
+.recommenders/
+.apt_generated/
+.apt_generated_tests/
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache/
+.loadpath
+.buildpath
+.externalToolBuilders/
+.target
+.texlipse
+.autotools
+.cproject
+.pydevproject
+*.launch
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+tmp/
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
 
 ### NetBeans ###
 /nbproject/private/
@@ -40,10 +78,18 @@ out/
 
 ### VS Code ###
 .vscode/
-/.idea/vcs.xml
+
+### Sistema operativo ###
+.DS_Store
+Thumbs.db
+desktop.ini
+
+### Archivos subidos en tiempo de ejecución ###
+/uploads/
 
 ### Secretos locales ###
 application-secret.properties
+.env
 
 ### Notas personales (no versionar) ###
 /notas/
