@@ -7,28 +7,28 @@ INSERT INTO genero (id, nombre) VALUES
 (5, 'Aventura');
 
 -- administrador
-INSERT INTO administrador (id, email, estado, nombre, password) VALUES
-  (1, 'admin1@example.com', 'ACTIVO', 'Admin Uno', 'password123'),
-  (2, 'admin2@example.com', 'ACTIVO', 'Admin Dos', 'securepass'),
-  (3, 'admin3@example.com', 'INACTIVO', 'Admin Tres', 'adminpass'),
-  (4, 'admin4@example.com', 'ACTIVO', 'Admin Cuatro', 'p@ssw0rd'),
-  (5, 'admin5@example.com', 'INACTIVO', 'Admin Cinco', 'adminadmin');
+INSERT INTO administrador (id, email, estado, nombre, password, url_imagen) VALUES
+  (1, 'admin1@example.com', 'ACTIVO', 'Admin Uno', 'password123', 'autor.jpg'),
+  (2, 'admin2@example.com', 'ACTIVO', 'Admin Dos', 'securepass', 'autor.jpg'),
+  (3, 'admin3@example.com', 'INACTIVO', 'Admin Tres', 'adminpass', 'autor.jpg'),
+  (4, 'admin4@example.com', 'ACTIVO', 'Admin Cuatro', 'p@ssw0rd', 'autor.jpg'),
+  (5, 'admin5@example.com', 'INACTIVO', 'Admin Cinco', 'adminadmin', 'autor.jpg');
 
 -- lector
-INSERT INTO lector (id, email, estado, nombre, password) VALUES
-(1, 'reader1@example.com', 'ACTIVO', 'Lector Uno', 'readerpass'),
-(2, 'reader2@example.com', 'ACTIVO', 'Lector Dos', 'bookslover'),
-(3, 'reader3@example.com', 'INACTIVO', 'Lector Tres', 'readingnow'),
-(4, 'reader4@example.com', 'ACTIVO', 'Lector Cuatro', 'pageturner'),
-(5, 'reader5@example.com', 'INACTIVO', 'Lector Cinco', 'bookworm');
+INSERT INTO lector (id, email, estado, nombre, password, url_imagen) VALUES
+(1, 'reader1@example.com', 'ACTIVO', 'Lector Uno', 'readerpass', 'autor.jpg'),
+(2, 'reader2@example.com', 'ACTIVO', 'Lector Dos', 'bookslover', 'autor.jpg'),
+(3, 'reader3@example.com', 'INACTIVO', 'Lector Tres', 'readingnow', 'autor.jpg'),
+(4, 'reader4@example.com', 'ACTIVO', 'Lector Cuatro', 'pageturner', 'autor.jpg'),
+(5, 'reader5@example.com', 'INACTIVO', 'Lector Cinco', 'bookworm', 'autor.jpg');
 
 -- escritor
-INSERT INTO escritor (id, email, estado, nombre, password, biografia) VALUES
-(1, 'writer1@example.com', 'ACTIVO', 'Escritor Uno', 'writerpass', 'Autor de bestsellers'),
-(2, 'writer2@example.com', 'ACTIVO', 'Escritor Dos', 'novelist123', 'Amante de la poesía'),
-(3, 'writer3@example.com', 'INACTIVO', 'Escritor Tres', 'passforwriter', 'Escribo ciencia ficción'),
-(4, 'writer4@example.com', 'ACTIVO', 'Escritor Cuatro', 'secretwriter', 'Ganador de premios literarios'),
-(5, 'writer5@example.com', 'INACTIVO', 'Escritor Cinco', 'writerpass123', 'Autor independiente');
+INSERT INTO escritor (id, email, estado, nombre, password, biografia, url_imagen) VALUES
+(1, 'writer1@example.com', 'ACTIVO', 'Escritor Uno', 'writerpass', 'Autor de bestsellers', 'autor.jpg'),
+(2, 'writer2@example.com', 'ACTIVO', 'Escritor Dos', 'novelist123', 'Amante de la poesía', 'autor.jpg'),
+(3, 'writer3@example.com', 'INACTIVO', 'Escritor Tres', 'passforwriter', 'Escribo ciencia ficción', 'autor.jpg'),
+(4, 'writer4@example.com', 'ACTIVO', 'Escritor Cuatro', 'secretwriter', 'Ganador de premios literarios', 'autor.jpg'),
+(5, 'writer5@example.com', 'INACTIVO', 'Escritor Cinco', 'writerpass123', 'Autor independiente', 'autor.jpg');
 
 -- obra_literaria ACTIVO, INACTIVO, APROBADO, RECHAZADO, PENDIENTE, PUBLICADO
 INSERT INTO obra_literaria (id, editorial, estado, fecha_publicacion, isbn, sinopsis, titulo) VALUES
@@ -109,5 +109,3 @@ INSERT INTO lector_publicacion_recomendada (lector_id, publicacion_id) VALUES
 (3, 3),
 (4, 4),
 (5, 5);
-
-

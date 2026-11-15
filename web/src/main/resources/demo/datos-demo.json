@@ -1,0 +1,303 @@
+{
+  "generos": ["Ficción", "Romance", "Ciencia ficción", "Misterio", "Aventura", "Fantasía", "Poesía", "Terror"],
+
+  "administrador": {
+    "nombre": "Administrador Impulso",
+    "email": "admin@impulso.com",
+    "password": "admin123",
+    "imagen": "demo_avatar_admin.jpg"
+  },
+
+  "escritores": [
+    {
+      "clave": "valentina",
+      "nombre": "Valentina Ríos",
+      "email": "valentina@impulso.com",
+      "password": "escritor123",
+      "imagen": "demo_avatar_valentina.jpg",
+      "biografia": "Novelista nacida en Armenia, Quindío. Escribe fantasía y realismo mágico inspirados en la niebla, los cafetales y las historias que contaban sus abuelos."
+    },
+    {
+      "clave": "mateo",
+      "nombre": "Mateo Cárdenas",
+      "email": "mateo@impulso.com",
+      "password": "escritor123",
+      "imagen": "demo_avatar_mateo.jpg",
+      "biografia": "Ingeniero de sistemas y autor de ciencia ficción. Le interesan las máquinas que recuerdan, los viajes largos y las preguntas que la tecnología todavía no responde."
+    },
+    {
+      "clave": "lucia",
+      "nombre": "Lucía Fernández",
+      "email": "lucia@impulso.com",
+      "password": "escritor123",
+      "imagen": "demo_avatar_lucia.jpg",
+      "biografia": "Bibliotecaria y escritora de misterio. Sus novelas transcurren en casas antiguas, librerías de barrio y pueblos donde todos guardan un secreto."
+    },
+    {
+      "clave": "andres",
+      "nombre": "Andrés Montoya",
+      "email": "andres@impulso.com",
+      "password": "escritor123",
+      "imagen": "demo_avatar_andres.jpg",
+      "biografia": "Poeta y viajero. Ha recorrido la cordillera de los Andes a pie y escribe sobre ríos, montañas y los amores que se quedan en el camino."
+    }
+  ],
+
+  "lectores": [
+    {
+      "clave": "camila",
+      "nombre": "Camila Torres",
+      "email": "camila@impulso.com",
+      "password": "lector123",
+      "imagen": "demo_avatar_camila.jpg",
+      "generosPreferidos": ["Fantasía", "Romance"],
+      "escritoresFavoritos": ["valentina", "andres"],
+      "publicacionesRecomendadas": ["niebla", "cartas", "viento"],
+      "publicacionesVistas": ["niebla", "cartas", "viento", "faro"]
+    },
+    {
+      "clave": "santiago",
+      "nombre": "Santiago Gómez",
+      "email": "santiago@impulso.com",
+      "password": "lector123",
+      "imagen": "demo_avatar_santiago.jpg",
+      "generosPreferidos": ["Ciencia ficción", "Aventura"],
+      "escritoresFavoritos": ["mateo"],
+      "publicacionesRecomendadas": ["faro", "orbita", "condor"],
+      "publicacionesVistas": ["faro", "memoria", "orbita", "condor", "niebla"]
+    },
+    {
+      "clave": "laura",
+      "nombre": "Laura Méndez",
+      "email": "laura@impulso.com",
+      "password": "lector123",
+      "imagen": "demo_avatar_laura.jpg",
+      "generosPreferidos": ["Misterio", "Terror"],
+      "escritoresFavoritos": ["lucia", "mateo"],
+      "publicacionesRecomendadas": ["libreria", "relojes", "memoria"],
+      "publicacionesVistas": ["libreria", "relojes", "memoria", "versos"]
+    }
+  ],
+
+  "obras": [
+    {
+      "clave": "niebla",
+      "titulo": "La niebla del cafetal",
+      "autores": ["valentina"],
+      "generos": ["Fantasía", "Ficción"],
+      "editorial": "Ediciones Guadua",
+      "isbn": "978-958-99-0070-3",
+      "fecha": "2025-03-14",
+      "sinopsis": "En una finca del Quindío la niebla trae cada noche a los muertos del pueblo. Rosa debe descubrir qué buscan antes de que termine la cosecha.",
+      "contenido": "Una novela de realismo mágico sobre la memoria, la tierra y las deudas que una familia arrastra durante tres generaciones.",
+      "portada": "demo_portada_niebla.jpg",
+      "fragmento": "demo_fragmento_niebla.pdf",
+      "colores": ["#2f4f3a", "#a9c5a0"],
+      "texto": [
+        "La niebla subió por la cañada a las seis en punto, como todas las tardes desde que murió el abuelo. Rosa la vio trepar entre los surcos de café, lenta y blanca, borrando primero los guamos, luego el beneficiadero y por último el camino que llevaba al pueblo.",
+        "Su madre cerró las ventanas sin decir nada. En la casa nadie hablaba de lo que pasaba cuando la niebla llegaba al patio, pero todos dejaban un plato de mazamorra en la mesa del corredor y una vela encendida junto a la puerta.",
+        "Esa noche Rosa no pudo dormir. A las once oyó pasos en el corredor, pasos cansados de alguien que había caminado mucho. Se asomó por la rendija de la puerta y vio al abuelo sentado en su taburete, con el sombrero sobre las rodillas, mirando hacia los cafetales como si esperara que alguien le devolviera algo.",
+        "Abuelo, susurró ella. El viejo levantó la cara. Tenía los ojos llenos de niebla. Todavía no han pagado, dijo. Y antes de que Rosa pudiera preguntar qué, el corredor estaba vacío y el plato de mazamorra seguía intacto."
+      ]
+    },
+    {
+      "clave": "cartas",
+      "titulo": "Cartas a la montaña",
+      "autores": ["valentina"],
+      "generos": ["Romance", "Ficción"],
+      "editorial": "Ediciones Guadua",
+      "isbn": "978-958-99-0140-3",
+      "fecha": "2025-08-02",
+      "sinopsis": "Una maestra rural encuentra en la escuela un paquete de cartas de amor que nunca fueron enviadas y decide buscar a quienes debían recibirlas.",
+      "contenido": "Una historia de amor contada a través de cartas perdidas, caminos de herradura y un pueblo que aprende a decir lo que calló durante años.",
+      "portada": "demo_portada_cartas.jpg",
+      "fragmento": "demo_fragmento_cartas.pdf",
+      "colores": ["#7a3b4f", "#f0c9b8"],
+      "texto": [
+        "El paquete estaba detrás del tablero, envuelto en papel periódico y amarrado con una cabuya. Inés lo encontró el primer día de clases, cuando intentaba colgar el mapa de Colombia que había traído desde la ciudad.",
+        "Eran cuarenta y tres cartas. Todas tenían la misma letra inclinada y ninguna tenía estampilla. La primera empezaba así: Querida Amparo, hoy volví a subir hasta la piedra grande para ver si se veía tu casa, pero la montaña estaba tapada y tuve que imaginármela.",
+        "Inés leyó hasta que oscureció. Cuando terminó la última carta sabía tres cosas: que el hombre que las escribió se llamaba Eliécer, que Amparo se había ido del pueblo en 1987 y que ninguna de las dos había dejado de esperar.",
+        "Al día siguiente preguntó en la tienda por Eliécer. La señora del mostrador dejó de contar las monedas y la miró por encima de las gafas. Ese señor todavía vive arriba, dijo, pero hace treinta años que no baja."
+      ]
+    },
+    {
+      "clave": "faro",
+      "titulo": "El último faro de Kepler",
+      "autores": ["mateo"],
+      "generos": ["Ciencia ficción"],
+      "editorial": "Sello Órbita",
+      "isbn": "978-958-99-0210-3",
+      "fecha": "2024-11-20",
+      "sinopsis": "La guardiana de una estación de navegación en el borde del sistema recibe una señal de una nave que desapareció hace dos siglos.",
+      "contenido": "Ciencia ficción contemplativa sobre la soledad, el tiempo y las decisiones que se toman a millones de kilómetros de cualquier testigo.",
+      "portada": "demo_portada_faro.jpg",
+      "fragmento": "demo_fragmento_faro.pdf",
+      "colores": ["#0f1e3d", "#f2b84b"],
+      "texto": [
+        "La estación Kepler-9 llevaba ciento doce años guiando naves hacia el corredor exterior, y Mara llevaba seis de ellos sola. Su trabajo consistía en mantener encendida la baliza, revisar los filtros de oxígeno y responder a las naves que pedían coordenadas. Hacía dos años que no pasaba ninguna.",
+        "La señal llegó durante el turno de descanso. El sistema la clasificó como ruido, después como error y finalmente como imposible. Mara la escuchó tres veces antes de entender que no era una transmisión automática: era una voz humana pidiendo permiso para atracar.",
+        "El identificador correspondía a la Aurora Lenta, una nave colonial que había partido hacia el corredor en el año 2231 y de la que nunca se volvió a saber. Según los registros, sus cuatrocientos pasajeros habían sido declarados muertos ciento ochenta años atrás.",
+        "Aquí Kepler-9, respondió Mara, con la mano temblando sobre el control. Aurora Lenta, ¿cuántas personas vienen a bordo? Hubo un silencio largo, demasiado largo para la distancia. Luego la voz contestó: Solo una. Y lleva doscientos años esperando que alguien le conteste."
+      ]
+    },
+    {
+      "clave": "memoria",
+      "titulo": "Memoria sintética",
+      "autores": ["mateo"],
+      "generos": ["Ciencia ficción", "Misterio"],
+      "editorial": "Sello Órbita",
+      "isbn": "978-958-99-0280-6",
+      "fecha": "2025-05-09",
+      "sinopsis": "En una Medellín futura los recuerdos se compran y se venden. Un detective descubre que uno de sus propios recuerdos fue fabricado.",
+      "contenido": "Un thriller tecnológico sobre la identidad: si tus recuerdos pueden editarse, ¿qué parte de ti sigue siendo tuya?",
+      "portada": "demo_portada_memoria.jpg",
+      "fragmento": "demo_fragmento_memoria.pdf",
+      "colores": ["#1b1b2f", "#e94560"],
+      "texto": [
+        "El recuerdo costaba doscientos créditos y olía a pan recién horneado. Julián lo había comprado en una tienda del centro para regalárselo a su madre: una tarde de domingo en una panadería que ya no existía, con la luz entrando por la vitrina.",
+        "Fue al instalárselo en su propio implante, para revisarlo antes de entregarlo, cuando vio el error. En una esquina del recuerdo, sentado junto a la vitrina, había un niño de ocho años con una camiseta azul. Ese niño era él.",
+        "Julián nunca había estado en esa panadería. Lo sabía con la certeza con la que se saben las cosas importantes. Y sin embargo, cuanto más miraba el recuerdo, más reconocía el sabor del pan, el ruido de la registradora y la voz de su padre pidiendo dos tintos.",
+        "Esa noche revisó su propio archivo de memorias. Encontró la panadería en tres recuerdos más, todos con fecha de modificación del mismo día: el día en que su padre desapareció."
+      ]
+    },
+    {
+      "clave": "orbita",
+      "titulo": "Órbita de regreso",
+      "autores": ["mateo"],
+      "generos": ["Ciencia ficción", "Aventura"],
+      "editorial": "Sello Órbita",
+      "isbn": "978-958-99-0350-6",
+      "fecha": "2026-01-15",
+      "sinopsis": "Tres astronautas varados en una estación abandonada tienen once días de oxígeno para reparar una cápsula que nadie ha usado en cincuenta años.",
+      "contenido": "Aventura espacial llena de ingenio y tensión, con personajes que deben confiar unos en otros cuando cada error puede ser el último.",
+      "portada": "demo_portada_orbita.jpg",
+      "fragmento": "demo_fragmento_orbita.pdf",
+      "colores": ["#232946", "#b8c1ec"],
+      "texto": [
+        "La explosión no hizo ruido. Lo primero que notó Daniela fue que la pantalla de navegación se apagaba, y lo segundo, que su taza de café flotaba hacia la pared en lugar de quedarse sujeta al imán. La nave había perdido el control de giro.",
+        "Tardaron cuatro horas en estabilizarla. Cuando por fin pudieron revisar los daños, el comandante Ortiz leyó el informe en voz alta, despacio, como si leerlo más lento pudiera cambiarlo: motor principal destruido, comunicación de largo alcance perdida, oxígeno para once días.",
+        "La única esperanza estaba a dos kilómetros: la estación Cóndor, abandonada desde 2071, donde según los planos todavía debía haber una cápsula de escape. Nadie sabía si funcionaba. Nadie sabía siquiera si seguía allí.",
+        "Daniela se puso el traje sin esperar la orden. Alguien tiene que ir a mirar, dijo. Ortiz quiso protestar, pero ella ya estaba en la esclusa, revisando el nivel de su tanque con la calma de quien ha decidido no tener miedo hasta después."
+      ]
+    },
+    {
+      "clave": "libreria",
+      "titulo": "El caso de la librería cerrada",
+      "autores": ["lucia"],
+      "generos": ["Misterio"],
+      "editorial": "Editorial Linterna",
+      "isbn": "978-958-99-0420-6",
+      "fecha": "2025-02-28",
+      "sinopsis": "El dueño de una librería aparece muerto en su local, cerrado por dentro. La única pista es un libro que no figura en ningún inventario.",
+      "contenido": "Un misterio clásico de cuarto cerrado con una bibliotecaria aficionada a la investigación que conoce mejor los libros que a las personas.",
+      "portada": "demo_portada_libreria.jpg",
+      "fragmento": "demo_fragmento_libreria.pdf",
+      "colores": ["#3e2723", "#d7b98e"],
+      "texto": [
+        "La librería El Ancla llevaba cuarenta años abierta en la misma esquina y nunca había cerrado un martes. Por eso, cuando a las diez de la mañana la reja seguía abajo, doña Teresa, la de la papelería de enfrente, llamó a la policía.",
+        "Encontraron a don Ramiro sentado en su escritorio, con la cabeza apoyada sobre un libro abierto. La puerta tenía el cerrojo pasado por dentro, las ventanas estaban selladas desde hacía años y la única llave colgaba de su cuello.",
+        "Elena Castaño llegó al mediodía, no porque la hubieran llamado, sino porque don Ramiro le había prometido apartarle una primera edición. El agente de la puerta no la dejó entrar, pero desde la vitrina ella alcanzó a ver el libro sobre el escritorio y sintió un escalofrío.",
+        "Conocía todos los libros de esa librería. Había pasado media vida entre sus estantes. Y ese libro, de tapas verdes y sin título en el lomo, no lo había visto jamás."
+      ]
+    },
+    {
+      "clave": "relojes",
+      "titulo": "La casa de los relojes",
+      "autores": ["lucia"],
+      "generos": ["Terror", "Misterio"],
+      "editorial": "Editorial Linterna",
+      "isbn": "978-958-99-0490-9",
+      "fecha": "2025-10-31",
+      "sinopsis": "Una familia hereda una casona en Salento llena de relojes antiguos. Todos se detienen a la misma hora, y cada noche esa hora llega un poco antes.",
+      "contenido": "Una novela de terror psicológico donde el tiempo se convierte en una amenaza y la casa parece recordar a todos los que vivieron en ella.",
+      "portada": "demo_portada_relojes.jpg",
+      "fragmento": "demo_fragmento_relojes.pdf",
+      "colores": ["#1a1a1a", "#9e7c4a"],
+      "texto": [
+        "La casa tenía ciento catorce relojes. Martín los contó el primer día, mientras sus padres discutían con el notario en la sala. Había relojes de pared, de mesa, de bolsillo guardados en vitrinas y uno enorme, de péndulo, al final del pasillo del segundo piso.",
+        "Todos marcaban la hora correcta. Eso fue lo que más le extrañó: la casa llevaba nueve años cerrada, desde la muerte de la tía abuela Clemencia, y sin embargo alguien les había dado cuerda a todos.",
+        "Esa noche, a las tres y diecisiete, los relojes se detuvieron al mismo tiempo. El silencio despertó a Martín. No era un silencio normal; era como si la casa entera estuviera conteniendo la respiración.",
+        "A la noche siguiente se detuvieron a las tres y doce. A la siguiente, a las tres y siete. Martín hizo la cuenta en un cuaderno y sintió frío en la nuca: si seguían así, en treinta y ocho días los relojes se detendrían a medianoche. Y no quería saber qué pasaría entonces."
+      ]
+    },
+    {
+      "clave": "versos",
+      "titulo": "Versos para un río",
+      "autores": ["andres"],
+      "generos": ["Poesía"],
+      "editorial": "Ediciones Guadua",
+      "isbn": "978-958-99-0560-9",
+      "fecha": "2024-09-05",
+      "sinopsis": "Un poemario que sigue el curso de un río desde el páramo hasta el mar, con poemas sobre el agua, la memoria y los pueblos de sus orillas.",
+      "contenido": "Poemas breves y luminosos escritos durante un viaje a pie siguiendo un río de la cordillera Central hasta su desembocadura.",
+      "portada": "demo_portada_versos.jpg",
+      "fragmento": "demo_fragmento_versos.pdf",
+      "colores": ["#1d4e5f", "#bfe3e0"],
+      "texto": [
+        "I. Nacimiento. Aquí, donde el frailejón guarda la niebla, el río es apenas una idea del agua: un hilo que no sabe todavía que algún día tendrá nombre.",
+        "II. Primer pueblo. Las mujeres lavan en la orilla y el río se lleva sus canciones río abajo, donde otras mujeres, sin saberlo, las terminan.",
+        "III. El puente. Mi abuelo cruzaba este puente cada mañana. El puente ya no existe, pero el río todavía hace el ruido de sus pasos.",
+        "IV. Crecida. En abril el río se acuerda de todo lo que fue y sale a buscarlo: casas, caminos, el nombre de los muertos.",
+        "V. Desembocadura. Al final el río no se pierde en el mar. Se queda, como se queda uno en la voz de quien lo recuerda."
+      ]
+    },
+    {
+      "clave": "condor",
+      "titulo": "La ruta del cóndor",
+      "autores": ["andres"],
+      "generos": ["Aventura"],
+      "editorial": "Editorial Linterna",
+      "isbn": "978-958-99-0630-9",
+      "fecha": "2025-06-21",
+      "sinopsis": "Dos hermanos recorren a pie la cordillera siguiendo el mapa que dejó su padre, un guía de montaña que desapareció hace diez años.",
+      "contenido": "Una aventura de montaña sobre la familia, el duelo y los caminos que solo se entienden cuando uno los recorre.",
+      "portada": "demo_portada_condor.jpg",
+      "fragmento": "demo_fragmento_condor.pdf",
+      "colores": ["#4a3f35", "#e8c07d"],
+      "texto": [
+        "El mapa estaba dibujado a mano en la parte de atrás de un calendario de 2014. Tenía montañas, ríos, un par de casas marcadas con una cruz y, en la esquina inferior, una frase con la letra de su padre: Para cuando estén listos.",
+        "Simón tenía diecinueve años y no estaba listo para nada. Clara, su hermana, tenía veintitrés y llevaba diez años diciendo que nunca iba a perdonar a su padre por irse a la montaña y no volver. Aun así, fue ella la que compró los pasajes de bus hasta el último pueblo.",
+        "El primer día caminaron nueve horas sin hablar. Al atardecer llegaron a la primera cruz del mapa: una casa de bahareque con techo de zinc, donde una señora mayor los miró desde la puerta como si los estuviera esperando.",
+        "Ustedes son los hijos de Germán, dijo, sin preguntar. Él me dijo que algún día vendrían. Entren, que la noche en el páramo no perdona, y lo que les tengo que contar es largo."
+      ]
+    },
+    {
+      "clave": "viento",
+      "titulo": "Lo que el viento guardó",
+      "autores": ["andres"],
+      "generos": ["Romance"],
+      "editorial": "Ediciones Guadua",
+      "isbn": "978-958-99-0700-9",
+      "fecha": "2026-02-14",
+      "sinopsis": "Dos antiguos compañeros de colegio se reencuentran veinte años después en el festival de cometas de su pueblo y descubren que nada ha cambiado.",
+      "contenido": "Una novela romántica tierna y luminosa sobre segundas oportunidades, cometas de papel y el viento de agosto.",
+      "portada": "demo_portada_viento.jpg",
+      "fragmento": "demo_fragmento_viento.pdf",
+      "colores": ["#e07a5f", "#f4f1de"],
+      "texto": [
+        "En agosto el viento llega al pueblo como un vecino que vuelve de viaje: sin avisar y con ganas de mover todo. Ese año, Sofía también volvió sin avisar, con una maleta pequeña y la intención de quedarse solo un fin de semana.",
+        "El festival de cometas seguía siendo en la cancha de fútbol, detrás de la iglesia. Los niños corrían con hilos enredados y los adultos fingían no competir. Sofía se sentó en las gradas a mirar, y entonces vio la cometa roja con forma de pez.",
+        "La reconoció de inmediato. La habían hecho juntos, ella y Tomás, en sexto grado, con papel de seda y varillas de guadua que él había cortado con la navaja de su papá. Ella se fue del pueblo a los dieciséis. La cometa, al parecer, no.",
+        "Tomás bajó la cometa despacio, sin dejar de mirarla. Se acercó a las gradas con el carrete en la mano y una sonrisa que tenía veinte años de retraso. Todavía vuela, dijo. Sofía tardó en contestar. Ya veo, dijo al fin. Algunas cosas aguantan."
+      ]
+    }
+  ],
+
+  "comentarios": [
+    { "obra": "niebla", "lector": "camila", "fecha": "2025-03-20T18:30:00", "contenido": "Me atrapó desde la primera página. La escena del abuelo en el corredor me puso la piel de gallina." },
+    { "obra": "niebla", "lector": "santiago", "fecha": "2025-03-22T21:10:00", "contenido": "No suelo leer fantasía, pero esta me encantó. Se siente muy nuestra." },
+    { "obra": "niebla", "escritor": "andres", "fecha": "2025-03-25T09:45:00", "contenido": "Valentina logra que la niebla sea un personaje más. Hermoso trabajo." },
+    { "obra": "cartas", "lector": "camila", "fecha": "2025-08-10T20:00:00", "contenido": "Lloré con la carta número doce. Necesito saber si Eliécer y Amparo se reencuentran." },
+    { "obra": "faro", "lector": "santiago", "fecha": "2024-12-01T22:15:00", "contenido": "Qué final de capítulo. La idea de una sola persona esperando doscientos años es brutal." },
+    { "obra": "faro", "lector": "camila", "fecha": "2024-12-05T17:40:00", "contenido": "Muy bien escrita, con un ritmo pausado que le queda perfecto a la historia." },
+    { "obra": "memoria", "lector": "laura", "fecha": "2025-05-15T19:25:00", "contenido": "Me hizo pensar mucho en qué tanto confiamos en nuestros recuerdos. Excelente premisa." },
+    { "obra": "memoria", "escritor": "lucia", "fecha": "2025-05-18T10:05:00", "contenido": "Un misterio muy bien planteado. Mateo, tienes que contarnos qué pasó con el padre." },
+    { "obra": "orbita", "lector": "santiago", "fecha": "2026-01-20T23:00:00", "contenido": "Daniela es mi personaje favorito del año. Tensión de principio a fin." },
+    { "obra": "libreria", "lector": "laura", "fecha": "2025-03-05T16:20:00", "contenido": "Un cuarto cerrado de los buenos. Ya tengo tres sospechosos y seguro me equivoco." },
+    { "obra": "relojes", "lector": "laura", "fecha": "2025-11-02T01:30:00", "contenido": "La leí de noche y fue un error. Ahora escucho todos los relojes de mi casa." },
+    { "obra": "relojes", "escritor": "valentina", "fecha": "2025-11-03T11:00:00", "contenido": "La cuenta regresiva de los relojes es una idea genial. Qué miedo tan elegante." },
+    { "obra": "versos", "lector": "camila", "fecha": "2024-09-15T08:50:00", "contenido": "El poema del puente es precioso. Se lo leí a mi abuela." },
+    { "obra": "condor", "lector": "santiago", "fecha": "2025-07-01T19:00:00", "contenido": "Me dieron ganas de salir a caminar la cordillera. La señora del páramo es entrañable." },
+    { "obra": "viento", "lector": "camila", "fecha": "2026-02-16T15:35:00", "contenido": "Tierna y luminosa, tal como promete. La cometa roja con forma de pez ya es un símbolo para mí." }
+  ]
+}

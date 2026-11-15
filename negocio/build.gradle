@@ -1,5 +1,10 @@
+plugins {
+    id 'java-library'
+}
+
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // 'api': el módulo web usa las entidades y repositorios, así que necesita JPA en su classpath de compilación
+    api 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'mysql:mysql-connector-java'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 }

@@ -50,6 +50,7 @@ public class ComentarioTest {
         escritor.setNombre("Escritor1");
         escritor.setEmail("correo@example.com");
         escritor.setPassword("12345");
+        escritor.setUrlImagen("autor.jpg");
         escritor.setBiografia("Esta es una bibliografia");
         escritor.setEstado(Estado.ACTIVO);
         escritorRepo.save(escritor);
@@ -61,6 +62,7 @@ public class ComentarioTest {
         lector.setNombre("Lector1");
         lector.setEmail("correolector@example.com");
         lector.setPassword("67890");
+        lector.setUrlImagen("autor.jpg");
         lector.setEstado(Estado.ACTIVO);
         lectorRepo.save(lector);
 
@@ -99,6 +101,7 @@ public class ComentarioTest {
         escritor.setNombre("Escritor1");
         escritor.setEmail("correo@example.com");
         escritor.setPassword("12345");
+        escritor.setUrlImagen("autor.jpg");
         escritor.setBiografia("Esta es una bibliografia");
         escritor.setEstado(Estado.ACTIVO);
         escritorRepo.save(escritor);
@@ -110,6 +113,7 @@ public class ComentarioTest {
         lector.setNombre("Lector1");
         lector.setEmail("correolector@example.com");
         lector.setPassword("67890");
+        lector.setUrlImagen("autor.jpg");
         lector.setEstado(Estado.ACTIVO);
         lectorRepo.save(lector);
 
@@ -151,6 +155,7 @@ public class ComentarioTest {
         escritor.setNombre("Escritor1");
         escritor.setEmail("correo@example.com");
         escritor.setPassword("12345");
+        escritor.setUrlImagen("autor.jpg");
         escritor.setBiografia("Esta es una bibliografia");
         escritor.setEstado(Estado.ACTIVO);
         escritorRepo.save(escritor);
@@ -162,6 +167,7 @@ public class ComentarioTest {
         lector.setNombre("Lector1");
         lector.setEmail("correolector@example.com");
         lector.setPassword("67890");
+        lector.setUrlImagen("autor.jpg");
         lector.setEstado(Estado.ACTIVO);
         lectorRepo.save(lector);
 
@@ -207,6 +213,7 @@ public class ComentarioTest {
         escritor.setNombre("Escritor1");
         escritor.setEmail("correo@example.com");
         escritor.setPassword("12345");
+        escritor.setUrlImagen("autor.jpg");
         escritor.setBiografia("Esta es una bibliografia");
         escritor.setEstado(Estado.ACTIVO);
         escritorRepo.save(escritor);
@@ -218,6 +225,7 @@ public class ComentarioTest {
         lector.setNombre("Lector1");
         lector.setEmail("correolector@example.com");
         lector.setPassword("67890");
+        lector.setUrlImagen("autor.jpg");
         lector.setEstado(Estado.ACTIVO);
         lectorRepo.save(lector);
 

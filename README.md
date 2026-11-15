@@ -32,7 +32,9 @@ Plataforma_Literaria_Impulso_sw3
 ├── web/                         # Aplicación web JSF (módulo ejecutable)
 │   ├── src/main/java/.../bean/  # Managed beans (Inicio, Explorar, Login, Registrar,
 │   │                            # Escritor, Publicacion, EditarPerfil)
+│   ├── src/main/resources/demo/ # Datos del perfil demo (datos-demo.json)
 │   └── src/main/webapp/         # Páginas .xhtml, plantilla y recursos (css, js, img, pdf)
+├── scripts/                     # Generador de portadas, avatares y PDFs de la demo
 ├── build.gradle                 # Configuración común de los módulos
 └── settings.gradle
 ```
@@ -129,12 +131,40 @@ New-NetFirewallRule -DisplayName "Impulso 8080" -Direction Inbound -Protocol TCP
 ./gradlew :negocio:test     # Ejecutar pruebas (requieren MySQL corriendo)
 ```
 
-### Datos de prueba
+Las pruebas usan una base de datos aparte, `plisw3_test`, que se crea automáticamente. No modifican la base de desarrollo.
 
-La base de datos arranca vacía. Para cargar datos de ejemplo:
+### Datos de demostración (perfil `demo`)
+
+La base de datos arranca vacía. Para llenarla con contenido de ejemplo, arranca la aplicación con el perfil `demo`:
+
+**Windows (PowerShell)**
+```powershell
+.\gradlew :web:bootRun --args="--spring.profiles.active=demo"
+```
+
+**Linux / macOS**
+```bash
+./gradlew :web:bootRun --args='--spring.profiles.active=demo'
+```
+
+Al arrancar se cargan 8 géneros, 1 administrador, 4 escritores, 3 lectores, 10 obras publicadas (cada una con portada y fragmento en PDF), 15 comentarios, y los favoritos, recomendaciones y visitas de los lectores. Los datos solo se cargan si la base no tiene usuarios ni publicaciones, así que arrancar varias veces con el perfil no los duplica. Si quieres volver a cargarlos, vacía antes la base de datos.
+
+| Rol | Correo | Contraseña |
+|---|---|---|
+| Administrador | `admin@impulso.com` | `admin123` |
+| Escritor | `valentina@impulso.com` | `escritor123` |
+| Escritor | `mateo@impulso.com` | `escritor123` |
+| Escritor | `lucia@impulso.com` | `escritor123` |
+| Escritor | `andres@impulso.com` | `escritor123` |
+| Lector | `camila@impulso.com` | `lector123` |
+| Lector | `santiago@impulso.com` | `lector123` |
+| Lector | `laura@impulso.com` | `lector123` |
+
+Los datos están en `web/src/main/resources/demo/datos-demo.json`. Las portadas, los avatares y los PDFs (`demo_*` en `web/src/main/webapp/resources/img` y `resources/pdf`) son originales del proyecto y se generan a partir de ese JSON con:
 
 ```bash
-docker exec -i <contenedor-mysql> mysql -uroot -p12345 plisw3 < negocio/src/test/resources/pli.sql
+pip install pillow
+python scripts/generar_recursos_demo.py
 ```
 
 ## Páginas disponibles
@@ -168,7 +198,6 @@ docker exec -i <contenedor-mysql> mysql -uroot -p12345 plisw3 < negocio/src/test
 
 - Las contraseñas se guardan y comparan en texto plano.
 - Las subidas se guardan en `src/main/webapp/resources/...` (ruta relativa); solo funciona en desarrollo.
-- Las pruebas de `negocio` usan la base de datos de desarrollo y el script `pli.sql` no coincide con el esquema actual, por lo que fallan.
 - El formulario para comentar en `publicacion.xhtml` todavía no está conectado a ningún bean.
 
 ## Historial de cambios de configuración

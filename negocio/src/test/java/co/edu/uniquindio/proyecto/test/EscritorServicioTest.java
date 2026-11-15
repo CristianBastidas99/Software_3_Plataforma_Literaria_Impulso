@@ -24,7 +24,7 @@ public class EscritorServicioTest {
     private EscritorServicio escritorServicio;
 
     @Test
-    //@Sql("classpath:pli.sql")
+    @Sql("classpath:pli.sql")
     public void obtenerPublicacionesAprobadasDeEscritorTest(){
         //Obtenemos la lista de todos los administradores
         Long id = Long.valueOf("1");
@@ -39,7 +39,7 @@ public class EscritorServicioTest {
     }
 
     @Test
-    //@Sql("classpath:pli.sql")
+    @Sql("classpath:pli.sql")
     public void obtenerEscritoresPorFraseTest(){
         //Obtenemos la lista de todos los administradores
         String frase = "Es";

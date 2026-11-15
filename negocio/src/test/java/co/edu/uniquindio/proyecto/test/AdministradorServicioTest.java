@@ -158,14 +158,9 @@ public class AdministradorServicioTest {
             Assertions.assertNotNull(adminValido);
             Assertions.assertEquals(email, adminValido.getEmail());
 
-            // Intento de iniciar sesión con credenciales incorrectas
-            Exception exception = Assertions.assertThrows(Exception.class, () -> {
-                administradorServicio.validaLogin(email, contrasenaIncorrecta);
-            });
-
-            // Verificar que se haya lanzado la excepción esperada
-            String mensajeEsperado = "No existe un administrador con ese email y contraseña";
-            Assertions.assertEquals(mensajeEsperado, exception.getMessage());
+            // Con credenciales incorrectas el servicio devuelve null (LoginBean usa ese null
+            // para intentar el login como escritor y luego como lector)
+            Assertions.assertNull(administradorServicio.validaLogin(email, contrasenaIncorrecta));
 
             // Intento de iniciar sesión con administrador inactivo
             // (Asumiendo que hay un administrador inactivo en el archivo de prueba SQL)

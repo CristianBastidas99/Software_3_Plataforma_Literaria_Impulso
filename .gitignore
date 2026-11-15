@@ -84,6 +84,9 @@ bin/
 Thumbs.db
 desktop.ini
 
+### Herramientas de automatización del navegador ###
+.playwright-mcp/
+
 ### Archivos subidos en tiempo de ejecución ###
 /uploads/
 
