@@ -3,6 +3,7 @@ package co.edu.uniquindio.proyecto.bean;
 import co.edu.uniquindio.proyecto.entidades.Escritor;
 import co.edu.uniquindio.proyecto.entidades.Estado;
 import co.edu.uniquindio.proyecto.entidades.Lector;
+import co.edu.uniquindio.proyecto.servicios.CorreoServicio;
 import co.edu.uniquindio.proyecto.servicios.EscritorServicio;
 import co.edu.uniquindio.proyecto.servicios.LectorServicio;
 import co.edu.uniquindio.proyecto.servicios.LoginServicio;
@@ -28,6 +29,8 @@ public class RegistrarBean implements Serializable {
     private LectorServicio lectorServicio;
     @Autowired
     private LoginServicio loginServicio;
+    @Autowired
+    private CorreoServicio correoServicio;
 
     private String nombre;
     private String email;
@@ -59,6 +62,8 @@ public class RegistrarBean implements Serializable {
                 escritor.setEstado(Estado.ACTIVO);
                 escritor.setBiografia("");
                 escritorServicio.registrarEscritor(escritor);
+                // En segundo plano: si el SMTP falla, el registro ya quedó hecho
+                correoServicio.enviarBienvenida(nombreLimpio, correo, true);
                 Mensajes.info("Registro como escritor exitoso");
                 limpiarCampos();
             } else if ("lector".equals(rol)) {
@@ -69,6 +74,7 @@ public class RegistrarBean implements Serializable {
                 lector.setUrlImagen("");
                 lector.setEstado(Estado.ACTIVO);
                 lectorServicio.registrarLector(lector);
+                correoServicio.enviarBienvenida(nombreLimpio, correo, false);
                 Mensajes.info("Registro como lector exitoso");
                 limpiarCampos();
             }

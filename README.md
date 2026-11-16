@@ -91,7 +91,19 @@ La configuración está en `web/src/main/resources/application.properties` (y un
 | `DB_PASSWORD` | `12345` | Contraseña de MySQL |
 | `MAIL_HOST` | `localhost` | Host SMTP |
 | `MAIL_PORT` | `1025` | Puerto SMTP |
+| `MAIL_FROM` | `Plataforma Literaria Impulso <no-responder@impulso.com>` | Remitente de los correos |
+| `APP_URL` | `http://localhost:8080` | Dirección pública de la app, usada en los enlaces de los correos |
 | `UPLOAD_DIR` | `uploads` | Carpeta donde se guardan las imágenes y PDFs que suben los usuarios |
+
+### Correos
+
+La aplicación envía tres correos, en segundo plano (`@Async`), así que un servidor SMTP lento o caído no bloquea la interfaz. Si el envío falla, el error solo queda en el log.
+
+- **Bienvenida** al registrarse.
+- **Recuperación de contraseña** desde "¿Olvidaste tu contraseña?" en el login. El enlace caduca a los 30 minutos (`app.recuperacion.minutos`), sirve una sola vez y deja de valer si se pide otro. En la base de datos solo se guarda el hash del token. La página responde lo mismo exista o no el correo, y no se envía nada a cuentas bloqueadas.
+- **Aviso al escritor** cuando comentan una de sus obras (no cuando la comenta él mismo).
+
+En desarrollo los correos llegan a Mailpit: http://localhost:8025.
 
 ### Archivos subidos
 
@@ -195,6 +207,8 @@ python scripts/generar_recursos_demo.py
 | `editar_perfil.xhtml` | Edición de nombre, correo, biografía, imagen y contraseña (escritor o lector con sesión) |
 | `mis_obras.xhtml` | Obras del escritor con sesión: editar, retirar y volver a publicar |
 | `nueva_obra.xhtml` | Publicar una obra (`?idObra=<id>` para editarla) con portada, fragmento PDF, géneros y coautores |
+| `recuperar.xhtml` | "¿Olvidaste tu contraseña?": pide el correo y envía el enlace |
+| `restablecer.xhtml?token=<token>` | Elegir una contraseña nueva desde el enlace del correo |
 | `mi_perfil.xhtml` | Géneros preferidos, escritores favoritos, recomendaciones e historial del lector con sesión |
 | `admin.xhtml` | Panel de control del administrador: resumen, usuarios, publicaciones, comentarios y géneros |
 
@@ -204,7 +218,7 @@ python scripts/generar_recursos_demo.py
 - Modelo de datos completo con relaciones JPA.
 - Repositorios con consultas JPQL y pruebas unitarias.
 - Servicios CRUD para todas las entidades, login por tipo de usuario y búsqueda por frase.
-- Servicio de envío de correo.
+- Correos HTML en segundo plano: bienvenida, recuperación de contraseña y aviso de comentarios.
 - Interfaz web: inicio, explorar, registro, login con sesión, detalle de publicación y perfil de escritor.
 - Edición de perfil (nombre, correo, biografía, imagen y contraseña) y página "Mi perfil" del lector.
 - Interacción: comentarios con filtro de palabras ofensivas, recomendaciones, contador de vistas, seguir escritores, géneros preferidos y sección "Recomendado para ti".
@@ -213,7 +227,6 @@ python scripts/generar_recursos_demo.py
 - Panel de administración: estadísticas, bloqueo de usuarios (no pueden iniciar sesión), moderación de publicaciones y comentarios (ocultar, volver a mostrar o eliminar) y gestión de géneros.
 
 **Pendiente / en desarrollo**
-- Uso del servicio de correo en algún flujo (registro, recuperación de contraseña, etc.).
 
 ## Problemas conocidos
 

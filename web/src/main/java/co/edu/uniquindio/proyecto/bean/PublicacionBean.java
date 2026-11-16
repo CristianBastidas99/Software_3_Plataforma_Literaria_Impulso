@@ -5,6 +5,7 @@ import co.edu.uniquindio.proyecto.entidades.Escritor;
 import co.edu.uniquindio.proyecto.entidades.Estado;
 import co.edu.uniquindio.proyecto.entidades.Genero;
 import co.edu.uniquindio.proyecto.entidades.Publicacion;
+import co.edu.uniquindio.proyecto.servicios.CorreoServicio;
 import co.edu.uniquindio.proyecto.servicios.InteraccionServicio;
 import co.edu.uniquindio.proyecto.servicios.PublicacionServicio;
 import co.edu.uniquindio.proyecto.util.Mensajes;
@@ -33,6 +34,8 @@ public class PublicacionBean implements Serializable {
     private PublicacionServicio publicacionServicio;
     @Autowired
     private InteraccionServicio interaccionServicio;
+    @Autowired
+    private CorreoServicio correoServicio;
     @Autowired
     private LoginBean loginBean;
 
@@ -114,9 +117,25 @@ public class PublicacionBean implements Serializable {
                 Mensajes.info("Tu comentario se publicó.");
             }
             nuevoComentario = "";
+            avisarAutores(guardado);
             cargarInteraccion();
         } catch (Exception e) {
             Mensajes.error(e.getMessage());
+        }
+    }
+
+    /**
+     * Avisa por correo (en segundo plano) a los autores activos de la obra, salvo al que comenta.
+     * Se envía el texto ya censurado.
+     */
+    private void avisarAutores(Comentario comentario) {
+        Long idQuienComenta = loginBean.getTipo() == ESCRITOR ? loginBean.getUsuario().getId() : null;
+        String nombreQuienComenta = loginBean.getUsuario().getNombre();
+        for (Escritor autor : autores) {
+            if (autor.getEstado() == Estado.ACTIVO && !autor.getId().equals(idQuienComenta)) {
+                correoServicio.enviarAvisoComentario(autor.getNombre(), autor.getEmail(), nombreQuienComenta,
+                        publicacion.getTitulo(), comentario.getContenido(), publicacion.getId());
+            }
         }
     }
 
