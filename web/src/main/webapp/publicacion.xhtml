@@ -32,10 +32,16 @@
         <ui:fragment rendered="#{publicacionBean.encontrada}">
         <div class="card p-5" style="width: 75%; margin: 0 auto;">
             <!-- Detalles de la Publicación -->
-            <ui:fragment rendered="#{not publicacionBean.publicada}">
+            <ui:fragment rendered="#{not publicacionBean.publicada and publicacionBean.publicacion.estado != 'RECHAZADO'}">
                 <div class="alert alert-warning">
                     Esta obra no está publicada: solo tú y sus coautores pueden verla. Puedes volver a publicarla desde
                     <h:link outcome="mis_obras.xhtml" value="Mis obras"/>.
+                </div>
+            </ui:fragment>
+            <ui:fragment rendered="#{publicacionBean.publicacion.estado == 'RECHAZADO'}">
+                <div class="alert alert-danger">
+                    El administrador ocultó esta obra: solo tú y sus coautores pueden verla. Si crees que es un error,
+                    escribe al administrador de la plataforma.
                 </div>
             </ui:fragment>
             <div class="row mb-3">

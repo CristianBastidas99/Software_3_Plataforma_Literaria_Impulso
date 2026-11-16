@@ -1,6 +1,8 @@
 package co.edu.uniquindio.proyecto.repositorios;
 
 import co.edu.uniquindio.proyecto.entidades.Genero;
+import org.springframework.data.jpa.repository.Modifying;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,4 +29,14 @@ public interface GeneroRepo extends JpaRepository<Genero, Long> {
     @Query("SELECT g FROM Genero g WHERE g.obraLiterarias IS EMPTY")
     List<Genero> obtenerGenerosSinObrasAsociadas();
 
+    // ---- Administración (Fase 7) ----
+
+    Optional<Genero> findByNombreIgnoreCase(String nombre);
+
+    @Query("SELECT COUNT(o) FROM ObraLiteraria o JOIN o.generos g WHERE g.id = :generoId")
+    long contarObrasDeGenero(@Param("generoId") Long generoId);
+
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query(value = "DELETE FROM lector_genero_preferido WHERE genero_id = :generoId", nativeQuery = true)
+    int eliminarPreferenciasDeGenero(@Param("generoId") Long generoId);
 }

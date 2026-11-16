@@ -169,7 +169,7 @@ public class AdministradorServicioTest {
             });
 
             // Verificar que se haya lanzado la excepción esperada para el administrador inactivo
-            String mensajeInactivoEsperado = "El administrador está INACTIVO";
+            String mensajeInactivoEsperado = "Tu cuenta está bloqueada. Si crees que es un error, escribe al administrador de la plataforma.";
             Assertions.assertEquals(mensajeInactivoEsperado, excepcionInactivo.getMessage());
 
         } catch (Exception e) {

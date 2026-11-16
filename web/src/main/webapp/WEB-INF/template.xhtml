@@ -5,6 +5,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
+<!-- Las páginas que necesitan f:metadata (por ejemplo f:viewAction) la definen aquí -->
+<ui:insert name="metadata"/>
 <h:head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -33,7 +35,7 @@
                         <p:menuitem value="Mis obras" outcome="mis_obras.xhtml" rendered="#{loginBean.tipo eq '2'}" icon="pi pi-book"/>
                         <p:menuitem value="Nueva obra" outcome="nueva_obra.xhtml" rendered="#{loginBean.tipo eq '2'}" icon="pi pi-plus"/>
                         <p:menuitem value="Editar cuenta" outcome="editar_perfil.xhtml" rendered="#{loginBean.tipo eq '2' or loginBean.tipo eq '3'}" icon="pi pi-user-edit"/>
-                        <p:menuitem value="Panel de control" outcome="index.xhtml" rendered="#{loginBean.tipo eq '1'}" icon="pi pi-sliders-h"/>
+                        <p:menuitem value="Panel de control" outcome="admin.xhtml" rendered="#{loginBean.tipo eq '1'}" icon="pi pi-sliders-h"/>
                         <p:divider />
                         <p:menuitem value="Cerrar sesión" action="#{loginBean.logout}" ajax="false" icon="pi pi-sign-out" />
                     </p:splitButton>

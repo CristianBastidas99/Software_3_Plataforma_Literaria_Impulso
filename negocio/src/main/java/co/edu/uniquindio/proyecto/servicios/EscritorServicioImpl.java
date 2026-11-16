@@ -82,7 +82,7 @@ public class EscritorServicioImpl implements EscritorServicio{
         Escritor escritorValido = escritor.get();
 
         if (escritorValido.getEstado() == Estado.INACTIVO) {
-            throw new Exception("El escritor está INACTIVO");
+            throw new Exception("Tu cuenta está bloqueada. Si crees que es un error, escribe al administrador de la plataforma.");
         }
 
         return escritorValido;

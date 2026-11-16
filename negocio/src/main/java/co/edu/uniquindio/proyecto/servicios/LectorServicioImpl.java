@@ -68,7 +68,7 @@ public class LectorServicioImpl implements LectorServicio{
         Lector lectorValido = lector.get();
 
         if (lectorValido.getEstado() == Estado.INACTIVO) {
-            throw new Exception("El lector está INACTIVO");
+            throw new Exception("Tu cuenta está bloqueada. Si crees que es un error, escribe al administrador de la plataforma.");
         }
 
         return lectorValido;

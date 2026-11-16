@@ -2,6 +2,8 @@ package co.edu.uniquindio.proyecto.repositorios;
 
 
 import co.edu.uniquindio.proyecto.entidades.*;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -68,4 +70,24 @@ public interface PublicacionRepo extends JpaRepository<Publicacion, Long> {
             "WHERE p.estado = 'PUBLICADO' AND (g.id IN :generos OR e.id IN :escritores)")
     List<Publicacion> buscarPublicadasPorGenerosOEscritores(@Param("generos") List<Long> generos,
                                                             @Param("escritores") List<Long> escritores);
+
+    // ---- Administración (Fase 7) ----
+
+    long countByEstado(Estado estado);
+
+    @Query("SELECT p FROM Publicacion p ORDER BY p.id DESC")
+    List<Publicacion> listarTodasRecientes();
+
+    /** Filas [id, título, vistas] de las publicaciones publicadas más vistas. */
+    @Query("SELECT p.id, p.titulo, COUNT(l) FROM Publicacion p LEFT JOIN p.lectoresVisitas l " +
+            "WHERE p.estado = 'PUBLICADO' GROUP BY p.id, p.titulo ORDER BY COUNT(l) DESC, p.id DESC")
+    List<Object[]> listarMasVistas(Pageable pagina);
+
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query(value = "DELETE FROM lector_publicacion_vista WHERE publicacion_id = :publicacionId", nativeQuery = true)
+    int eliminarVistasDePublicacion(@Param("publicacionId") Long publicacionId);
+
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query(value = "DELETE FROM lector_publicacion_recomendada WHERE publicacion_id = :publicacionId", nativeQuery = true)
+    int eliminarRecomendacionesDePublicacion(@Param("publicacionId") Long publicacionId);
 }

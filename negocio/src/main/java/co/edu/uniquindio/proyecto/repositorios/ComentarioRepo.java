@@ -1,6 +1,8 @@
 package co.edu.uniquindio.proyecto.repositorios;
 
 import co.edu.uniquindio.proyecto.entidades.*;
+import org.springframework.data.jpa.repository.Modifying;
+import co.edu.uniquindio.proyecto.entidades.Estado;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -31,4 +33,12 @@ public interface ComentarioRepo extends JpaRepository<Comentario, Long> {
 
     @Query("SELECT c FROM Comentario c WHERE c.publicacion.id = :publicacionId AND c.estado = 'APROBADO' ORDER BY c.fechaPublicacion DESC, c.id DESC")
     List<Comentario> listarComentariosVisibles(@Param("publicacionId") Long publicacionId);
+
+    // ---- Administración (Fase 7) ----
+
+    long countByEstado(Estado estado);
+
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query("DELETE FROM Comentario c WHERE c.publicacion.id = :publicacionId")
+    int eliminarComentariosDePublicacion(@Param("publicacionId") Long publicacionId);
 }

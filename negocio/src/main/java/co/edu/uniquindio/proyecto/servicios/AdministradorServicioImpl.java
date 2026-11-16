@@ -68,7 +68,7 @@ public class AdministradorServicioImpl implements AdministradorServicio{
         Administrador admin = administrador.get();
 
         if (admin.getEstado() == Estado.INACTIVO) {
-            throw new Exception("El administrador está INACTIVO");
+            throw new Exception("Tu cuenta está bloqueada. Si crees que es un error, escribe al administrador de la plataforma.");
         }
 
         return admin;

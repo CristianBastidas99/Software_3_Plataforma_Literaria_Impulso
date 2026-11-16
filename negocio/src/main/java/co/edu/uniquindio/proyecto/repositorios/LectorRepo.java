@@ -1,6 +1,7 @@
 package co.edu.uniquindio.proyecto.repositorios;
 
 import co.edu.uniquindio.proyecto.entidades.*;
+import co.edu.uniquindio.proyecto.entidades.Estado;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -44,4 +45,6 @@ public interface LectorRepo extends JpaRepository<Lector, Long> {
 
     @Query("SELECT p.id FROM Lector l JOIN l.publicacionesVistas p WHERE l.id = :lectorId")
     List<Long> idsPublicacionesVistas(@Param("lectorId") Long lectorId);
+
+    long countByEstado(Estado estado);
 }

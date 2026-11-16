@@ -1,6 +1,7 @@
 package co.edu.uniquindio.proyecto.repositorios;
 
 import co.edu.uniquindio.proyecto.entidades.*;
+import co.edu.uniquindio.proyecto.entidades.Estado;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -34,4 +35,6 @@ public interface EscritorRepo extends JpaRepository<Escritor, Long> {
     List<Escritor> obtenerEscritoresPorEstado(@Param("estado") String estado);
     @Query("SELECT DISTINCT e FROM Escritor e JOIN e.obrasLiterarias o WHERE o.estado = 'PENDIENTE'")
     List<Escritor> listarEscritoresConObrasPendientes();
+
+    long countByEstado(Estado estado);
 }

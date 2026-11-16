@@ -83,7 +83,7 @@ public class MisObrasBean implements Serializable {
             case PENDIENTE:
                 return "Pendiente de revisión";
             case RECHAZADO:
-                return "Rechazada";
+                return "Ocultada por el administrador";
             case APROBADO:
                 return "Aprobada";
             default:

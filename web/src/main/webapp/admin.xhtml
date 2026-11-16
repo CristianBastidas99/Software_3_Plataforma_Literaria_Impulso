@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="/WEB-INF/template.xhtml">
+
+    <ui:define name="metadata">
+        <f:metadata>
+            <!-- Quien no sea administrador se redirige antes de mostrar nada -->
+            <f:viewAction action="#{adminBean.verificarAcceso}"/>
+        </f:metadata>
+    </ui:define>
+
+    <ui:define name="head">
+        <h:outputStylesheet library="css" name="bootstrap.min.css" />
+        <h:outputStylesheet library="css" name="style.css" />
+    </ui:define>
+    <ui:define name="title">Panel de control</ui:define>
+
+    <ui:define name="content">
+        <ui:fragment rendered="#{adminBean.administrador}">
+        <div class="container-fluid py-4 px-md-5">
+            <h2 class="mb-3">Panel de control</h2>
+
+            <h:form id="formAdmin">
+                <p:growl id="mensajes" life="4000" showDetail="true"/>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" width="400">
+                    <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+                </p:confirmDialog>
+
+                <p:tabView id="pestanas" dynamic="false" cache="true">
+
+                    <!-- ===================== Estadísticas ===================== -->
+                    <p:tab title="Resumen">
+                        <h:panelGroup id="resumen" layout="block">
+                            <div class="row">
+                                <div class="col-6 col-md-3 mb-3">
+                                    <div class="card p-3 h-100"><div class="text-muted small">Escritores</div>
+                                        <div class="h3 mb-0 total-escritores">#{adminBean.estadisticas.escritores}</div>
+                                        <div class="small text-muted">#{adminBean.estadisticas.escritoresBloqueados} bloqueados</div></div>
+                                </div>
+                                <div class="col-6 col-md-3 mb-3">
+                                    <div class="card p-3 h-100"><div class="text-muted small">Lectores</div>
+                                        <div class="h3 mb-0 total-lectores">#{adminBean.estadisticas.lectores}</div>
+                                        <div class="small text-muted">#{adminBean.estadisticas.lectoresBloqueados} bloqueados</div></div>
+                                </div>
+                                <div class="col-6 col-md-3 mb-3">
+                                    <div class="card p-3 h-100"><div class="text-muted small">Obras</div>
+                                        <div class="h3 mb-0 total-obras">#{adminBean.estadisticas.obras}</div>
+                                        <div class="small text-muted">#{adminBean.estadisticas.publicacionesPublicadas} publicadas ·
+                                            #{adminBean.estadisticas.publicacionesOcultas} ocultas ·
+                                            #{adminBean.estadisticas.publicacionesRetiradas} retiradas</div></div>
+                                </div>
+                                <div class="col-6 col-md-3 mb-3">
+                                    <div class="card p-3 h-100"><div class="text-muted small">Comentarios</div>
+                                        <div class="h3 mb-0 total-comentarios">#{adminBean.estadisticas.comentarios}</div>
+                                        <div class="small text-muted">#{adminBean.estadisticas.comentariosOcultos} ocultos</div></div>
+                                </div>
+                            </div>
+                            <h4 class="mt-2">Publicaciones más vistas</h4>
+                            <p:dataTable id="masVistas" value="#{adminBean.estadisticas.masVistas}" var="mv" rowIndexVar="i"
+                                         emptyMessage="Todavía no hay vistas registradas.">
+                                <p:column headerText="#" style="width: 50px;">#{i + 1}</p:column>
+                                <p:column headerText="Publicación">
+                                    <h:link outcome="publicacion.xhtml" value="#{mv.titulo}"><f:param name="idProd" value="#{mv.id}"/></h:link>
+                                </p:column>
+                                <p:column headerText="Vistas" style="width: 120px;">#{mv.vistas}</p:column>
+                            </p:dataTable>
+                        </h:panelGroup>
+                    </p:tab>
+
+                    <!-- ===================== Usuarios ===================== -->
+                    <p:tab title="Usuarios">
+                        <h4>Escritores</h4>
+                        <p:dataTable id="tablaEscritores" value="#{adminBean.escritores}" var="u" rowKey="#{u.id}"
+                                     rows="10" paginator="true" paginatorAlwaysVisible="false" emptyMessage="No hay escritores.">
+                            <p:column headerText="Nombre" sortBy="#{u.nombre}" filterBy="#{u.nombre}" filterMatchMode="contains">
+                                <h:link outcome="escritor.xhtml" value="#{u.nombre}"><f:param name="idEscr" value="#{u.id}"/></h:link>
+                            </p:column>
+                            <p:column headerText="Correo" filterBy="#{u.email}" filterMatchMode="contains">#{u.email}</p:column>
+                            <p:column headerText="Estado" style="width: 130px;">
+                                <p:tag value="#{adminBean.isActivo(u.estado) ? 'Activo' : 'Bloqueado'}" severity="#{adminBean.severidad(u.estado)}"/>
+                            </p:column>
+                            <p:column headerText="Acción" style="width: 150px;">
+                                <p:commandButton value="Bloquear" icon="pi pi-lock" rendered="#{adminBean.isActivo(u.estado)}"
+                                                 action="#{adminBean.cambiarEstadoEscritor(u.id, false)}" process="@this"
+                                                 update="@form" styleClass="ui-button-danger ui-button-flat">
+                                    <p:confirm header="Bloquear escritor" icon="pi pi-exclamation-triangle"
+                                               message="¿Bloquear a #{u.nombre}? No podrá iniciar sesión hasta que lo desbloquees."/>
+                                </p:commandButton>
+                                <p:commandButton value="Desbloquear" icon="pi pi-lock-open" rendered="#{not adminBean.isActivo(u.estado)}"
+                                                 action="#{adminBean.cambiarEstadoEscritor(u.id, true)}" process="@this"
+                                                 update="@form" styleClass="ui-button-success ui-button-flat"/>
+                            </p:column>
+                        </p:dataTable>
+
+                        <h4 class="mt-4">Lectores</h4>
+                        <p:dataTable id="tablaLectores" value="#{adminBean.lectores}" var="u" rowKey="#{u.id}"
+                                     rows="10" paginator="true" paginatorAlwaysVisible="false" emptyMessage="No hay lectores.">
+                            <p:column headerText="Nombre" sortBy="#{u.nombre}" filterBy="#{u.nombre}" filterMatchMode="contains">#{u.nombre}</p:column>
+                            <p:column headerText="Correo" filterBy="#{u.email}" filterMatchMode="contains">#{u.email}</p:column>
+                            <p:column headerText="Estado" style="width: 130px;">
+                                <p:tag value="#{adminBean.isActivo(u.estado) ? 'Activo' : 'Bloqueado'}" severity="#{adminBean.severidad(u.estado)}"/>
+                            </p:column>
+                            <p:column headerText="Acción" style="width: 150px;">
+                                <p:commandButton value="Bloquear" icon="pi pi-lock" rendered="#{adminBean.isActivo(u.estado)}"
+                                                 action="#{adminBean.cambiarEstadoLector(u.id, false)}" process="@this"
+                                                 update="@form" styleClass="ui-button-danger ui-button-flat">
+                                    <p:confirm header="Bloquear lector" icon="pi pi-exclamation-triangle"
+                                               message="¿Bloquear a #{u.nombre}? No podrá iniciar sesión hasta que lo desbloquees."/>
+                                </p:commandButton>
+                                <p:commandButton value="Desbloquear" icon="pi pi-lock-open" rendered="#{not adminBean.isActivo(u.estado)}"
+                                                 action="#{adminBean.cambiarEstadoLector(u.id, true)}" process="@this"
+                                                 update="@form" styleClass="ui-button-success ui-button-flat"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+
+                    <!-- ===================== Publicaciones ===================== -->
+                    <p:tab title="Publicaciones">
+                        <p:dataTable id="tablaPublicaciones" value="#{adminBean.publicaciones}" var="pub" rowKey="#{pub.id}"
+                                     rows="10" paginator="true" paginatorAlwaysVisible="false" emptyMessage="No hay publicaciones.">
+                            <p:column headerText="Portada" style="width: 70px;">
+                                <h:graphicImage value="#{recursos.imagenPublicacion(pub.urlImagen)}" alt=""
+                                                style="width: 44px; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 3px;"/>
+                            </p:column>
+                            <p:column headerText="Título" sortBy="#{pub.titulo}" filterBy="#{pub.titulo}" filterMatchMode="contains">
+                                <h:link outcome="publicacion.xhtml" value="#{pub.titulo}"><f:param name="idProd" value="#{pub.id}"/></h:link>
+                            </p:column>
+                            <p:column headerText="Fecha" style="width: 110px;">
+                                <h:outputText value="#{pub.fechaPublicacion}"><f:convertDateTime pattern="dd/MM/yyyy"/></h:outputText>
+                            </p:column>
+                            <p:column headerText="Estado" style="width: 180px;">
+                                <p:tag value="#{adminBean.textoEstadoPublicacion(pub.estado)}" severity="#{adminBean.severidad(pub.estado)}"/>
+                            </p:column>
+                            <p:column headerText="Acciones" style="width: 240px;">
+                                <p:commandButton value="Ocultar" icon="pi pi-eye-slash" rendered="#{pub.estado != 'RECHAZADO'}"
+                                                 action="#{adminBean.ocultarPublicacion(pub.id)}" process="@this" update="@form"
+                                                 styleClass="ui-button-warning ui-button-flat">
+                                    <p:confirm header="Ocultar publicación" icon="pi pi-exclamation-triangle"
+                                               message="¿Ocultar «#{pub.titulo}»? Dejará de verse y su autor no podrá volver a publicarla."/>
+                                </p:commandButton>
+                                <p:commandButton value="Mostrar" icon="pi pi-eye" rendered="#{pub.estado == 'RECHAZADO'}"
+                                                 action="#{adminBean.mostrarPublicacion(pub.id)}" process="@this" update="@form"
+                                                 styleClass="ui-button-success ui-button-flat"/>
+                                <p:commandButton value="Eliminar" icon="pi pi-trash"
+                                                 action="#{adminBean.eliminarPublicacion(pub.id)}" process="@this" update="@form"
+                                                 styleClass="ui-button-danger ui-button-flat">
+                                    <p:confirm header="Eliminar publicación" icon="pi pi-exclamation-triangle"
+                                               message="¿Eliminar definitivamente «#{pub.titulo}», su obra, sus comentarios y sus archivos? No se puede deshacer."/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+
+                    <!-- ===================== Comentarios ===================== -->
+                    <p:tab title="Comentarios">
+                        <p:dataTable id="tablaComentarios" value="#{adminBean.comentarios}" var="c" rowKey="#{c.id}"
+                                     rows="10" paginator="true" paginatorAlwaysVisible="false" emptyMessage="No hay comentarios.">
+                            <p:column headerText="Comentario" filterBy="#{c.contenido}" filterMatchMode="contains">
+                                <div style="white-space: pre-wrap;">#{c.contenido}</div>
+                            </p:column>
+                            <p:column headerText="Autor" style="width: 200px;">#{adminBean.autorComentario(c)}</p:column>
+                            <p:column headerText="Publicación" style="width: 200px;">
+                                <h:link outcome="publicacion.xhtml" value="#{c.publicacion.titulo}"><f:param name="idProd" value="#{c.publicacion.id}"/></h:link>
+                            </p:column>
+                            <p:column headerText="Fecha" style="width: 140px;">
+                                <h:outputText value="#{c.fechaPublicacion}"><f:convertDateTime pattern="dd/MM/yyyy HH:mm"/></h:outputText>
+                            </p:column>
+                            <p:column headerText="Estado" style="width: 110px;">
+                                <p:tag value="#{c.estado == 'RECHAZADO' ? 'Oculto' : (c.estado == 'APROBADO' ? 'Visible' : c.estado)}"
+                                       severity="#{adminBean.severidad(c.estado)}"/>
+                            </p:column>
+                            <p:column headerText="Acciones" style="width: 230px;">
+                                <p:commandButton value="Ocultar" icon="pi pi-eye-slash" rendered="#{c.estado != 'RECHAZADO'}"
+                                                 action="#{adminBean.ocultarComentario(c.id)}" process="@this" update="@form"
+                                                 styleClass="ui-button-warning ui-button-flat"/>
+                                <p:commandButton value="Mostrar" icon="pi pi-eye" rendered="#{c.estado == 'RECHAZADO'}"
+                                                 action="#{adminBean.mostrarComentario(c.id)}" process="@this" update="@form"
+                                                 styleClass="ui-button-success ui-button-flat"/>
+                                <p:commandButton value="Eliminar" icon="pi pi-trash"
+                                                 action="#{adminBean.eliminarComentario(c.id)}" process="@this" update="@form"
+                                                 styleClass="ui-button-danger ui-button-flat">
+                                    <p:confirm header="Eliminar comentario" icon="pi pi-exclamation-triangle"
+                                               message="¿Eliminar este comentario? No se puede deshacer."/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+
+                    <!-- ===================== Géneros ===================== -->
+                    <p:tab title="Géneros">
+                        <div class="d-flex align-items-center mb-3">
+                            <p:inputText id="nuevoGenero" value="#{adminBean.nuevoGenero}" maxlength="50"
+                                         placeholder="Nombre del género nuevo" styleClass="mr-2"/>
+                            <p:commandButton id="crearGenero" value="Crear género" icon="pi pi-plus"
+                                             action="#{adminBean.crearGenero}" process="@this nuevoGenero" update="@form"/>
+                        </div>
+                        <p:dataTable id="tablaGeneros" value="#{adminBean.generos}" var="g" rowKey="#{g.id}"
+                                     emptyMessage="No hay géneros.">
+                            <p:column headerText="Nombre">
+                                <p:inputText id="nombreGenero" value="#{g.nombre}" maxlength="50" style="width: 100%;"/>
+                            </p:column>
+                            <p:column headerText="Obras" style="width: 90px;">#{adminBean.obrasDeGenero(g.id)}</p:column>
+                            <p:column headerText="Acciones" style="width: 230px;">
+                                <p:commandButton value="Guardar" icon="pi pi-check"
+                                                 action="#{adminBean.renombrarGenero(g)}" process="@this nombreGenero" update="@form"
+                                                 styleClass="ui-button-flat"/>
+                                <p:commandButton value="Eliminar" icon="pi pi-trash"
+                                                 action="#{adminBean.eliminarGenero(g.id)}" process="@this" update="@form"
+                                                 styleClass="ui-button-danger ui-button-flat">
+                                    <p:confirm header="Eliminar género" icon="pi pi-exclamation-triangle"
+                                               message="¿Eliminar el género «#{g.nombre}»? Solo es posible si no tiene obras."/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+                </p:tabView>
+            </h:form>
+        </div>
+        </ui:fragment>
+    </ui:define>
+
+    <ui:define name="script">
+        <h:outputScript library="js" name="bootstrap.bundle.min.js" />
+    </ui:define>
+
+</ui:composition>
+</html>

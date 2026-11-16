@@ -1,6 +1,7 @@
 package co.edu.uniquindio.proyecto.bean;
 
 import co.edu.uniquindio.proyecto.entidades.Escritor;
+import co.edu.uniquindio.proyecto.entidades.Estado;
 import co.edu.uniquindio.proyecto.entidades.Publicacion;
 import co.edu.uniquindio.proyecto.servicios.EscritorServicio;
 import co.edu.uniquindio.proyecto.servicios.InteraccionServicio;
@@ -16,6 +17,7 @@ import javax.faces.view.ViewScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @ViewScoped
@@ -44,7 +46,10 @@ public class InicioBean implements Serializable {
     @PostConstruct
     public void inicializar() {
         publicacions = publicacionServicio.listarPublicacionesPublicadas();
-        escritors = escritorServicio.listarEscritores();
+        // Los escritores bloqueados por el administrador no se destacan en inicio
+        escritors = escritorServicio.listarEscritores().stream()
+                .filter(e -> e.getEstado() == Estado.ACTIVO)
+                .collect(Collectors.toList());
         if (isLector()) {
             recomendadas = interaccionServicio.recomendadasPara(loginBean.getUsuario().getId(), MAX_RECOMENDADAS);
         }

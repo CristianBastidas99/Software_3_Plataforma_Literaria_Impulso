@@ -196,6 +196,7 @@ python scripts/generar_recursos_demo.py
 | `mis_obras.xhtml` | Obras del escritor con sesión: editar, retirar y volver a publicar |
 | `nueva_obra.xhtml` | Publicar una obra (`?idObra=<id>` para editarla) con portada, fragmento PDF, géneros y coautores |
 | `mi_perfil.xhtml` | Géneros preferidos, escritores favoritos, recomendaciones e historial del lector con sesión |
+| `admin.xhtml` | Panel de control del administrador: resumen, usuarios, publicaciones, comentarios y géneros |
 
 ## Estado del proyecto
 
@@ -209,9 +210,9 @@ python scripts/generar_recursos_demo.py
 - Interacción: comentarios con filtro de palabras ofensivas, recomendaciones, contador de vistas, seguir escritores, géneros preferidos y sección "Recomendado para ti".
 - Publicación de obras por los escritores: creación con portada, PDF, géneros y coautores; edición, retiro y nueva publicación, con validación de datos (incluido el ISBN) y control de autoría.
 - Subida de imágenes y PDF a una carpeta externa, con validación de tipo y tamaño.
+- Panel de administración: estadísticas, bloqueo de usuarios (no pueden iniciar sesión), moderación de publicaciones y comentarios (ocultar, volver a mostrar o eliminar) y gestión de géneros.
 
 **Pendiente / en desarrollo**
-- Pantallas de administración (moderación de comentarios, géneros y usuarios).
 - Uso del servicio de correo en algún flujo (registro, recuperación de contraseña, etc.).
 
 ## Problemas conocidos
