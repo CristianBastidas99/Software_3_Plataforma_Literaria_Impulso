@@ -9,28 +9,23 @@
 
 <ui:composition template="/WEB-INF/template.xhtml">
 
-    <ui:define name="head">
-        <h:outputStylesheet library="css" name="bootstrap.min.css" />
-        <h:outputStylesheet library="css" name="style.css" />
-    </ui:define>
     <ui:define name="title">#{publicacionBean.encontrada ? publicacionBean.publicacion.titulo : 'Publicación no encontrada'}</ui:define>
 
     <ui:define name="content">
 
         <ui:fragment rendered="#{not publicacionBean.encontrada}">
-            <div class="card p-5 text-center" style="width: 75%; margin: 0 auto;">
+            <div class="card p-5 text-center contenido-centrado">
                 <h2>Publicación no encontrada</h2>
                 <p>La publicación que buscas no existe o ya no está disponible.</p>
                 <div>
                     <p:button value="Explorar publicaciones" outcome="explorar.xhtml" styleClass="ui-button-raised">
-                        <f:param name="i" value="1" />
                     </p:button>
                 </div>
             </div>
         </ui:fragment>
 
         <ui:fragment rendered="#{publicacionBean.encontrada}">
-        <div class="card p-5" style="width: 75%; margin: 0 auto;">
+        <div class="card p-5 contenido-centrado">
             <!-- Detalles de la Publicación -->
             <ui:fragment rendered="#{not publicacionBean.publicada and publicacionBean.publicacion.estado != 'RECHAZADO'}">
                 <div class="alert alert-warning">
@@ -95,12 +90,19 @@
                     </h:form>
                 </div>
             </div>
-            <p>Fragmento de la Obra:</p>
-            <p:media value="#{recursos.pdf(publicacionBean.publicacion.obraLiteraria.fragmento.url)}" width="100%" height="600px"
+            <h3 class="mt-2">Fragmento de la obra</h3>
+            <p:media value="#{recursos.pdf(publicacionBean.publicacion.obraLiteraria.fragmento.url)}" player="pdf"
+                     styleClass="visor-pdf" width="100%" height="100%"
                      rendered="#{not empty publicacionBean.publicacion.obraLiteraria.fragmento.url}">
                 Tu navegador no puede mostrar el PDF. <h:outputLink
                     value="#{request.contextPath}#{recursos.pdf(publicacionBean.publicacion.obraLiteraria.fragmento.url)}">Haz clic aquí</h:outputLink> para descargarlo.
             </p:media>
+            <p class="small mt-2 mb-4">
+                <h:outputLink value="#{request.contextPath}#{recursos.pdf(publicacionBean.publicacion.obraLiteraria.fragmento.url)}"
+                              target="_blank" rel="noopener" rendered="#{not empty publicacionBean.publicacion.obraLiteraria.fragmento.url}">
+                    <i class="pi pi-external-link" aria-hidden="true"></i> Abrir el fragmento en otra pestaña
+                </h:outputLink>
+            </p>
             <h:outputText value="Esta obra aún no tiene un fragmento disponible." styleClass="text-muted"
                           rendered="#{empty publicacionBean.publicacion.obraLiteraria.fragmento.url}"/>
             <!-- Comentarios -->
@@ -167,9 +169,6 @@
         </ui:fragment>
     </ui:define>
 
-    <ui:define name="script">
-        <h:outputScript library="js" name="bootstrap.bundle.min.js" />
-    </ui:define>
 
 </ui:composition>
 </html>

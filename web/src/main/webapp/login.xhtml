@@ -9,18 +9,14 @@
 
 <ui:composition template="/WEB-INF/template.xhtml">
 
-    <ui:define name="head">
-        <h:outputStylesheet library="css" name="bootstrap.min.css" />
-        <h:outputStylesheet library="css" name="style.css" />
-    </ui:define>
-    <ui:define name="title">Login</ui:define>
+    <ui:define name="title">Iniciar sesión</ui:define>
 
     <ui:define name="content">
 
 
-        <div class="card p-5">
+        <div class="py-md-4">
 
-            <p:panel header="Iniciar sesión" style="width: 75%; margin: 0 auto;">
+            <p:panel header="Iniciar sesión" styleClass="contenido-estrecho mb-4">
                 <ui:fragment rendered="#{param['acceso'] eq 'sesion' and not loginBean.autenticado}">
                     <div id="avisoAcceso" class="alert alert-warning">Inicia sesión para abrir esa página.</div>
                 </ui:fragment>
@@ -31,7 +27,7 @@
                     </div>
                     <div class="form-group">
                         <p:outputLabel for="password" value="Contraseña"/>
-                        <p:password id="password" value="#{loginBean.password}" style="width: 67vw;" styleClass="form-control" toggleMask="true" required="true"/>
+                        <p:password id="password" value="#{loginBean.password}" styleClass="form-control" toggleMask="true" required="true"/>
                     </div>
                     <div class="form-group p-2">
                         <p:commandButton value="Iniciar sesión" action="#{loginBean.loginn}" update="@form"  styleClass="btn btn-primary"/>
@@ -47,9 +43,6 @@
 
     </ui:define>
 
-    <ui:define name="script">
-        <h:outputScript library="js" name="bootstrap.bundle.min.js" />
-    </ui:define>
 
 </ui:composition>
 </html>

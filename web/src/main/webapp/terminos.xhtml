@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+<ui:composition template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Términos y condiciones</ui:define>
+
+    <ui:define name="content">
+        <article class="card p-4 p-md-5 contenido-centrado texto-legal">
+            <h1>Términos y condiciones</h1>
+            <p class="text-muted">Última actualización: 15 de noviembre de 2026</p>
+
+            <h2>Uso de la plataforma</h2>
+            <p>Impulso es un espacio para que escritores emergentes compartan sus obras y para que los lectores las
+                descubran, comenten y recomienden. Al crear una cuenta aceptas usarla de forma respetuosa.</p>
+
+            <h2>Lo que publicas</h2>
+            <ul>
+                <li>Conservas los derechos de autor de tus obras. Al publicarlas nos autorizas a mostrarlas en la plataforma
+                    mientras sigan publicadas; puedes retirarlas cuando quieras desde
+                    <h:link outcome="mis_obras.xhtml" value="Mis obras"/>.</li>
+                <li>Solo puedes publicar obras propias o de las que tengas permiso, con su ISBN real si lo indicas.</li>
+                <li>Las portadas deben ser imágenes JPG, PNG o WEBP de hasta 5 MB, y los fragmentos, PDF de hasta 20 MB.</li>
+            </ul>
+
+            <h2>Comentarios</h2>
+            <p>Los comentarios pasan por un filtro que censura las palabras ofensivas. El administrador puede ocultar o
+                eliminar comentarios y publicaciones que incumplan estas normas.</p>
+
+            <h2>Cuentas</h2>
+            <p>Eres responsable de mantener tu contraseña en secreto. El administrador puede bloquear las cuentas que hagan
+                un uso indebido de la plataforma; una cuenta bloqueada no puede iniciar sesión.</p>
+
+            <h2>Más información</h2>
+            <p>Consulta también la <h:link outcome="privacidad.xhtml" value="política de privacidad"/>.</p>
+        </article>
+    </ui:define>
+
+</ui:composition>
+</html>

@@ -10,16 +10,14 @@
 <ui:composition template="/WEB-INF/template.xhtml">
 
     <ui:define name="head">
-        <h:outputStylesheet library="css" name="bootstrap.min.css" />
-        <h:outputStylesheet library="css" name="style.css" />
         <!-- El token va en la URL: que no se envíe a otros sitios en la cabecera Referer -->
         <meta name="referrer" content="no-referrer"/>
     </ui:define>
     <ui:define name="title">Nueva contraseña</ui:define>
 
     <ui:define name="content">
-        <div class="card p-5">
-            <p:panel header="Elige una contraseña nueva" style="width: 75%; margin: 0 auto;">
+        <div class="py-md-4">
+            <p:panel header="Elige una contraseña nueva" styleClass="contenido-estrecho mb-4">
                 <h:form id="formRestablecer">
                     <ui:fragment rendered="#{restablecerBean.tokenValido}">
                         <p>Cuenta: <strong>#{restablecerBean.email}</strong></p>
@@ -50,9 +48,6 @@
         </div>
     </ui:define>
 
-    <ui:define name="script">
-        <h:outputScript library="js" name="bootstrap.bundle.min.js" />
-    </ui:define>
 
 </ui:composition>
 </html>

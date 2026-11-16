@@ -9,105 +9,80 @@
 
 <ui:composition template="/WEB-INF/template.xhtml">
 
-    <ui:define name="head">
-        <h:outputStylesheet library="css" name="bootstrap.min.css" />
-        <h:outputStylesheet library="css" name="style.css" />
-    </ui:define>
-    <ui:define name="title">Página de Inicio - Plataforma Literaria</ui:define>
+    <ui:define name="title">Inicio</ui:define>
 
     <ui:define name="content">
 
-        <!-- Contenido principal -->
-        <div class="card ml-auto p-5">
-            <h1>Bienvenido a la Plataforma Literaria</h1>
-            <p>Descubre nuevas obras literarias y conéctate con escritores emergentes.</p>
+        <section class="portada-inicio mb-5">
             <div>
-                <p:button value="Explorar Obras" outcome="explorar.xhtml" styleClass="ui-button-raised">
-                    <f:param name="i" value="1" />
-                </p:button>
+                <p class="antetitulo">Plataforma literaria</p>
+                <h1>Lee lo que todavía nadie ha descubierto</h1>
+                <p class="entradilla">Obras de escritores emergentes, fragmentos para leer en línea y lectores que
+                    comentan y recomiendan.</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <p:linkButton value="Explorar obras" outcome="explorar.xhtml" icon="pi pi-search"/>
+                    <p:linkButton value="Publicar mi obra" outcome="#{loginBean.autenticado ? 'nueva_obra.xhtml' : 'registro.xhtml'}"
+                                  icon="pi pi-pencil" styleClass="ui-button-outlined"
+                                  rendered="#{not loginBean.autenticado or loginBean.tipo eq 2}"/>
+                </div>
             </div>
-        </div>
+        </section>
 
         <!-- Recomendado para ti (solo lectores) -->
         <ui:fragment rendered="#{inicioBean.lector}">
-            <div class="p-5 pb-0" id="recomendadoParaTi">
+            <section class="mb-5" id="recomendadoParaTi">
                 <h2>Recomendado para ti</h2>
                 <p class="text-muted">Según tus géneros preferidos y los escritores que sigues.</p>
                 <ui:include src="/WEB-INF/fragmentos/lista_publicaciones.xhtml">
                     <ui:param name="publicaciones" value="#{inicioBean.recomendadas}"/>
                     <ui:param name="vacio" value="Elige tus géneros preferidos o sigue a algún escritor para recibir recomendaciones."/>
                 </ui:include>
-                <p:button value="Elegir mis géneros" outcome="mi_perfil.xhtml" icon="pi pi-sliders-h"
-                          rendered="#{empty inicioBean.recomendadas}" styleClass="ui-button-outlined mb-3"/>
-            </div>
+                <p:linkButton value="Elegir mis géneros" outcome="mi_perfil.xhtml" icon="pi pi-sliders-h"
+                              rendered="#{empty inicioBean.recomendadas}" styleClass="ui-button-outlined mb-3"/>
+            </section>
         </ui:fragment>
 
-        <!-- Publicaciones Populares -->
-        <div class=" p-5">
+        <!-- Publicaciones -->
+        <section class="mb-5">
+            <h2>Publicaciones recientes</h2>
             <ui:fragment rendered="#{empty inicioBean.publicacions}">
-                <h2>Publicaciones Populares</h2>
                 <p class="text-muted">Aún no hay publicaciones.</p>
             </ui:fragment>
-            <p:carousel value="#{inicioBean.publicacions}" rendered="#{not empty inicioBean.publicacions}" var="publicacion" circular="true" autoplayInterval="3000"
-                        responsiveOptions="#{inicioBean.responsiveOptions}" numVisible="3" numScroll="1">
-                <f:facet name="header">
-                    <h2>Publicaciones Populares</h2>
-                </f:facet>
-
-                <div class="product-item p-2">
-                    <div class="product-item-content">
-                        <div class="mb-3">
-                            <p:graphicImage value="#{recursos.imagenPublicacion(publicacion.urlImagen)}" styleClass="product-image card-img-top"/>
-                        </div>
-                        <div>
-                            <h4 class="mb-1">#{publicacion.titulo}</h4>
-                            <h6 class="mt-0 mb-3">
-                                <h:outputText value="#{publicacion.contenido}" />
-                            </h6>
-                            <p:button value="Ver Detalles" outcome="publicacion.xhtml" styleClass="ui-button-raised">
-                                <f:param name="idProd" value="#{publicacion.id}" />
-                            </p:button>
-                        </div>
-                    </div>
+            <p:carousel value="#{inicioBean.publicacions}" rendered="#{not empty inicioBean.publicacions}" var="publicacion"
+                        circular="true" autoplayInterval="5000" styleClass="carrusel"
+                        responsiveOptions="#{inicioBean.responsiveOptions}" numVisible="4" numScroll="1">
+                <div class="p-2">
+                    <h:link outcome="publicacion.xhtml" styleClass="tarjeta-publicacion">
+                        <f:param name="idProd" value="#{publicacion.id}"/>
+                        <h:graphicImage value="#{recursos.imagenPublicacion(publicacion.urlImagen)}"
+                                        alt="Portada de #{publicacion.titulo}" styleClass="portada"/>
+                        <div class="titulo-publicacion">#{publicacion.titulo}</div>
+                        <div class="text-muted small resumen">#{publicacion.contenido}</div>
+                    </h:link>
                 </div>
             </p:carousel>
-        </div>
+        </section>
 
-        <!-- Autores Famosos -->
-        <div class=" p-5">
+        <!-- Escritores -->
+        <section class="mb-4">
+            <h2>Escritores</h2>
             <ui:fragment rendered="#{empty inicioBean.escritors}">
-                <h2>Escritores Populares</h2>
                 <p class="text-muted">Aún no hay escritores registrados.</p>
             </ui:fragment>
-            <p:carousel value="#{inicioBean.escritors}" rendered="#{not empty inicioBean.escritors}" var="escritor" circular="true" autoplayInterval="3000"
-                        responsiveOptions="#{inicioBean.responsiveOptions}" numVisible="3" numScroll="1">
-                <f:facet name="header">
-                    <h2>Escritores Populares</h2>
-                </f:facet>
-
-                <div class="product-item p-2">
-                    <div class="product-item-content">
-                        <div class="mb-3">
-                            <p:graphicImage value="#{recursos.imagenUsuario(escritor.urlImagen)}" styleClass="product-image card-img-top"/>
-                        </div>
-                        <div>
-                            <h4 class="mb-1">#{escritor.nombre}</h4>
-                            <h6 class="mt-0 mb-3">
-                                <h:outputText value="#{escritor.biografia}" />
-                            </h6>
-                            <p:button value="Ver Detalles" outcome="escritor.xhtml" styleClass="ui-button-raised" >
-                                <f:param name="idEscr" value="#{escritor.id}" />
-                            </p:button>
-                        </div>
-                    </div>
+            <p:carousel value="#{inicioBean.escritors}" rendered="#{not empty inicioBean.escritors}" var="escritor"
+                        circular="true" autoplayInterval="6000" styleClass="carrusel"
+                        responsiveOptions="#{inicioBean.responsiveOptions}" numVisible="4" numScroll="1">
+                <div class="p-2">
+                    <h:link outcome="escritor.xhtml" styleClass="tarjeta-escritor">
+                        <f:param name="idEscr" value="#{escritor.id}"/>
+                        <h:graphicImage value="#{recursos.imagenUsuario(escritor.urlImagen)}" alt="" styleClass="avatar-grande"/>
+                        <div class="titulo-publicacion">#{escritor.nombre}</div>
+                        <div class="text-muted small resumen">#{escritor.biografia}</div>
+                    </h:link>
                 </div>
             </p:carousel>
-        </div>
+        </section>
 
-    </ui:define>
-
-    <ui:define name="script">
-        <h:outputScript library="js" name="bootstrap.bundle.min.js" />
     </ui:define>
 
 </ui:composition>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Algo salió mal</ui:define>
+
+    <ui:define name="content">
+        <section class="card contenido-centrado pagina-error" id="pagina500">
+            <div class="codigo">500</div>
+            <h1>Algo salió mal</h1>
+            <p class="text-muted mb-4">Tuvimos un problema al cargar esta página. Inténtalo de nuevo en unos minutos; si la página llevaba mucho tiempo abierta, recárgala.</p>
+            <div class="d-flex flex-wrap gap-2 justify-content-center">
+                <p:linkButton value="Ir al inicio" outcome="/index.xhtml" icon="pi pi-home"/>
+                <p:linkButton value="Explorar obras" outcome="/explorar.xhtml" icon="pi pi-search" styleClass="ui-button-outlined"/>
+            </div>
+        </section>
+    </ui:define>
+
+</ui:composition>
+</html>

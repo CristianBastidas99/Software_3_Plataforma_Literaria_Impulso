@@ -9,7 +9,7 @@
     <div class="row mb-4">
         <ui:repeat value="#{publicaciones}" var="pub">
             <div class="col-6 col-md-3 mb-3">
-                <h:link outcome="publicacion.xhtml" style="text-decoration: none; color: inherit;">
+                <h:link outcome="/publicacion.xhtml" style="text-decoration: none; color: inherit;">
                     <f:param name="idProd" value="#{pub.id}"/>
                     <h:graphicImage value="#{recursos.imagenPublicacion(pub.urlImagen)}" alt="#{pub.titulo}"
                                     style="width: 100%; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 4px;"/>

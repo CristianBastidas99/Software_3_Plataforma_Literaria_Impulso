@@ -147,6 +147,13 @@ Las imágenes y PDFs que suben los usuarios se guardan **fuera del código**, en
 - **Login:** el mensaje "Correo o contraseña incorrectos" es el mismo si el correo no existe y si la contraseña es incorrecta. El identificador de sesión se renueva al iniciar sesión.
 - **Bloqueo:** bloquear a un usuario desde el panel cierra también las sesiones que tenga abiertas.
 
+### Apariencia
+
+- **Estilos:** una sola hoja, `web/src/main/webapp/resources/css/style.css`, une Bootstrap 5 y PrimeFaces con la misma paleta y tipografía. Los colores están en variables CSS al principio del archivo: el bloque `:root` es el modo claro y `:root[data-tema="oscuro"]` el oscuro.
+- **Modo oscuro:** el botón de luna o sol de la cabecera cambia el tema sin recargar y lo recuerda en la cookie `tema`. La primera visita sigue la preferencia del sistema. El tema de PrimeFaces es `saga` en claro y `vela` en oscuro (propiedad `joinfaces.primefaces.theme`, que lee la cookie).
+- **Caché de la hoja:** los recursos se guardan 7 días en el navegador. Al cambiar `style.css`, sube el número `v=` con que lo enlaza `WEB-INF/template.xhtml` para que los navegadores descarguen la nueva versión.
+- **Páginas de error:** `errores/404.xhtml` y `errores/500.xhtml`, con el diseño del sitio, registradas en `PaginasError`.
+
 ## Cómo ejecutar
 
 1. Verifica que los contenedores de MySQL y Mailpit estén corriendo (`docker ps`).
@@ -233,6 +240,7 @@ python scripts/generar_recursos_demo.py
 | `restablecer.xhtml?token=<token>` | Elegir una contraseña nueva desde el enlace del correo |
 | `mi_perfil.xhtml` | Géneros preferidos, escritores favoritos, recomendaciones e historial del lector con sesión |
 | `admin.xhtml` | Panel de control del administrador: resumen, usuarios, publicaciones, comentarios y géneros |
+| `privacidad.xhtml`, `terminos.xhtml` | Política de privacidad y términos y condiciones (enlazadas desde el pie) |
 
 ## Estado del proyecto
 
@@ -248,6 +256,7 @@ python scripts/generar_recursos_demo.py
 - Publicación de obras por los escritores: creación con portada, PDF, géneros y coautores; edición, retiro y nueva publicación, con validación de datos (incluido el ISBN) y control de autoría.
 - Subida de imágenes y PDF a una carpeta externa, con validación de tipo y tamaño.
 - Panel de administración: estadísticas, bloqueo de usuarios (no pueden iniciar sesión), moderación de publicaciones y comentarios (ocultar, volver a mostrar o eliminar) y gestión de géneros.
+- Diseño propio y adaptable a móvil (desde 375 px) con modo claro y oscuro, logotipo y favicon, páginas legales y páginas de error 404 y 500.
 
 **Pendiente / en desarrollo**
 

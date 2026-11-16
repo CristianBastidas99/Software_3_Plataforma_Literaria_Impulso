@@ -8,15 +8,12 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 <ui:composition template="/WEB-INF/template.xhtml">
-    <ui:define name="head">
-        <h:outputStylesheet library="css" name="bootstrap.min.css" />
-        <h:outputStylesheet library="css" name="style.css" />
-    </ui:define>
-    <ui:define name="title">Búsqueda y exploración</ui:define>
+    <ui:define name="title">Explorar</ui:define>
     <ui:define name="content">
         <!-- Contenido principal -->
-        <div class="card ml-auto p-5">
-            <!-- Búsqueda de Fragmentos Literarios -->
+        <div class="card p-4 p-md-5 mb-4">
+            <h1 class="h2">Explorar</h1>
+            <p class="text-muted">Busca obras por título o descripción, filtra por género, o encuentra escritores.</p>
             <h:form id="searchForm">
                 <div class="d-flex flex-wrap align-items-center">
                     <p:selectOneMenu id="searchType" value="#{explorarBean.searchType}" appendTo="@(self)" styleClass="mr-2 mb-2">
@@ -41,58 +38,45 @@
                 </div>
             </h:form>
         </div>
-        <!-- Resultados de la búsqueda de Fragmentos Literarios -->
-        <div class="card ml-auto p-5">
-            <h3>Resultados</h3>
-            <div class="card product">
-                <h:form id="resultados">
-                    <p class="text-muted mb-2" id="totalResultados">#{explorarBean.resultadosBusqueda.size()} #{explorarBean.resultadosBusqueda.size() == 1 ? 'resultado' : 'resultados'}</p>
-                    <p:dataView var="resultado" value="#{explorarBean.resultadosBusqueda}" rows="12" paginator="true"
-                                rowsPerPageTemplate="6,12,16"
-                                paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                gridIcon="pi pi-th-large" listIcon="pi pi-bars">
+        <!-- Resultados -->
+        <section class="card p-4 p-md-5 mb-4">
+            <h:form id="resultados">
+                <div class="d-flex flex-wrap align-items-baseline justify-content-between mb-2">
+                    <h2 class="h3 mb-0">Resultados</h2>
+                    <p class="text-muted mb-0" id="totalResultados">#{explorarBean.resultadosBusqueda.size()} #{explorarBean.resultadosBusqueda.size() == 1 ? 'resultado' : 'resultados'}</p>
+                </div>
+                <p:dataView var="resultado" value="#{explorarBean.resultadosBusqueda}" rows="12" paginator="true"
+                            paginatorAlwaysVisible="false" layout="list" rowsPerPageTemplate="6,12,24"
+                            paginatorTemplate="{PreviousPageLink} {PageLinks} {NextPageLink} {RowsPerPageDropdown}"
+                            styleClass="lista-resultados" emptyMessage="No hay resultados. Prueba con otra frase u otro género.">
 
-                        <p:dataViewListItem rendered="#{explorarBean.searchType eq '0'}">
-                            <div class="container-flex product-list-item p-4">
-                                <p:graphicImage value="#{recursos.imagenPublicacion(resultado.urlImagen)}" style="width: 20%;"/>
-                                <div class="product-list-detail p-2" style="width: 73%;">
-                                    <div class="product-name">#{resultado.titulo}</div>
-                                    <div class="product-description">#{resultado.contenido}</div>
-                                </div>
-                                <div class="product-list-action" style="display: flex; align-items: center; justify-content: center;width: 7%;">
-                                    <p:button type="button"
-                                              value="Ver Detalles"
-                                              outcome="publicacion.xhtml">
-                                        <f:param name="idProd" value="#{resultado.id}" />
-                                    </p:button>
-                                </div>
-                            </div>
-                        </p:dataViewListItem>
-                        <p:dataViewListItem rendered="#{explorarBean.searchType eq '1'}">
-                            <div class="container-flex product-list-item p-4" >
-                                <p:graphicImage value="#{recursos.imagenUsuario(resultado.urlImagen)}" style="width: 20%;"/>
-                                <div class="product-list-detail p-2" style="width: 73%;">
-                                    <div class="product-name">#{resultado.nombre}</div>
-                                    <div class="product-description">#{resultado.biografia}</div>
-                                </div>
-                                <div class="product-list-action" style="display: flex; align-items: center; justify-content: center;width: 7%;">
-                                    <p:button type="button"
-                                              value="Ver Detalles"
-                                              outcome="escritor.xhtml">
-                                        <f:param name="idEscr" value="#{resultado.id}" />
-                                    </p:button>
-                                </div>
-                            </div>
-                        </p:dataViewListItem>
-                    </p:dataView>
-                    <p:messages showDetail="true" />
-                </h:form>
-            </div>
-        </div>
+                    <p:dataViewListItem rendered="#{explorarBean.searchType eq '0'}">
+                        <h:link outcome="publicacion.xhtml" styleClass="resultado">
+                            <f:param name="idProd" value="#{resultado.id}"/>
+                            <h:graphicImage value="#{recursos.imagenPublicacion(resultado.urlImagen)}" alt="" styleClass="portada resultado-imagen"/>
+                            <span class="resultado-texto">
+                                <span class="titulo-publicacion d-block">#{resultado.titulo}</span>
+                                <span class="text-muted small resumen">#{resultado.contenido}</span>
+                            </span>
+                            <i class="pi pi-angle-right resultado-flecha" aria-hidden="true"></i>
+                        </h:link>
+                    </p:dataViewListItem>
+                    <p:dataViewListItem rendered="#{explorarBean.searchType eq '1'}">
+                        <h:link outcome="escritor.xhtml" styleClass="resultado">
+                            <f:param name="idEscr" value="#{resultado.id}"/>
+                            <h:graphicImage value="#{recursos.imagenUsuario(resultado.urlImagen)}" alt="" styleClass="resultado-avatar"/>
+                            <span class="resultado-texto">
+                                <span class="titulo-publicacion d-block">#{resultado.nombre}</span>
+                                <span class="text-muted small resumen">#{resultado.biografia}</span>
+                            </span>
+                            <i class="pi pi-angle-right resultado-flecha" aria-hidden="true"></i>
+                        </h:link>
+                    </p:dataViewListItem>
+                </p:dataView>
+                <p:messages showDetail="true"/>
+            </h:form>
+        </section>
 
-    </ui:define>
-    <ui:define name="script">
-        <h:outputScript library="js" name="bootstrap.bundle.min.js" />
     </ui:define>
 </ui:composition>
 </html>

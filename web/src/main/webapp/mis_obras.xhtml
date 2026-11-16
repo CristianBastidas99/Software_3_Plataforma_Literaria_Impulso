@@ -9,16 +9,12 @@
 
 <ui:composition template="/WEB-INF/template.xhtml">
 
-    <ui:define name="head">
-        <h:outputStylesheet library="css" name="bootstrap.min.css" />
-        <h:outputStylesheet library="css" name="style.css" />
-    </ui:define>
     <ui:define name="title">Mis obras</ui:define>
 
     <ui:define name="content">
 
         <ui:fragment rendered="#{not misObrasBean.escritorAutenticado}">
-            <div class="card p-5 text-center" style="width: 75%; margin: 0 auto;">
+            <div class="card p-5 text-center contenido-centrado">
                 <h2>Inicia sesión como escritor</h2>
                 <p>Aquí los escritores gestionan las obras que han publicado.</p>
                 <div>
@@ -82,9 +78,6 @@
         </ui:fragment>
     </ui:define>
 
-    <ui:define name="script">
-        <h:outputScript library="js" name="bootstrap.bundle.min.js" />
-    </ui:define>
 
 </ui:composition>
 </html>

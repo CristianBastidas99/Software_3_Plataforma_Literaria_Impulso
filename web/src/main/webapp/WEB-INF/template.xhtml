@@ -1,71 +1,158 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      lang="es"
+      data-tema="#{cookie['tema'].value eq 'oscuro' ? 'oscuro' : 'claro'}">
 <!-- Las páginas que necesitan f:metadata (por ejemplo f:viewAction) la definen aquí -->
 <ui:insert name="metadata"/>
 <h:head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <f:facet name="first">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta name="color-scheme" content="light dark"/>
+        <!-- Bootstrap primero: el tema de PrimeFaces y style.css van después y mandan sobre él -->
+        <link rel="stylesheet" href="#{resource['css:bootstrap.min.css']}"/>
+    </f:facet>
+    <f:facet name="last">
+        <!-- "v" cambia con cada versión de la hoja: los recursos se guardan 7 días en la caché del navegador -->
+        <link rel="stylesheet" href="#{resource['css:style.css']}&amp;v=10"/>
+        <link rel="icon" type="image/svg+xml" href="#{resource['img:favicon.svg']}"/>
+        <link rel="icon" sizes="32x32" href="#{request.contextPath}/favicon.ico"/>
+        <!--
+            Tema claro / oscuro. El servidor ya pinta la página con el tema de la cookie "tema"
+            (atributo data-tema y tema de PrimeFaces saga/vela), así que no hay parpadeo. Si aún no hay
+            cookie, se usa la preferencia del sistema. El botón cambia el tema sin recargar.
+        -->
+        <script>
+            //<![CDATA[
+            (function () {
+                var TEMAS_PF = {claro: 'primefaces-saga', oscuro: 'primefaces-vela'};
+                function leerCookie() {
+                    var m = document.cookie.match(/(?:^|;\s*)tema=(claro|oscuro)/);
+                    return m ? m[1] : null;
+                }
+                function aplicar(tema, guardar) {
+                    document.documentElement.setAttribute('data-tema', tema);
+                    var enlaces = document.querySelectorAll('link[href*="ln=primefaces-"]');
+                    for (var i = 0; i < enlaces.length; i++) {
+                        enlaces[i].href = enlaces[i].href.replace(/ln=primefaces-(saga|vela)/, 'ln=' + TEMAS_PF[tema]);
+                    }
+                    if (guardar) {
+                        document.cookie = 'tema=' + tema + '; path=/; max-age=31536000; SameSite=Lax';
+                    }
+                    var boton = document.getElementById('botonTema');
+                    if (boton) {
+                        var texto = tema === 'oscuro' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro';
+                        boton.setAttribute('aria-label', texto);
+                        boton.setAttribute('title', texto);
+                        boton.setAttribute('aria-pressed', tema === 'oscuro' ? 'true' : 'false');
+                    }
+                }
+                window.Tema = {
+                    alternar: function () {
+                        var actual = document.documentElement.getAttribute('data-tema');
+                        aplicar(actual === 'oscuro' ? 'claro' : 'oscuro', true);
+                    },
+                    actualizarBoton: function () {
+                        aplicar(document.documentElement.getAttribute('data-tema'), false);
+                    }
+                };
+                if (!leerCookie() && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    aplicar('oscuro', true);
+                }
+                document.addEventListener('DOMContentLoaded', Tema.actualizarBoton);
+            })();
+            //]]>
+        </script>
+    </f:facet>
 
-    <title><ui:insert name="title">Título</ui:insert></title>
-    <ui:insert name="head"></ui:insert>
+    <title><ui:insert name="title">Inicio</ui:insert> · Impulso</title>
+    <ui:insert name="head"/>
 </h:head>
 <h:body>
 
-    <div class="card">
-        <div class="navbar p-4">
-            <a class="navbar-brand" href="../index.xhtml">Plataforma Literaria</a>
-            <div class="ml-auto p-1">
-                <h:form id="menuUsuario" styleClass="d-flex align-items-center">
-                    <p:commandButton value="Registrarse" update="@form" action="#{inicioBean.registro}" rendered="#{!loginBean.autenticado}" styleClass="ui-button-raised ui-button" />
-                    <p:commandButton value="Iniciar sesión" update="@form" action="#{inicioBean.login}" rendered="#{!loginBean.autenticado}" styleClass="ui-button-raised ui-button"  />
+    <header class="cabecera">
+        <div class="cabecera-contenido">
+            <h:link outcome="/index.xhtml" styleClass="marca" title="Ir al inicio">
+                <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+                    <rect width="64" height="64" rx="14" fill="#b08d57"/>
+                    <path d="M12 20c7-3 14-3 20 1v27c-6-4-13-4-20-1z" fill="#f6f3ee"/>
+                    <path d="M52 20c-7-3-14-3-20 1v27c6-4 13-4 20-1z" fill="#e9dfcf"/>
+                    <path d="M44 9c-6 5-10 12-12 21l3 1c3-8 7-14 12-19z" fill="#33291f"/>
+                </svg>
+                <span>
+                    <span class="marca-nombre">Impulso</span>
+                    <span class="marca-lema">Plataforma literaria</span>
+                </span>
+            </h:link>
+
+            <nav class="navegacion" aria-label="Navegación principal">
+                <h:link outcome="/index.xhtml" styleClass="#{view.viewId eq '/index.xhtml' ? 'activo' : ''}">
+                    <i class="pi pi-home" aria-hidden="true"></i> Inicio
+                </h:link>
+                <h:link outcome="/explorar.xhtml" styleClass="#{view.viewId eq '/explorar.xhtml' ? 'activo' : ''}">
+                    <i class="pi pi-search" aria-hidden="true"></i> Explorar
+                </h:link>
+            </nav>
+
+            <div class="acciones">
+                <button type="button" id="botonTema" class="boton-tema" onclick="Tema.alternar()"
+                        aria-label="Cambiar a modo oscuro" title="Cambiar a modo oscuro" aria-pressed="false">
+                    <i class="pi pi-moon icono-luna" aria-hidden="true"></i>
+                    <i class="pi pi-sun icono-sol" aria-hidden="true"></i>
+                </button>
+                <h:form id="menuUsuario">
+                    <p:linkButton value="Entrar" outcome="/login.xhtml" rendered="#{!loginBean.autenticado}"
+                                  styleClass="boton-cabecera-contorno"/>
+                    <p:linkButton value="Registrarse" outcome="/registro.xhtml" rendered="#{!loginBean.autenticado}"
+                                  styleClass="boton-cabecera-claro"/>
 
                     <p:graphicImage id="avatarUsuario" value="#{recursos.imagenUsuario(loginBean.usuario.urlImagen)}" rendered="#{loginBean.autenticado}"
-                                    alt="Tu imagen de perfil" styleClass="mr-2"
-                                    style="width: 36px; height: 36px; object-fit: cover; border-radius: 50%;"/>
-                    <p:splitButton id="nombreUsuario" value="#{loginBean.usuario.nombre}" rendered="#{loginBean.autenticado}" outcome="index.xhtml" appendTo="@(self)" icon="pi pi-user" styleClass="ui-button-secondary">
-                        <p:menuitem value="Mi perfil" outcome="mi_perfil.xhtml" rendered="#{loginBean.tipo eq '3'}" icon="pi pi-bookmark"/>
-                        <p:menuitem value="Mi perfil público" outcome="escritor.xhtml" rendered="#{loginBean.tipo eq '2'}" icon="pi pi-id-card">
+                                    alt="Tu imagen de perfil" styleClass="avatar-cabecera"/>
+                    <p:splitButton id="nombreUsuario" value="#{loginBean.usuario.nombre}" rendered="#{loginBean.autenticado}" outcome="/index.xhtml" appendTo="@(self)" icon="pi pi-user" styleClass="ui-button-secondary">
+                        <p:menuitem value="Mi perfil" outcome="/mi_perfil.xhtml" rendered="#{loginBean.tipo eq '3'}" icon="pi pi-bookmark"/>
+                        <p:menuitem value="Mi perfil público" outcome="/escritor.xhtml" rendered="#{loginBean.tipo eq '2'}" icon="pi pi-id-card">
                             <f:param name="idEscr" value="#{loginBean.usuario.id}"/>
                         </p:menuitem>
-                        <p:menuitem value="Mis obras" outcome="mis_obras.xhtml" rendered="#{loginBean.tipo eq '2'}" icon="pi pi-book"/>
-                        <p:menuitem value="Nueva obra" outcome="nueva_obra.xhtml" rendered="#{loginBean.tipo eq '2'}" icon="pi pi-plus"/>
-                        <p:menuitem value="Editar cuenta" outcome="editar_perfil.xhtml" rendered="#{loginBean.tipo eq '2' or loginBean.tipo eq '3'}" icon="pi pi-user-edit"/>
-                        <p:menuitem value="Panel de control" outcome="admin.xhtml" rendered="#{loginBean.tipo eq '1'}" icon="pi pi-sliders-h"/>
+                        <p:menuitem value="Mis obras" outcome="/mis_obras.xhtml" rendered="#{loginBean.tipo eq '2'}" icon="pi pi-book"/>
+                        <p:menuitem value="Nueva obra" outcome="/nueva_obra.xhtml" rendered="#{loginBean.tipo eq '2'}" icon="pi pi-plus"/>
+                        <p:menuitem value="Editar cuenta" outcome="/editar_perfil.xhtml" rendered="#{loginBean.tipo eq '2' or loginBean.tipo eq '3'}" icon="pi pi-user-edit"/>
+                        <p:menuitem value="Panel de control" outcome="/admin.xhtml" rendered="#{loginBean.tipo eq '1'}" icon="pi pi-sliders-h"/>
                         <p:divider />
                         <p:menuitem value="Cerrar sesión" action="#{loginBean.logout}" ajax="false" icon="pi pi-sign-out" />
                     </p:splitButton>
                 </h:form>
             </div>
         </div>
-        <p:tabMenu activeIndex="#{param.i}">
-            <p:menuitem value="Home" outcome="index.xhtml" icon="pi pi-fw pi-home">
-                <f:param name="i" value="0"/>
-            </p:menuitem>
-            <p:menuitem value="Explorar" outcome="explorar.xhtml" icon="pi pi-fw pi-search">
-                <f:param name="i" value="1"/>
-            </p:menuitem>
-        </p:tabMenu>
-    </div>
+    </header>
 
-    <div id="content">
-        <ui:insert name="content">Contenido</ui:insert>
-    </div>
+    <main id="content">
+        <ui:insert name="content"/>
+    </main>
 
-    <div id="footer">
-        <ui:insert name="footer">
-            <footer class="bg-dark text-white text-center py-3 mt-5">
-                <div class="container">
-                    <p>Derechos de autor © 2023 Plataforma Literaria. Todos los derechos reservados.</p>
-                    <p><a href="#">Política de Privacidad</a> | <a href="#">Términos y Condiciones</a></p>
-                </div>
-            </footer>
-        </ui:insert>
-    </div>
-    <ui:insert name="script"></ui:insert>
+    <!--
+        Mensajes que llegan tras una redirección (flash) a páginas sin p:messages propio. Va al final
+        y con redisplay="false": si la página ya mostró el mensaje en su formulario, no se repite aquí.
+    -->
+    <p:growl id="avisosGlobales" globalOnly="true" redisplay="false" showDetail="false" life="5000"/>
+
+    <ui:insert name="footer">
+        <footer class="pie">
+            <div class="pie-contenido">
+                <span>© 2026 Plataforma Literaria Impulso</span>
+                <nav class="pie-enlaces" aria-label="Enlaces legales">
+                    <h:link outcome="/privacidad.xhtml" value="Política de privacidad"/>
+                    <h:link outcome="/terminos.xhtml" value="Términos y condiciones"/>
+                    <h:link outcome="/explorar.xhtml" value="Explorar obras"/>
+                </nav>
+            </div>
+        </footer>
+    </ui:insert>
+
+    <h:outputScript library="js" name="bootstrap.bundle.min.js" target="body"/>
+    <ui:insert name="script"/>
 </h:body>
 </html>

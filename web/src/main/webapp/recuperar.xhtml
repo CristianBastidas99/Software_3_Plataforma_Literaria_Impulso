@@ -9,15 +9,11 @@
 
 <ui:composition template="/WEB-INF/template.xhtml">
 
-    <ui:define name="head">
-        <h:outputStylesheet library="css" name="bootstrap.min.css" />
-        <h:outputStylesheet library="css" name="style.css" />
-    </ui:define>
     <ui:define name="title">Recuperar contraseña</ui:define>
 
     <ui:define name="content">
-        <div class="card p-5">
-            <p:panel header="¿Olvidaste tu contraseña?" style="width: 75%; margin: 0 auto;">
+        <div class="py-md-4">
+            <p:panel header="¿Olvidaste tu contraseña?" styleClass="contenido-estrecho mb-4">
                 <h:form id="formRecuperar">
                     <ui:fragment rendered="#{not recuperarBean.enviado}">
                         <p>Escribe el correo de tu cuenta y te enviaremos un enlace para elegir una contraseña nueva.</p>
@@ -49,9 +45,6 @@
         </div>
     </ui:define>
 
-    <ui:define name="script">
-        <h:outputScript library="js" name="bootstrap.bundle.min.js" />
-    </ui:define>
 
 </ui:composition>
 </html>

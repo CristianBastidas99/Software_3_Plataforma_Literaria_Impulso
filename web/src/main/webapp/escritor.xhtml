@@ -9,21 +9,16 @@
 
 <ui:composition template="/WEB-INF/template.xhtml">
 
-    <ui:define name="head">
-        <h:outputStylesheet library="css" name="bootstrap.min.css" />
-        <h:outputStylesheet library="css" name="style.css" />
-    </ui:define>
 
     <ui:define name="title">#{escritorBean.encontrado ? escritorBean.escritor.nombre : 'Escritor no encontrado'}</ui:define>
 
     <ui:define name="content">
         <ui:fragment rendered="#{not escritorBean.encontrado}">
-            <div class="card p-5 text-center" style="width: 75%; margin: 0 auto;">
+            <div class="card p-5 text-center contenido-centrado">
                 <h2>Escritor no encontrado</h2>
                 <p>El escritor que buscas no existe o ya no está disponible.</p>
                 <div>
                     <p:button value="Explorar escritores" outcome="explorar.xhtml" styleClass="ui-button-raised">
-                        <f:param name="i" value="1" />
                     </p:button>
                 </div>
             </div>
@@ -84,9 +79,6 @@
         </ui:fragment>
     </ui:define>
 
-    <ui:define name="script">
-        <h:outputScript library="js" name="bootstrap.bundle.min.js" />
-    </ui:define>
 
 </ui:composition>
 </html>

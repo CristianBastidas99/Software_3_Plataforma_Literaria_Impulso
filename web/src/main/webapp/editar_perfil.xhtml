@@ -9,16 +9,12 @@
 
 <ui:composition template="/WEB-INF/template.xhtml">
 
-    <ui:define name="head">
-        <h:outputStylesheet library="css" name="bootstrap.min.css" />
-        <h:outputStylesheet library="css" name="style.css" />
-    </ui:define>
     <ui:define name="title">Editar perfil</ui:define>
 
     <ui:define name="content">
 
         <ui:fragment rendered="#{not editarPerfilBean.puedeEditar}">
-            <div class="card p-5 text-center" style="width: 75%; margin: 0 auto;">
+            <div class="card p-5 text-center contenido-centrado">
                 <h2>Inicia sesión para editar tu perfil</h2>
                 <p>Esta página es para escritores y lectores con sesión iniciada.</p>
                 <div>
@@ -29,7 +25,7 @@
 
         <ui:fragment rendered="#{editarPerfilBean.puedeEditar}">
         <div class="card p-5">
-            <p:panel id="edit" header="Editar perfil de #{editarPerfilBean.titulo}" style="width: 75%; margin: 0 auto;">
+            <p:panel id="edit" header="Editar perfil de #{editarPerfilBean.titulo}" styleClass="contenido-centrado mb-4">
                 <h:form id="editProfileForm" enctype="multipart/form-data">
                     <div class="form-group p-2">
                         <p:outputLabel for="nombre" value="Nombre" />
@@ -86,7 +82,7 @@
         </div>
 
         <div class="card p-5">
-            <p:panel header="Cambiar contraseña" style="width: 75%; margin: 0 auto;">
+            <p:panel header="Cambiar contraseña" styleClass="contenido-centrado mb-4">
                 <h:form id="editPassForm">
                     <div class="form-group p-2">
                         <p:outputLabel for="contrasenaActual" value="Contraseña actual" />
@@ -114,9 +110,6 @@
         </ui:fragment>
     </ui:define>
 
-    <ui:define name="script">
-        <h:outputScript library="js" name="bootstrap.bundle.min.js" />
-    </ui:define>
 
 </ui:composition>
 </html>

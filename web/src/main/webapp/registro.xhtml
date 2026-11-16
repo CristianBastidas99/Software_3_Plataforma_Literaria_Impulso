@@ -9,18 +9,14 @@
 
 <ui:composition template="/WEB-INF/template.xhtml">
 
-    <ui:define name="head">
-        <h:outputStylesheet library="css" name="bootstrap.min.css" />
-        <h:outputStylesheet library="css" name="style.css" />
-    </ui:define>
-    <ui:define name="title">Registro</ui:define>
+    <ui:define name="title">Crear cuenta</ui:define>
 
     <ui:define name="content">
 
 
-        <div class="card p-5">
+        <div class="py-md-4">
 
-            <p:panel header="Registrarse" style="width: 75%; margin: 0 auto;">
+            <p:panel header="Registrarse" styleClass="contenido-estrecho mb-4">
                 <h:form>
                     <div class="form-group">
                         <p:outputLabel for="rol" value="Seleccionar Rol"/>
@@ -55,9 +51,6 @@
 
     </ui:define>
 
-    <ui:define name="script">
-        <h:outputScript library="js" name="bootstrap.bundle.min.js" />
-    </ui:define>
 
 </ui:composition>
 </html>
