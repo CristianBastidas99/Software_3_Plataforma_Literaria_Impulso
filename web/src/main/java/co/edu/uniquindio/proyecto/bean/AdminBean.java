@@ -8,6 +8,7 @@ import co.edu.uniquindio.proyecto.entidades.Estado;
 import co.edu.uniquindio.proyecto.entidades.Genero;
 import co.edu.uniquindio.proyecto.entidades.Lector;
 import co.edu.uniquindio.proyecto.entidades.Publicacion;
+import co.edu.uniquindio.proyecto.seguridad.RegistroSesiones;
 import co.edu.uniquindio.proyecto.servicios.AdministracionServicio;
 import co.edu.uniquindio.proyecto.util.Mensajes;
 import lombok.Getter;
@@ -33,7 +34,6 @@ import java.util.List;
 @Setter
 public class AdminBean implements Serializable {
 
-    private static final int ADMINISTRADOR = 1;
     private static final int MAX_MAS_VISTAS = 5;
 
     @Autowired
@@ -42,6 +42,8 @@ public class AdminBean implements Serializable {
     private ArchivoServicio archivoServicio;
     @Autowired
     private LoginBean loginBean;
+    @Autowired
+    private RegistroSesiones registroSesiones;
 
     private Estadisticas estadisticas = new Estadisticas();
     private List<Escritor> escritores = new ArrayList<>();
@@ -72,19 +74,27 @@ public class AdminBean implements Serializable {
     }
 
     public boolean isAdministrador() {
-        return Boolean.TRUE.equals(loginBean.getAutenticado()) && loginBean.getTipo() == ADMINISTRADOR;
+        return Boolean.TRUE.equals(loginBean.getAutenticado()) && loginBean.getTipo() == LoginBean.ADMINISTRADOR;
     }
 
     // ---- Usuarios ----
 
     public void cambiarEstadoEscritor(Long id, boolean activo) {
-        ejecutar(() -> administracionServicio.cambiarEstadoEscritor(id, activo),
-                activo ? "El escritor se desbloqueó." : "El escritor se bloqueó: ya no puede iniciar sesión.");
+        ejecutar(() -> {
+            administracionServicio.cambiarEstadoEscritor(id, activo);
+            if (!activo) {
+                registroSesiones.cerrarSesionesDe(LoginBean.ESCRITOR, id);
+            }
+        }, activo ? "El escritor se desbloqueó." : "El escritor se bloqueó: se cerró su sesión y ya no puede iniciarla.");
     }
 
     public void cambiarEstadoLector(Long id, boolean activo) {
-        ejecutar(() -> administracionServicio.cambiarEstadoLector(id, activo),
-                activo ? "El lector se desbloqueó." : "El lector se bloqueó: ya no puede iniciar sesión.");
+        ejecutar(() -> {
+            administracionServicio.cambiarEstadoLector(id, activo);
+            if (!activo) {
+                registroSesiones.cerrarSesionesDe(LoginBean.LECTOR, id);
+            }
+        }, activo ? "El lector se desbloqueó." : "El lector se bloqueó: se cerró su sesión y ya no puede iniciarla.");
     }
 
     public boolean isActivo(Estado estado) {

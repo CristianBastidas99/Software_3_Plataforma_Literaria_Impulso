@@ -5,6 +5,7 @@ import co.edu.uniquindio.proyecto.archivos.ArchivoServicio;
 import co.edu.uniquindio.proyecto.entidades.Escritor;
 import co.edu.uniquindio.proyecto.entidades.Lector;
 import co.edu.uniquindio.proyecto.entidades.Usuario;
+import co.edu.uniquindio.proyecto.seguridad.Contrasenas;
 import co.edu.uniquindio.proyecto.servicios.EscritorServicio;
 import co.edu.uniquindio.proyecto.servicios.LectorServicio;
 import co.edu.uniquindio.proyecto.servicios.LoginServicio;
@@ -165,7 +166,7 @@ public class EditarPerfilBean implements Serializable {
         }
         try {
             Usuario actual = obtenerUsuario();
-            if (contrasenaActual == null || !contrasenaActual.equals(actual.getPassword())) {
+            if (!Contrasenas.coincide(contrasenaActual, actual.getPassword())) {
                 Mensajes.error("La contraseña actual es incorrecta");
                 return;
             }

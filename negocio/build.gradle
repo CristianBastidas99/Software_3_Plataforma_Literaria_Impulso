@@ -11,6 +11,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     // Lectura de malaspalabras.json en el filtro de comentarios
     implementation 'com.fasterxml.jackson.core:jackson-databind'
+    // BCrypt para cifrar contraseñas (solo la parte criptográfica, sin la cadena de filtros de Spring Security)
+    implementation 'org.springframework.security:spring-security-crypto'
 }
 
 test {

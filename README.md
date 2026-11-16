@@ -69,7 +69,7 @@ Si aún no tienes los contenedores, puedes crearlos así:
 
 ```bash
 docker run -d --name impulso-mysql -p 3306:3306 \
-  -e MYSQL_ROOT_PASSWORD=12345 mysql:8.0
+  -e MYSQL_ROOT_PASSWORD=<tu_contraseña> mysql:8.0
 
 docker run -d --name impulso-mailpit -p 1025:1025 -p 8025:8025 axllent/mailpit
 ```
@@ -81,14 +81,33 @@ docker run -d --name impulso-mailpit -p 1025:1025 -p 8025:8025 axllent/mailpit
 
 ## Configuración
 
-La configuración está en `web/src/main/resources/application.properties` (y una copia equivalente en `negocio/`, que usan las pruebas). Los valores se pueden cambiar con variables de entorno sin editar los archivos:
+La configuración está en `web/src/main/resources/application.properties` (y una copia equivalente en `negocio/`, que usan las pruebas).
+
+### Credenciales (obligatorio)
+
+El repositorio no contiene credenciales. Antes de arrancar la aplicación o las pruebas, copia la plantilla y pon el usuario y la contraseña de tu MySQL:
+
+```bash
+cp application-secret.properties.example application-secret.properties   # en la raíz del proyecto
+```
+
+```properties
+DB_USER=root
+DB_PASSWORD=<la contraseña de tu contenedor MySQL>
+```
+
+`application-secret.properties` está en `.gitignore` y **no debe subirse al repositorio**. Lo leen la aplicación (`./gradlew :web:bootRun`) y las pruebas (`./gradlew test`). También sirve para sobrescribir cualquier otra propiedad en tu máquina, por ejemplo un SMTP real en lugar de Mailpit (la plantilla tiene un ejemplo). Si falta, la aplicación no arranca y avisa con `Could not resolve placeholder 'DB_USER'`.
+
+### Variables de entorno
+
+Los valores se pueden cambiar con variables de entorno sin editar los archivos (tienen prioridad sobre `application-secret.properties`):
 
 | Variable | Valor por defecto | Descripción |
 |---|---|---|
 | `DB_HOST` | `localhost` | Host de MySQL |
 | `DB_PORT` | `3306` | Puerto de MySQL |
-| `DB_USER` | `root` | Usuario de MySQL |
-| `DB_PASSWORD` | `12345` | Contraseña de MySQL |
+| `DB_USER` | — (obligatoria) | Usuario de MySQL |
+| `DB_PASSWORD` | — (obligatoria) | Contraseña de MySQL |
 | `MAIL_HOST` | `localhost` | Host SMTP |
 | `MAIL_PORT` | `1025` | Puerto SMTP |
 | `MAIL_FROM` | `Plataforma Literaria Impulso <no-responder@impulso.com>` | Remitente de los correos |
@@ -113,23 +132,26 @@ Las imágenes y PDFs que suben los usuarios se guardan **fuera del código**, en
 - Fragmentos: PDF, máximo 20 MB (`upload.pdf.max-mb`).
 - El tipo se comprueba por la extensión **y** por el contenido del archivo, y cada archivo se guarda con un nombre aleatorio (UUID).
 
-Además puedes crear un archivo **opcional** `application-secret.properties` (en `web/src/main/resources/`) para sobrescribir cualquier propiedad en tu máquina, por ejemplo, para usar Gmail real en lugar de Mailpit:
+### Seguridad
 
-```properties
-spring.mail.host=smtp.gmail.com
-spring.mail.port=587
-spring.mail.username=tu_correo@gmail.com
-spring.mail.password=tu_contrasena_de_aplicacion
-spring.mail.properties.mail.smtp.auth=true
-spring.mail.properties.mail.smtp.starttls.enable=true
-```
+- **Contraseñas:** se guardan cifradas con BCrypt. Una base de datos anterior se actualiza sola al arrancar: se amplía la columna `password` y se cifran las contraseñas que estaban en claro (cada usuario conserva la suya).
+- **Acceso por rol:** un filtro protege las páginas antes de que JSF las procese. Sin sesión, redirige al login; con una sesión de otro tipo de usuario, al inicio.
 
-Este archivo está en `.gitignore` y **no debe subirse al repositorio**.
+| Página | Quién puede abrirla |
+|---|---|
+| `admin.xhtml` | Administrador |
+| `mis_obras.xhtml`, `nueva_obra.xhtml` | Escritor |
+| `mi_perfil.xhtml` | Lector |
+| `editar_perfil.xhtml` | Escritor o lector |
+
+- **Login:** el mensaje "Correo o contraseña incorrectos" es el mismo si el correo no existe y si la contraseña es incorrecta. El identificador de sesión se renueva al iniciar sesión.
+- **Bloqueo:** bloquear a un usuario desde el panel cierra también las sesiones que tenga abiertas.
 
 ## Cómo ejecutar
 
 1. Verifica que los contenedores de MySQL y Mailpit estén corriendo (`docker ps`).
-2. Desde la raíz del proyecto:
+2. Si es la primera vez, crea `application-secret.properties` con tus credenciales de MySQL (ver [Credenciales](#credenciales-obligatorio)).
+3. Desde la raíz del proyecto:
 
    **Windows (PowerShell)**
    ```powershell
@@ -218,6 +240,7 @@ python scripts/generar_recursos_demo.py
 - Modelo de datos completo con relaciones JPA.
 - Repositorios con consultas JPQL y pruebas unitarias.
 - Servicios CRUD para todas las entidades, login por tipo de usuario y búsqueda por frase.
+- Seguridad: contraseñas cifradas con BCrypt, páginas protegidas por rol, login que no revela qué correos existen y credenciales fuera del repositorio.
 - Correos HTML en segundo plano: bienvenida, recuperación de contraseña y aviso de comentarios.
 - Interfaz web: inicio, explorar, registro, login con sesión, detalle de publicación y perfil de escritor.
 - Edición de perfil (nombre, correo, biografía, imagen y contraseña) y página "Mi perfil" del lector.
@@ -230,7 +253,6 @@ python scripts/generar_recursos_demo.py
 
 ## Problemas conocidos
 
-- Las contraseñas se guardan y comparan en texto plano.
 - Los cambios en las páginas `.xhtml` pueden no verse hasta reiniciar la aplicación (JSF guarda las vistas en caché).
 
 ## Historial de cambios de configuración
@@ -242,3 +264,4 @@ Ajustes hechos para que el proyecto compile y arranque en un entorno nuevo:
 - **Base de datos:** URL parametrizada con variables de entorno, `createDatabaseIfNotExist=true`, `allowPublicKeyRetrieval=true` y `useSSL=false` para conectar con MySQL 8 en Docker.
 - **Correo:** se reemplazó Gmail por **Mailpit** (SMTP `localhost:1025`, sin autenticación ni TLS).
 - **`application-secret.properties`:** ahora es opcional (`optional:classpath:`). Antes era obligatorio y, como no estaba en el repositorio, la aplicación no arrancaba. Se añadió a `.gitignore`.
+- **Credenciales (Fase 9):** se quitaron del repositorio los valores por defecto de `DB_USER` y `DB_PASSWORD`. Ahora se leen de variables de entorno o de `application-secret.properties` en la raíz del proyecto (plantilla: `application-secret.properties.example`).

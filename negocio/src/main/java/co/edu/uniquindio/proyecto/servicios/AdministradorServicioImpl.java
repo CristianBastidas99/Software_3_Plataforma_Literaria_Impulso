@@ -2,6 +2,7 @@ package co.edu.uniquindio.proyecto.servicios;
 
 import co.edu.uniquindio.proyecto.entidades.*;
 import co.edu.uniquindio.proyecto.repositorios.*;
+import co.edu.uniquindio.proyecto.seguridad.Contrasenas;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -59,7 +60,8 @@ public class AdministradorServicioImpl implements AdministradorServicio{
 
     @Override
     public Administrador validaLogin(String email, String contrasena) throws Exception {
-        Optional<Administrador> administrador = administradorRepo.iniciarSesionAdministrador(email, contrasena);
+        Optional<Administrador> administrador = administradorRepo.buscarAdministradorPorCorreo(email)
+                .filter(u -> Contrasenas.coincide(contrasena, u.getPassword()));
 
         if (administrador.isEmpty()) {
             return null;
@@ -68,7 +70,7 @@ public class AdministradorServicioImpl implements AdministradorServicio{
         Administrador admin = administrador.get();
 
         if (admin.getEstado() == Estado.INACTIVO) {
-            throw new Exception("Tu cuenta está bloqueada. Si crees que es un error, escribe al administrador de la plataforma.");
+            throw new Exception(LoginServicio.CUENTA_BLOQUEADA);
         }
 
         return admin;

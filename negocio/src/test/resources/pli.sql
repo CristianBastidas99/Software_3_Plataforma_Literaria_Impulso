@@ -7,28 +7,30 @@ INSERT INTO genero (id, nombre) VALUES
 (5, 'Aventura');
 
 -- administrador
+-- Las contraseñas están cifradas con BCrypt (Fase 9). En claro: adminadmin, adminpass, bookslover, bookworm, novelist123, p@ssw0rd, pageturner, passforwriter, password123, readerpass, readingnow, secretwriter, securepass, writerpass, writerpass123.
+-- Cada usuario tiene la misma que antes; las pruebas inician sesión con el texto en claro.
 INSERT INTO administrador (id, email, estado, nombre, password, url_imagen) VALUES
-  (1, 'admin1@example.com', 'ACTIVO', 'Admin Uno', 'password123', 'autor.jpg'),
-  (2, 'admin2@example.com', 'ACTIVO', 'Admin Dos', 'securepass', 'autor.jpg'),
-  (3, 'admin3@example.com', 'INACTIVO', 'Admin Tres', 'adminpass', 'autor.jpg'),
-  (4, 'admin4@example.com', 'ACTIVO', 'Admin Cuatro', 'p@ssw0rd', 'autor.jpg'),
-  (5, 'admin5@example.com', 'INACTIVO', 'Admin Cinco', 'adminadmin', 'autor.jpg');
+  (1, 'admin1@example.com', 'ACTIVO', 'Admin Uno', '$2a$10$51elHuklokDpwkE7s.tsB.r1x1DBpZ.v0PI0EzuStkxRfYqHjn8TC', 'autor.jpg'),
+  (2, 'admin2@example.com', 'ACTIVO', 'Admin Dos', '$2a$10$moHncLdY8d9/h2WVxVY6yu22zWn.Y.nulR8i0ne1s8xrqF83UktdS', 'autor.jpg'),
+  (3, 'admin3@example.com', 'INACTIVO', 'Admin Tres', '$2a$10$8s.RIc6HX8yShdklPeYQKubefs2T13zSdHlmOi4krao7kZhF8vtBi', 'autor.jpg'),
+  (4, 'admin4@example.com', 'ACTIVO', 'Admin Cuatro', '$2a$10$BfHBiLrZChZaezlBuRCrsuJqRJR0NAADmtBa3waUy1rBRTB.Fa2r2', 'autor.jpg'),
+  (5, 'admin5@example.com', 'INACTIVO', 'Admin Cinco', '$2a$10$PyPjXOBCeLtiKJPdgB2D7uKTO9Hwei5F3MiRp7sC6du.nzXQ9NRSu', 'autor.jpg');
 
 -- lector
 INSERT INTO lector (id, email, estado, nombre, password, url_imagen) VALUES
-(1, 'reader1@example.com', 'ACTIVO', 'Lector Uno', 'readerpass', 'autor.jpg'),
-(2, 'reader2@example.com', 'ACTIVO', 'Lector Dos', 'bookslover', 'autor.jpg'),
-(3, 'reader3@example.com', 'INACTIVO', 'Lector Tres', 'readingnow', 'autor.jpg'),
-(4, 'reader4@example.com', 'ACTIVO', 'Lector Cuatro', 'pageturner', 'autor.jpg'),
-(5, 'reader5@example.com', 'INACTIVO', 'Lector Cinco', 'bookworm', 'autor.jpg');
+(1, 'reader1@example.com', 'ACTIVO', 'Lector Uno', '$2a$10$X/U3revdXpMlFuOIVTcMPOHGadKZEs9Y8Xc4tDEDMuytA7LG.j30y', 'autor.jpg'),
+(2, 'reader2@example.com', 'ACTIVO', 'Lector Dos', '$2a$10$P3qNlxTK3KCrNh/V34pxVe5sI.XtU/TWeOeIklu3UjbNuqgqHnNL2', 'autor.jpg'),
+(3, 'reader3@example.com', 'INACTIVO', 'Lector Tres', '$2a$10$00iIVD/KTmXOT7kuDD0smu86jf.bPjs.PWvdxXRvT7UDEDGdR9Lv2', 'autor.jpg'),
+(4, 'reader4@example.com', 'ACTIVO', 'Lector Cuatro', '$2a$10$j2/2bZw3.tClNQ6vXV.60OjzFmhez1aZs4DLA/K7hDmlDtNGW.LR6', 'autor.jpg'),
+(5, 'reader5@example.com', 'INACTIVO', 'Lector Cinco', '$2a$10$SfmrZI6nlmCZBk9NBzHqEuP8OIXIf3iIUvoz9xD7NMpS0JO0ct7e2', 'autor.jpg');
 
 -- escritor
 INSERT INTO escritor (id, email, estado, nombre, password, biografia, url_imagen) VALUES
-(1, 'writer1@example.com', 'ACTIVO', 'Escritor Uno', 'writerpass', 'Autor de bestsellers', 'autor.jpg'),
-(2, 'writer2@example.com', 'ACTIVO', 'Escritor Dos', 'novelist123', 'Amante de la poesía', 'autor.jpg'),
-(3, 'writer3@example.com', 'INACTIVO', 'Escritor Tres', 'passforwriter', 'Escribo ciencia ficción', 'autor.jpg'),
-(4, 'writer4@example.com', 'ACTIVO', 'Escritor Cuatro', 'secretwriter', 'Ganador de premios literarios', 'autor.jpg'),
-(5, 'writer5@example.com', 'INACTIVO', 'Escritor Cinco', 'writerpass123', 'Autor independiente', 'autor.jpg');
+(1, 'writer1@example.com', 'ACTIVO', 'Escritor Uno', '$2a$10$TCSvplnvMGvhV.Lj.nAulOQWlkvi6DvDNbD5T9rV0y8o.QqyTg9dS', 'Autor de bestsellers', 'autor.jpg'),
+(2, 'writer2@example.com', 'ACTIVO', 'Escritor Dos', '$2a$10$RrTxDq48F.of37xdHcusJO9AbJh1B6JEowB7zKPlcIy/g4Sxbfp5e', 'Amante de la poesía', 'autor.jpg'),
+(3, 'writer3@example.com', 'INACTIVO', 'Escritor Tres', '$2a$10$XczAV/JIP0vQoinoSywMVOkwoU7fL47ne89N137x0G4.eYghvWzHi', 'Escribo ciencia ficción', 'autor.jpg'),
+(4, 'writer4@example.com', 'ACTIVO', 'Escritor Cuatro', '$2a$10$lKitL2f6wL3pA8Dem8nglugqBh616aP2.4L8hwuLAXsQfvJp1xQtG', 'Ganador de premios literarios', 'autor.jpg'),
+(5, 'writer5@example.com', 'INACTIVO', 'Escritor Cinco', '$2a$10$1mA1/ALLhG8voCk5GsuG6OWVVQ1YwKmKsWesFwn7sR4t7SFuy34A.', 'Autor independiente', 'autor.jpg');
 
 -- obra_literaria ACTIVO, INACTIVO, APROBADO, RECHAZADO, PENDIENTE, PUBLICADO
 INSERT INTO obra_literaria (id, editorial, estado, fecha_publicacion, isbn, sinopsis, titulo) VALUES

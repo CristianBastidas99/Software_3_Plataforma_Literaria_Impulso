@@ -12,8 +12,6 @@ import java.util.Optional;
 
 @Repository
 public interface LectorRepo extends JpaRepository<Lector, Long> {
-    @Query("SELECT l FROM Lector l WHERE l.email = :correoElectronico AND l.password = :contrasena")
-    Optional<Lector> iniciarSesionLector(@Param("correoElectronico") String correoElectronico, @Param("contrasena") String contrasena);
     @Query("SELECT l FROM Lector l WHERE l.estado = 'ACTIVO'")
     List<Lector> obtenerLectoresActivos();
     @Query("SELECT l FROM Lector l WHERE l.email = :correoElectronico")

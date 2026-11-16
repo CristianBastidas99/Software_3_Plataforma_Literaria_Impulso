@@ -4,9 +4,7 @@ import co.edu.uniquindio.proyecto.entidades.Administrador;
 import co.edu.uniquindio.proyecto.entidades.Escritor;
 import co.edu.uniquindio.proyecto.entidades.Lector;
 import co.edu.uniquindio.proyecto.entidades.Usuario;
-import co.edu.uniquindio.proyecto.servicios.AdministradorServicio;
-import co.edu.uniquindio.proyecto.servicios.EscritorServicio;
-import co.edu.uniquindio.proyecto.servicios.LectorServicio;
+import co.edu.uniquindio.proyecto.seguridad.RegistroSesiones;
 import co.edu.uniquindio.proyecto.servicios.LoginServicio;
 import co.edu.uniquindio.proyecto.util.Mensajes;
 import lombok.Getter;
@@ -18,6 +16,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 
 @Component
@@ -26,14 +25,14 @@ import java.io.Serializable;
 @Setter
 public class LoginBean implements Serializable {
 
-    @Autowired
-    private EscritorServicio escritorServicio;
-    @Autowired
-    private LectorServicio lectorServicio;
-    @Autowired
-    private AdministradorServicio administradorServicio;
+    public static final int ADMINISTRADOR = 1;
+    public static final int ESCRITOR = 2;
+    public static final int LECTOR = 3;
+
     @Autowired
     private LoginServicio loginServicio;
+    @Autowired
+    private RegistroSesiones registroSesiones;
 
     private String email;
     private String password;
@@ -53,23 +52,18 @@ public class LoginBean implements Serializable {
             if (camposVacios()) {
                 return "login.xhtml";
             }
-            if (!loginServicio.isEmailRegistrado(email)) {
-                Mensajes.error("El correo electrónico no se encuentra registrado");
-                return "login.xhtml";
+            // El mismo mensaje si el correo no existe o la contraseña no coincide
+            Usuario valido = loginServicio.autenticar(email, password).orElse(null);
+            if (valido instanceof Administrador) {
+                return iniciarSesion(valido, ADMINISTRADOR);
             }
-            Administrador administrador = administradorServicio.validaLogin(email, password);
-            if (administrador != null) {
-                return iniciarSesion(administrador, 1);
+            if (valido instanceof Escritor) {
+                return iniciarSesion(valido, ESCRITOR);
             }
-            Escritor escritor = escritorServicio.validaLogin(email, password);
-            if (escritor != null) {
-                return iniciarSesion(escritor, 2);
+            if (valido instanceof Lector) {
+                return iniciarSesion(valido, LECTOR);
             }
-            Lector lector = lectorServicio.validaLogin(email, password);
-            if (lector != null) {
-                return iniciarSesion(lector, 3);
-            }
-            Mensajes.error("La contraseña es incorrecta");
+            Mensajes.error(LoginServicio.CREDENCIALES_INCORRECTAS);
         } catch (Exception e) {
             Mensajes.error(e.getMessage());
         }
@@ -77,9 +71,15 @@ public class LoginBean implements Serializable {
     }
 
     private String iniciarSesion(Usuario usuarioValido, int tipoUsuario) {
+        // Nuevo identificador de sesión al autenticarse (evita la fijación de sesión); conserva los datos
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        request.changeSessionId();
+        password = null;
         usuario = usuarioValido;
         autenticado = true;
         tipo = tipoUsuario;
+        // Para poder expulsarlo si el administrador lo bloquea mientras está dentro
+        registroSesiones.registrar(tipoUsuario, usuarioValido.getId(), request.getSession());
         return "index?faces-redirect=true";
     }
 

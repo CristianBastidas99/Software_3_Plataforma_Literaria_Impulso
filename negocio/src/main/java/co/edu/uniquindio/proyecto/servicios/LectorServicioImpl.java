@@ -2,6 +2,7 @@ package co.edu.uniquindio.proyecto.servicios;
 
 import co.edu.uniquindio.proyecto.entidades.*;
 import co.edu.uniquindio.proyecto.repositorios.*;
+import co.edu.uniquindio.proyecto.seguridad.Contrasenas;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -59,7 +60,8 @@ public class LectorServicioImpl implements LectorServicio{
 
     @Override
     public Lector validaLogin(String email, String contrasena) throws Exception {
-        Optional<Lector> lector = lectorRepo.iniciarSesionLector(email, contrasena);
+        Optional<Lector> lector = lectorRepo.buscarLectorPorCorreo(email)
+                .filter(u -> Contrasenas.coincide(contrasena, u.getPassword()));
 
         if (lector.isEmpty()) {
             return null;
@@ -68,7 +70,7 @@ public class LectorServicioImpl implements LectorServicio{
         Lector lectorValido = lector.get();
 
         if (lectorValido.getEstado() == Estado.INACTIVO) {
-            throw new Exception("Tu cuenta está bloqueada. Si crees que es un error, escribe al administrador de la plataforma.");
+            throw new Exception(LoginServicio.CUENTA_BLOQUEADA);
         }
 
         return lectorValido;

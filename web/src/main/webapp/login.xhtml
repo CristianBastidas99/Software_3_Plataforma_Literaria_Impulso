@@ -21,6 +21,9 @@
         <div class="card p-5">
 
             <p:panel header="Iniciar sesión" style="width: 75%; margin: 0 auto;">
+                <ui:fragment rendered="#{param['acceso'] eq 'sesion' and not loginBean.autenticado}">
+                    <div id="avisoAcceso" class="alert alert-warning">Inicia sesión para abrir esa página.</div>
+                </ui:fragment>
                 <h:form>
                     <div class="form-group">
                         <p:outputLabel for="email" value="Correo Electrónico"/>
@@ -28,7 +31,7 @@
                     </div>
                     <div class="form-group">
                         <p:outputLabel for="password" value="Contraseña"/>
-                        <p:password id="password" value="#{loginBean.password}" style="width: 67vw;" styleClass="form-control" toggleMask="true" redisplay="true" required="true"/>
+                        <p:password id="password" value="#{loginBean.password}" style="width: 67vw;" styleClass="form-control" toggleMask="true" required="true"/>
                     </div>
                     <div class="form-group p-2">
                         <p:commandButton value="Iniciar sesión" action="#{loginBean.loginn}" update="@form"  styleClass="btn btn-primary"/>

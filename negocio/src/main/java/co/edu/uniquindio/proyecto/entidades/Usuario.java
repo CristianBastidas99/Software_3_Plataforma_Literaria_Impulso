@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.entidades;
 
+import co.edu.uniquindio.proyecto.seguridad.CifradoContrasenaListener;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -12,6 +13,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
+@EntityListeners(CifradoContrasenaListener.class)
 @ToString
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Usuario implements Serializable{
@@ -27,7 +29,9 @@ public class Usuario implements Serializable{
     @Column(name = "email", length = 50, nullable = false, unique = true)
     private String email;
 
-    @Column(name = "password", length = 30, nullable = false)
+    /** Hash BCrypt (60 caracteres); nunca la contraseña en claro. No se incluye en {@code toString}. */
+    @Column(name = "password", length = 100, nullable = false)
+    @ToString.Exclude
     private String password;
 
     @Column(name = "urlImagen", nullable = false)

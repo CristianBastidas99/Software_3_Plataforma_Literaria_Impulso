@@ -13,8 +13,6 @@ import java.util.Optional;
 @Repository
 public interface EscritorRepo extends JpaRepository<Escritor, Long> {
 
-    @Query("SELECT e FROM Escritor e WHERE e.email = :correoElectronico AND e.password = :contrasena")
-    Optional<Escritor> iniciarSesionEscritor(@Param("correoElectronico") String correoElectronico, @Param("contrasena") String contrasena);
     @Query("SELECT e FROM Escritor e WHERE e.email = :correoElectronico")
     Optional<Escritor> buscarEscritorPorCorreo(@Param("correoElectronico") String correoElectronico);
     @Query("SELECT e FROM Escritor e WHERE e.estado = 'ACTIVO' AND (LOWER(e.nombre) LIKE %:frase% OR LOWER(e.biografia) LIKE %:frase%)")
