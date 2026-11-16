@@ -19,9 +19,9 @@ public class PublicacionServicioImpl implements PublicacionServicio{
 
     @Override
     public Publicacion registrarPublicacion(Publicacion publicacion) throws Exception {
-        Optional<Publicacion> publicacionExistente = publicacionRepo.findById(publicacion.getId());
-        if (publicacionExistente.isPresent()) {
-            throw new Exception("El email ya se encuentra en uso");
+        // Una publicación nueva llega sin id: findById(null) lanzaría IllegalArgumentException
+        if (publicacion.getId() != null && publicacionRepo.existsById(publicacion.getId())) {
+            throw new Exception("Ya existe una publicación con ese id");
         }
         return publicacionRepo.save(publicacion);
     }
@@ -70,7 +70,11 @@ public class PublicacionServicioImpl implements PublicacionServicio{
 
     @Override
     public List<Publicacion> buscarPublicacionPorFrase(String frase) {
-        return publicacionRepo.obtenerPublicacionesPorFrase(frase);
+        // La consulta compara en minúsculas, así que la frase también tiene que ir en minúsculas
+        if (frase == null || frase.isBlank()) {
+            return publicacionRepo.listarPublicacionesPublicadas();
+        }
+        return publicacionRepo.obtenerPublicacionesPorFrase(frase.trim().toLowerCase());
     }
 
     @Override

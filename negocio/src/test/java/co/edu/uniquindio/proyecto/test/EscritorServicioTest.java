@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +25,7 @@ public class EscritorServicioTest {
     private EscritorServicio escritorServicio;
 
     @Test
-    @Sql("classpath:pli.sql")
+    @Sql(scripts = "classpath:pli.sql", config = @SqlConfig(encoding = "UTF-8"))
     public void obtenerPublicacionesAprobadasDeEscritorTest(){
         //Obtenemos la lista de todos los administradores
         Long id = Long.valueOf("1");
@@ -39,7 +40,7 @@ public class EscritorServicioTest {
     }
 
     @Test
-    @Sql("classpath:pli.sql")
+    @Sql(scripts = "classpath:pli.sql", config = @SqlConfig(encoding = "UTF-8"))
     public void obtenerEscritoresPorFraseTest(){
         //Obtenemos la lista de todos los administradores
         String frase = "Es";

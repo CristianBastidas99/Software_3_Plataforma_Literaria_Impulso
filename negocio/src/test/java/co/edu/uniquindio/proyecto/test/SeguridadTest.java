@@ -9,6 +9,7 @@ import co.edu.uniquindio.proyecto.repositorios.AdministradorRepo;
 import co.edu.uniquindio.proyecto.repositorios.EscritorRepo;
 import co.edu.uniquindio.proyecto.repositorios.LectorRepo;
 import co.edu.uniquindio.proyecto.seguridad.Contrasenas;
+import co.edu.uniquindio.proyecto.seguridad.LimiteIntentosLogin;
 import co.edu.uniquindio.proyecto.servicios.EscritorServicio;
 import co.edu.uniquindio.proyecto.servicios.LoginServicio;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -27,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /** Contraseñas cifradas con BCrypt, login genérico y migración de contraseñas en claro. */
 @SpringBootTest
 @Transactional
-@Sql("classpath:pli.sql")
+@Sql(scripts = "classpath:pli.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class SeguridadTest {
 
     @Autowired
@@ -112,5 +114,25 @@ public class SeguridadTest {
         assertTrue(loginServicio.autenticar("reader2@example.com", "antigua123").isPresent());
         // Las que ya estaban cifradas no cambian
         assertTrue(loginServicio.autenticar("reader1@example.com", "readerpass").isPresent());
+    }
+
+    @Test
+    public void elLoginSeBloqueaTrasVariosFallos() throws Exception {
+        // Un acierto reinicia la cuenta de fallos: 4 fallos, acierto y otros 4 fallos no bloquean
+        assertTrue(loginServicio.autenticar("writer1@example.com", "writerpass").isPresent());
+        for (int ronda = 0; ronda < 2; ronda++) {
+            for (int i = 0; i < LimiteIntentosLogin.MAX_FALLOS - 1; i++) {
+                assertTrue(loginServicio.autenticar("writer1@example.com", "mala").isEmpty());
+            }
+            assertTrue(loginServicio.autenticar("writer1@example.com", "writerpass").isPresent());
+        }
+
+        // Con un correo inexistente pasa lo mismo que con uno real: no se delata cuál existe
+        for (int i = 0; i < LimiteIntentosLogin.MAX_FALLOS; i++) {
+            assertTrue(loginServicio.autenticar("fuerza.bruta@example.com", "intento" + i).isEmpty());
+        }
+        Exception e = assertThrows(Exception.class, () -> loginServicio.autenticar("fuerza.bruta@example.com", "otra"));
+        assertTrue(e.getMessage().startsWith("Demasiados intentos fallidos"), e.getMessage());
+        assertTrue(e.getMessage().endsWith("15 minutos."), e.getMessage());
     }
 }

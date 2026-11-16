@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -26,7 +27,7 @@ import static org.mockito.Mockito.*;
 /** Flujo de recuperación de contraseña. El envío de correos se simula para no depender del SMTP. */
 @SpringBootTest
 @Transactional
-@Sql("classpath:pli.sql")
+@Sql(scripts = "classpath:pli.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class RecuperacionServicioTest {
 
     private static final String ENLACE_INVALIDO = "El enlace para cambiar la contraseña no es válido, ya se usó o caducó. Pide uno nuevo.";

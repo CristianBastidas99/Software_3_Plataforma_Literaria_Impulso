@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,7 @@ public class AdministradorServicioTest {
     private EmaillServicio emaillServicio;
 
     @Test
-    @Sql("classpath:pli.sql")
+    @Sql(scripts = "classpath:pli.sql", config = @SqlConfig(encoding = "UTF-8"))
     public void testRegistrarAdministrador() {
         // Crear un nuevo administrador y guardarlo en la base de datos
         Administrador administrador = new Administrador();
@@ -47,7 +48,7 @@ public class AdministradorServicioTest {
     }
 
     @Test
-    @Sql("classpath:pli.sql")
+    @Sql(scripts = "classpath:pli.sql", config = @SqlConfig(encoding = "UTF-8"))
     public void testObtenerAdministradorPorId() {
         // Crear un administrador de ejemplo y persistirlo en la base de datos
         Administrador administrador = new Administrador();
@@ -73,7 +74,7 @@ public class AdministradorServicioTest {
     }
 
     @Test
-    @Sql("classpath:pli.sql")
+    @Sql(scripts = "classpath:pli.sql", config = @SqlConfig(encoding = "UTF-8"))
     public void testActualizarAdministrador() {
         // Crear un administrador de ejemplo y persistirlo en la base de datos
         Administrador administrador = new Administrador();
@@ -102,7 +103,7 @@ public class AdministradorServicioTest {
     }
 
     @Test
-    @Sql("classpath:pli.sql")
+    @Sql(scripts = "classpath:pli.sql", config = @SqlConfig(encoding = "UTF-8"))
     public void testEliminarAdministrador() {
         // Crear un administrador de ejemplo y persistirlo en la base de datos
         Administrador administrador = new Administrador();
@@ -133,7 +134,7 @@ public class AdministradorServicioTest {
     }
 
     @Test
-    @Sql("classpath:pli.sql")
+    @Sql(scripts = "classpath:pli.sql", config = @SqlConfig(encoding = "UTF-8"))
     public void listarAdministradoresTest(){
         //Obtenemos la lista de todos los administradores
         List<Administrador> lista = administradorServicio.listarAdministradores();
@@ -143,7 +144,7 @@ public class AdministradorServicioTest {
     }
 
     @Test
-    @Sql("classpath:pli.sql")
+    @Sql(scripts = "classpath:pli.sql", config = @SqlConfig(encoding = "UTF-8"))
     public void testValidaLogin() {
         // Datos de prueba
         String email = "admin1@example.com";
@@ -178,7 +179,7 @@ public class AdministradorServicioTest {
     }
 
     @Test
-    @Sql("classpath:pli.sql")
+    @Sql(scripts = "classpath:pli.sql", config = @SqlConfig(encoding = "UTF-8"))
     public void testEnviarCorreo() {
         boolean estado = emaillServicio.enviarEmail("Prueba!!", "Este es un mensaje", "cristianmasmasmas@gmail.com");
     }

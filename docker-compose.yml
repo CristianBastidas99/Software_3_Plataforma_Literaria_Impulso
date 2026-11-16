@@ -1,0 +1,43 @@
+# Servicios que necesita la Plataforma Literaria Impulso: MySQL y Mailpit (correo de pruebas).
+#
+#   1. Copia application-secret.properties.example como application-secret.properties y pon una contraseña.
+#   2. docker compose up -d
+#   3. ./gradlew :web:bootRun
+#
+# MySQL toma la contraseña de root de DB_PASSWORD en application-secret.properties, el mismo archivo
+# que lee la aplicación, así que no hay que escribirla dos veces. Con este compose, DB_USER debe ser root.
+# Los puertos se pueden cambiar si ya están ocupados: MYSQL_PORT=3307 MAILPIT_SMTP_PORT=1026 docker compose up -d
+# (y entonces arrancar la aplicación con DB_PORT=3307 MAIL_PORT=1026).
+
+name: impulso
+
+services:
+  mysql:
+    image: mysql:8.0
+    env_file:
+      - application-secret.properties
+    environment:
+      MYSQL_DATABASE: plisw3
+      TZ: UTC
+    # La imagen espera MYSQL_ROOT_PASSWORD: se copia de DB_PASSWORD antes de arrancar
+    entrypoint: ["sh", "-c", "export MYSQL_ROOT_PASSWORD=\"$$DB_PASSWORD\" && exec docker-entrypoint.sh mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"]
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - datos-mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$DB_PASSWORD\" --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    restart: unless-stopped
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "${MAILPIT_SMTP_PORT:-1025}:1025"   # SMTP que usa la aplicación
+      - "${MAILPIT_WEB_PORT:-8025}:8025"    # Bandeja de entrada: http://localhost:8025
+    restart: unless-stopped
+
+volumes:
+  datos-mysql:

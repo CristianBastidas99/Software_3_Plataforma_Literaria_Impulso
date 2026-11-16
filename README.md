@@ -4,6 +4,24 @@ Plataforma web donde **escritores** publican sus obras literarias (con portada y
 
 Proyecto académico de la asignatura *Software 3*, Universidad del Quindío.
 
+![Inicio de la plataforma](docs/capturas/inicio.png)
+
+## Inicio rápido
+
+Con **Docker** y un **JDK 11** instalados:
+
+```bash
+cp application-secret.properties.example application-secret.properties   # y pon una contraseña en DB_PASSWORD
+docker compose up -d                                                      # MySQL y Mailpit
+./gradlew :web:bootRun --args='--spring.profiles.active=demo'             # la app con datos de ejemplo
+```
+
+En Windows (PowerShell): `copy application-secret.properties.example application-secret.properties` y `.\gradlew :web:bootRun --args="--spring.profiles.active=demo"`.
+
+Abre **http://localhost:8080** y entra con `valentina@impulso.com` / `escritor123` (escritora), `camila@impulso.com` / `lector123` (lectora) o `admin@impulso.com` / `admin123` (administrador). Los correos que envía la aplicación se ven en **http://localhost:8025**.
+
+Para presentar el proyecto hay un [guion de demostración de 5 minutos](docs/guion_demo.md) por los tres roles.
+
 ---
 
 ## Tecnologías
@@ -40,6 +58,8 @@ Plataforma_Literaria_Impulso_sw3
 │   ├── src/main/resources/demo/ # Datos del perfil demo (datos-demo.json)
 │   └── src/main/webapp/         # Páginas .xhtml, plantilla y recursos (css, js, img, pdf)
 ├── scripts/                     # Generador de portadas, avatares y PDFs de la demo
+├── docs/                        # Guion de demostración y capturas de pantalla
+├── docker-compose.yml           # MySQL y Mailpit para desarrollo
 ├── build.gradle                 # Configuración común de los módulos
 └── settings.gradle
 ```
@@ -65,16 +85,24 @@ La aplicación necesita dos servicios, pensados para correr en contenedores Dock
 | MySQL | `mysql:8.0` | `3306` | Base de datos `plisw3` |
 | Mailpit | `axllent/mailpit` | `1025` (SMTP) / `8025` (web) | Captura los correos enviados por la app |
 
-Si aún no tienes los contenedores, puedes crearlos así:
+Se levantan los dos con `docker-compose.yml`, desde la raíz del proyecto y después de crear `application-secret.properties` (ver [Credenciales](#credenciales-obligatorio)):
 
 ```bash
-docker run -d --name impulso-mysql -p 3306:3306 \
-  -e MYSQL_ROOT_PASSWORD=<tu_contraseña> mysql:8.0
-
-docker run -d --name impulso-mailpit -p 1025:1025 -p 8025:8025 axllent/mailpit
+docker compose up -d      # crea y arranca MySQL y Mailpit
+docker compose ps         # MySQL aparece como "healthy" cuando ya acepta conexiones
+docker compose down       # los detiene (los datos se conservan en el volumen)
+docker compose down -v    # los detiene y borra la base de datos
 ```
 
-> Sirve cualquier contenedor de MySQL 8 y Mailpit que publique esos puertos en `localhost`; no es necesario que se llamen así.
+- MySQL toma la contraseña de root de `DB_PASSWORD` en `application-secret.properties`, el mismo archivo que lee la aplicación, así que no se escribe dos veces. Con este compose, `DB_USER` debe ser `root`.
+- Si los puertos 3306, 1025 u 8025 ya están ocupados (por ejemplo por otros contenedores), cámbialos al levantar los servicios y díselo a la aplicación:
+
+  ```bash
+  MYSQL_PORT=3307 MAILPIT_SMTP_PORT=1026 MAILPIT_WEB_PORT=8026 docker compose up -d
+  DB_PORT=3307 MAIL_PORT=1026 ./gradlew :web:bootRun
+  ```
+
+> También sirve cualquier otro MySQL 8 y Mailpit que publique esos puertos en `localhost`, por ejemplo contenedores creados con `docker run`.
 
 - **Base de datos:** no hace falta crearla a mano. La URL de conexión incluye `createDatabaseIfNotExist=true` y Hibernate crea o actualiza las tablas al arrancar (`ddl-auto=update`).
 - **Correo:** Mailpit no envía nada a internet; los correos que manda la aplicación se ven en **http://localhost:8025**.
@@ -146,6 +174,7 @@ Las imágenes y PDFs que suben los usuarios se guardan **fuera del código**, en
 
 - **Login:** el mensaje "Correo o contraseña incorrectos" es el mismo si el correo no existe y si la contraseña es incorrecta. El identificador de sesión se renueva al iniciar sesión.
 - **Bloqueo:** bloquear a un usuario desde el panel cierra también las sesiones que tenga abiertas.
+- **Intentos de login:** tras 5 contraseñas incorrectas seguidas para el mismo correo en 15 minutos, ese correo no puede iniciar sesión durante 15 minutos. Se cuenta igual exista o no el correo. El contador vive en memoria y se reinicia al reiniciar la aplicación.
 
 ### Apariencia
 
@@ -187,7 +216,7 @@ New-NetFirewallRule -DisplayName "Impulso 8080" -Direction Inbound -Protocol TCP
 ./gradlew :web:test         # Pruebas de web (no requieren MySQL)
 ```
 
-Las pruebas usan una base de datos aparte, `plisw3_test`, que se crea automáticamente. No modifican la base de desarrollo.
+Las pruebas usan una base de datos aparte, `plisw3_test`, que se crea automáticamente. No modifican la base de desarrollo. Hay 102 pruebas en `negocio` (repositorios, consultas y servicios: publicar obras, comentarios y filtro de palabras, recomendaciones, administración, correo, recuperación de contraseña, seguridad y límite de intentos) y 20 en `web` (subida de archivos, control de acceso, validación de usuarios y páginas de error).
 
 ### Datos de demostración (perfil `demo`)
 
@@ -222,6 +251,16 @@ Los datos están en `web/src/main/resources/demo/datos-demo.json`. Las portadas,
 pip install pillow
 python scripts/generar_recursos_demo.py
 ```
+
+## Capturas
+
+| Detalle de una obra con el fragmento en PDF | Explorar con filtros |
+|---|---|
+| ![Detalle de publicación](docs/capturas/publicacion.png) | ![Explorar](docs/capturas/explorar.png) |
+| **Panel del administrador** | **Mis obras (escritor)** |
+| ![Panel de control](docs/capturas/admin.png) | ![Mis obras](docs/capturas/mis_obras.png) |
+| **Modo oscuro** | **Móvil (375 px, modo oscuro)** |
+| ![Inicio en modo oscuro](docs/capturas/inicio_oscuro.png) | ![Vista móvil](docs/capturas/movil_oscuro.png) |
 
 ## Páginas disponibles
 
@@ -258,7 +297,11 @@ python scripts/generar_recursos_demo.py
 - Panel de administración: estadísticas, bloqueo de usuarios (no pueden iniciar sesión), moderación de publicaciones y comentarios (ocultar, volver a mostrar o eliminar) y gestión de géneros.
 - Diseño propio y adaptable a móvil (desde 375 px) con modo claro y oscuro, logotipo y favicon, páginas legales y páginas de error 404 y 500.
 
-**Pendiente / en desarrollo**
+**Posibles mejoras**
+- Volver a la página que se quería abrir después de iniciar sesión.
+- Límite de intentos también en el registro y en "¿Olvidaste tu contraseña?", y borrado periódico de los enlaces de recuperación caducados.
+- Borrar los archivos subidos que quedan huérfanos si se abandona un formulario sin guardar.
+- Ver los cambios en `.xhtml` sin reiniciar (perfil de desarrollo de JSF).
 
 ## Problemas conocidos
 

@@ -785,3 +785,14 @@ body .ui-menu .ui-menuitem-link .ui-menuitem-icon {
     color: inherit !important;
     text-decoration: none !important;
 }
+
+/* Explorar solo usa la vista de lista: se oculta el selector de cuadrícula/lista de p:dataView */
+.lista-resultados .ui-dataview-layout-options {
+    display: none;
+}
+
+.lista-resultados .ui-dataview-header:empty,
+.lista-resultados .ui-dataview-header {
+    padding: 0;
+    border: none;
+}
